@@ -2,7 +2,7 @@
 #from glob import glob
 #import AthenaPoolCnvSvc.ReadAthenaPool
 
-runGrid = True
+runGrid = False
 
 if runGrid:
   import AthenaRootComps.ReadAthenaxAOD
@@ -19,9 +19,9 @@ if not runGrid:
   #Specify AccessMode (read mode) ... ClassAccess is good default for xAOD
   jps.AthenaCommonFlags.AccessMode = "ClassAccess" 
 
-jps.AthenaCommonFlags.HistOutputs = ["ANALYSIS:bfield_map_2016.outputs.root"]
+#jps.AthenaCommonFlags.HistOutputs = ["ANALYSIS:bfield_map_2016.outputs.root"]
 #jps.AthenaCommonFlags.HistOutputs = ["ANALYSIS:bfieldmap_RunI.outputs.root"]
-#jps.AthenaCommonFlags.HistOutputs = ["ANALYSIS:test.root"]
+jps.AthenaCommonFlags.HistOutputs = ["ANALYSIS:test.root"]
 svcMgr.THistSvc.MaxFileSize=-1 # speeds up jobs that output lots of histograms?
 
 # create our algorithm with the given name

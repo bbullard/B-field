@@ -90,6 +90,12 @@ StatusCode MuonSelection :: initialize ()
   ANA_CHECK(book (TTree ("BackgroundMuons", "Low M muon pairs")));
   TTree* vetotree = tree ("BackgroundMuons");
 
+  // book histogram for cutflow
+  int nCuts = 6;
+  ANA_CHECK(book (TH1F ("h_cutflow","h_cutflow",nCuts,0,nCuts))); 
+  ANA_CHECK(book (TH1F ("h_nMuons","h_nMuons",20,0,20))); 
+  ANA_CHECK(book (TH2F ("hh_nPlusMinusMuons","h_nPlusMinusMuons",20,0,20, 20,0,20))); 
+
   // set branch addresses for zmumutree  
   m_pt_CB = new std::vector<float>();
   zmumutree->Branch("Pt_CB", &m_pt_CB);
@@ -333,6 +339,9 @@ StatusCode MuonSelection :: execute ()
   bool isMC = false;
   if (ei->eventType(xAOD::EventInfo::IS_SIMULATION)) isMC = true;
 
+  // total events
+  hist ("h_cutflow")->Fill(0.5);
+  
   // check if data passes GRL
   if (!isMC) {
     if (!m_grl->passRunLB(*ei)) {
@@ -340,6 +349,9 @@ StatusCode MuonSelection :: execute ()
       return StatusCode::SUCCESS;
     }
   }
+
+  // passes GRL
+  hist ("h_cutflow")->Fill(1.5);
 
   // get muon container
   const xAOD::MuonContainer *muons = 0;
@@ -365,7 +377,8 @@ StatusCode MuonSelection :: execute ()
     return StatusCode::SUCCESS;
   }
 
-  //ANA_MSG_INFO("Primary vertex found.");
+  // has primary vertex
+  hist ("h_cutflow")->Fill(2.5);
 
   //pvtx_z = 0;
   
@@ -423,29 +436,38 @@ StatusCode MuonSelection :: execute ()
   m_author->clear();
 
 
+  double nPlusMuons = 0;
+  double nMinusMuons = 0;
   // select muons
   muon_1 = nullptr;
   muon_2 = nullptr;
   for (const xAOD::Muon* muon : *muons) {
     if (muon->charge() > 0) {
+      nPlusMuons++;
       if (!muon_1) 
         muon_1 = muon;
       else if (muon->pt() > muon_1->pt()) 
         muon_1 = muon;
     }
     if (muon->charge() < 0) {
+      nMinusMuons++;
       if (!muon_2)
         muon_2 = muon;
       else if (muon->pt() > muon_2->pt())
         muon_2 = muon; 
     }
   }
+  hist ("h_nMuons")->Fill(nPlusMuons+nMinusMuons);
+  hist ("hh_nPlusMinusMuons")->Fill(nPlusMuons,nMinusMuons);
 
   // check that we found opposite sign muons
   if (!muon_1 || !muon_2) {
     ANA_MSG_DEBUG ("No muon pair selected");
       return StatusCode::SUCCESS;
   }
+
+  // found muon pair
+  hist ("h_cutflow")->Fill(3.5);
 
   std::vector<const xAOD::Muon*> *my_muons = new std::vector<const xAOD::Muon*>();
   if (muon_1->pt() > muon_2->pt()) {
@@ -624,9 +646,15 @@ StatusCode MuonSelection :: execute ()
   }
  
   delete my_muons; 
+  
+  if (m_muonSelection->accept(*muon_1) || m_muonSelection->accept(*muon_2))
+    hist ("h_cutflow")->Fill(4.5);
+   
   // if both muons pass the selection
-  if (m_muonSelection->accept(*muon_1) && m_muonSelection->accept(*muon_2))
+  if (m_muonSelection->accept(*muon_1) && m_muonSelection->accept(*muon_2)) {
     tree ("SelectedZDecayMuons")->Fill();
+    hist ("h_cutflow")->Fill(5.5);
+  }
 
   // fill background tree if any invariant mass is < 70 GeV
   // may change the requirement

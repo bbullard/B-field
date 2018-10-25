@@ -95,7 +95,7 @@ namespace ROOT {
       ::MuonSelection *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::MuonSelection));
       static ::ROOT::TGenericClassInfo 
-         instance("MuonSelection", "MuonSelection.h", 11,
+         instance("MuonSelection", "MuonSelection.h", 12,
                   typeid(::MuonSelection), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &MuonSelection_Dictionary, isa_proxy, 4,
                   sizeof(::MuonSelection) );

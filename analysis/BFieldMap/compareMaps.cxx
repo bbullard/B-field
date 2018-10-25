@@ -156,22 +156,23 @@ main( int argc, const char* argv[] )
     title += mapfile[0];
     title += " vs. ";
     title += mapfile[1];
-    int Ncol = 8;
-    int Nrow = 2; 
+    int Ncol = 4;//8;
+    int Nrow = 1;//2; 
     TCanvas* c = new TCanvas("c",title,500*Ncol,1500*Nrow);
     c->Divide(Ncol,Nrow);
     /* x-y scan @ fixed z */
-    //xyscan(c->GetPad(1),14000,0,500);
-    //xyscan(c->GetPad(2),14000,10000,500);
+    xyscan(c->GetPad(1),14000,0,500);
+    xyscan(c->GetPad(2),14000,10000,500);
     /* z-r scan @ fixed phi */
-    //zrscan(c->GetPad(3),15000,14000,0.375*M_PI,500); // sector 4-12
-    //zrscan(c->GetPad(4),15000,14000,0.5*M_PI,500); // sector 5-13
+    zrscan(c->GetPad(3),15000,14000,0.375*M_PI,500); // sector 4-12
+    zrscan(c->GetPad(4),15000,14000,0.5*M_PI,500); // sector 5-13
     //zrscan(c->GetPad(3),3000,2000,0.375*M_PI,500); // sector 4-12
     //zrscan(c->GetPad(4),3000,2000,0.5*M_PI,500); // sector 5-13
     /* z-phi scan @ fixed r */
     //zphiscan("c6",15000,4000,200);
-    double phi1 = -1, phi2 = -2;
-    for (int i = 0; i < Ncol*Nrow; i++)
-      zrscan(c->GetPad(i+1),15000,14000,phi1+(phi2-phi1)*(double)i/(double)Ncol,500);
-    c->Print("compareMaps_phiFeetRegionScan.png");
+    //double phi1 = -1, phi2 = -2;
+    //for (int i = 0; i < Ncol*Nrow; i++)
+    //  zrscan(c->GetPad(i+1),15000,14000,phi1+(phi2-phi1)*(double)i/(double)Ncol,500);
+    //c->Print("compareMaps_phiFeetRegionScan.png");
+    c->Print("compareMaps.png");
 }

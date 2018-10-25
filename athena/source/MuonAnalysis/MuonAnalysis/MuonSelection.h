@@ -6,6 +6,7 @@
 #include <AsgAnalysisInterfaces/IGoodRunsListSelectionTool.h>
 #include <AsgTools/AnaToolHandle.h>
 #include <TTree.h>
+#include <TH1.h>
 #include <vector>
 
 class MuonSelection : public EL::AnaAlgorithm
