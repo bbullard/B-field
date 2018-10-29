@@ -12,60 +12,162 @@ MuonSelection :: MuonSelection (const std::string& name,
     : EL::AnaAlgorithm (name, pSvcLocator),
       m_grl ("GoodRunsListSelectionTool/grl", this), 
       m_muonSelection ("CP::MuonSelectionTool", this),
-      muon_1 (),
-      muon_2 ()
+      CB (),
+      ME (), 
+      MSO (),
+      MSOE (),
+      ID (),
+      positiveMuons(),
+      negativeMuons()
 {
 }
 
 MuonSelection :: ~MuonSelection () {
-  if (m_pt_CB) delete m_pt_CB;
-  if (m_pt_ME) delete m_pt_ME;
-  if (m_pt_MS) delete m_pt_MS;
-  if (m_pt_ID) delete m_pt_ID;
-  if (m_eta_CB) delete m_eta_CB;
-  if (m_eta_ME) delete m_eta_ME;
-  if (m_eta_MS) delete m_eta_MS;
-  if (m_eta_ID) delete m_eta_ID;
-  if (m_phi_CB) delete m_phi_CB;
-  if (m_phi_ME) delete m_phi_ME;
-  if (m_phi_MS) delete m_phi_MS;
-  if (m_phi_ID) delete m_phi_ID;
-  if (m_d0sig_CB) delete m_d0sig_CB;
-  if (m_d0sig_ME) delete m_d0sig_ME;
-  if (m_d0sig_MS) delete m_d0sig_MS;
-  if (m_d0sig_ID) delete m_d0sig_ID;
-  if (m_z0_CB) delete m_z0_CB;
-  if (m_z0_ME) delete m_z0_ME;
-  if (m_z0_MS) delete m_z0_MS;
-  if (m_z0_ID) delete m_z0_ID;
-  if (m_e_CB) delete m_e_CB;
-  if (m_e_ME) delete m_e_ME;
-  if (m_e_MS) delete m_e_MS; 
-  if (m_e_ID) delete m_e_ID;
-  if (m_charge_CB) delete m_charge_CB;
-  if (m_charge_ME) delete m_charge_ME;
-  if (m_charge_MS) delete m_charge_MS;
-  if (m_charge_ID) delete m_charge_ID;
-  if (m_qOverP_CB) delete m_qOverP_CB;
-  if (m_qOverP_ME) delete m_qOverP_ME;
-  if (m_qOverP_MS) delete m_qOverP_MS;
-  if (m_qOverP_ID) delete m_qOverP_ID;
-  if (m_dqOverP_CB) delete m_dqOverP_CB;
-  if (m_dqOverP_ME) delete m_dqOverP_ME;
-  if (m_dqOverP_MS) delete m_dqOverP_MS;
-  if (m_dqOverP_ID) delete m_dqOverP_ID;
-  if (m_chi2_CB) delete m_chi2_CB;
-  if (m_chi2_ME) delete m_chi2_ME;
-  if (m_chi2_MS) delete m_chi2_MS;
-  if (m_chi2_ID) delete m_chi2_ID;
-  if (m_dof_CB) delete m_dof_CB;
-  if (m_dof_ME) delete m_dof_ME;
-  if (m_dof_MS) delete m_dof_MS;
-  if (m_dof_ID) delete m_dof_ID;
-  if (m_eLoss) delete m_eLoss;
-  if (m_muonType) delete m_muonType;
-  if (m_quality) delete m_quality;
-  if (m_author) delete m_author;
+  // Delete positive muon variables
+  if (p_passIDcuts) delete p_passIDcuts;
+  if (p_passAll) delete p_passAll;
+  if (p_eLoss) delete p_eLoss;
+  if (p_muonType) delete p_muonType;
+  if (p_quality) delete p_quality;
+  if (p_primaryAuthor) delete p_primaryAuthor;
+  if (p_authors) delete p_authors;
+  if (p_nPrecisionLayers) delete p_nPrecisionLayers;
+  if (p_nPrecisionHoleLayers) delete p_nPrecisionHoleLayers;
+  if (p_nPhiLayers) delete p_nPhiLayers;
+  if (p_nPhiHoleLayers) delete p_nPhiHoleLayers;
+  if (p_nTriggerLayers) delete p_nTriggerLayers;
+  if (p_nTriggerHoleLayers) delete p_nTriggerHoleLayers;
+  if (p_innerSmallHits) delete p_innerSmallHits;
+  if (p_innerLargeHits) delete p_innerLargeHits;
+  if (p_middleSmallHits) delete p_middleSmallHits;
+  if (p_middleLargeHits) delete p_middleLargeHits;
+  if (p_outerSmallHits) delete p_outerSmallHits;
+  if (p_outerLargeHits) delete p_outerLargeHits;
+  if (p_extendedSmallHits) delete p_extendedSmallHits;
+  if (p_extendedLargeHits) delete p_extendedLargeHits;
+  if (p_innerSmallHoles) delete p_innerSmallHoles;
+  if (p_innerLargeHoles) delete p_innerLargeHoles;
+  if (p_middleSmallHoles) delete p_middleSmallHoles;
+  if (p_middleLargeHoles) delete p_middleLargeHoles;
+  if (p_outerSmallHoles) delete p_outerSmallHoles;
+  if (p_outerLargeHoles) delete p_outerLargeHoles;
+  if (p_extendedSmallHoles) delete p_extendedSmallHoles;
+  if (p_extendedLargeHoles) delete p_extendedLargeHoles;
+
+  // Delete negative muon variables
+  if (n_passIDcuts) delete n_passIDcuts;
+  if (n_passAll) delete n_passAll;
+  if (n_eLoss) delete n_eLoss;
+  if (n_muonType) delete n_muonType;
+  if (n_quality) delete n_quality;
+  if (n_primaryAuthor) delete n_primaryAuthor;
+  if (n_authors) delete n_authors;
+  if (n_nPrecisionLayers) delete n_nPrecisionLayers;
+  if (n_nPrecisionHoleLayers) delete n_nPrecisionHoleLayers;
+  if (n_nPhiLayers) delete n_nPhiLayers;
+  if (n_nPhiHoleLayers) delete n_nPhiHoleLayers;
+  if (n_nTriggerLayers) delete n_nTriggerLayers;
+  if (n_nTriggerHoleLayers) delete n_nTriggerHoleLayers;
+  if (n_innerSmallHits) delete n_innerSmallHits;
+  if (n_innerLargeHits) delete n_innerLargeHits;
+  if (n_middleSmallHits) delete n_middleSmallHits;
+  if (n_middleLargeHits) delete n_middleLargeHits;
+  if (n_outerSmallHits) delete n_outerSmallHits;
+  if (n_outerLargeHits) delete n_outerLargeHits;
+  if (n_extendedSmallHits) delete n_extendedSmallHits;
+  if (n_extendedLargeHits) delete n_extendedLargeHits;
+  if (n_innerSmallHoles) delete n_innerSmallHoles;
+  if (n_innerLargeHoles) delete n_innerLargeHoles;
+  if (n_middleSmallHoles) delete n_middleSmallHoles;
+  if (n_middleLargeHoles) delete n_middleLargeHoles;
+  if (n_outerSmallHoles) delete n_outerSmallHoles;
+  if (n_outerLargeHoles) delete n_outerLargeHoles;
+  if (n_extendedSmallHoles) delete n_extendedSmallHoles;
+  if (n_extendedLargeHoles) delete n_extendedLargeHoles;
+  
+  // Delete positive track parameters
+  if (p_isCB) delete p_isCB;
+  if (p_isME) delete p_isME;
+  if (p_isMSO) delete p_isMSO;
+  if (p_isMSOE) delete p_isMSOE;
+  if (p_isID) delete p_isID;
+  if (p_eta_CB) delete p_eta_CB;
+  if (p_eta_ME) delete p_eta_ME;
+  if (p_eta_MSO) delete p_eta_MSO;
+  if (p_eta_MSOE) delete p_eta_MSOE;
+  if (p_eta_ID) delete p_eta_ID;
+  if (p_phi_CB) delete p_phi_CB;
+  if (p_phi_ME) delete p_phi_ME;
+  if (p_phi_MSO) delete p_phi_MSO;
+  if (p_phi_MSOE) delete p_phi_MSOE;
+  if (p_phi_ID) delete p_phi_ID;
+  if (p_z0_CB) delete p_z0_CB;
+  if (p_z0_ME) delete p_z0_ME;
+  if (p_z0_MSO) delete p_z0_MSO;
+  if (p_z0_MSOE) delete p_z0_MSOE;
+  if (p_z0_ID) delete p_z0_ID;
+  if (p_d0sig_CB) delete p_d0sig_CB;
+  if (p_d0sig_ME) delete p_d0sig_ME;
+  if (p_d0sig_MSO) delete p_d0sig_MSO;
+  if (p_d0sig_MSOE) delete p_d0sig_MSOE;
+  if (p_d0sig_ID) delete p_d0sig_ID;
+  if (p_qOverP_CB) delete p_qOverP_CB;
+  if (p_qOverP_ME) delete p_qOverP_ME;
+  if (p_qOverP_MSO) delete p_qOverP_MSO;
+  if (p_qOverP_MSOE) delete p_qOverP_MSOE;
+  if (p_qOverP_ID) delete p_qOverP_ID;
+  if (p_dqOverP_CB) delete p_dqOverP_CB;
+  if (p_dqOverP_ME) delete p_dqOverP_ME;
+  if (p_dqOverP_MSO) delete p_dqOverP_MSO;
+  if (p_dqOverP_MSOE) delete p_dqOverP_MSOE;
+  if (p_dqOverP_ID) delete p_dqOverP_ID;
+  if (p_rchi2_CB) delete p_rchi2_CB;
+  if (p_rchi2_ME) delete p_rchi2_ME;
+  if (p_rchi2_MSO) delete p_rchi2_MSO;
+  if (p_rchi2_MSOE) delete p_rchi2_MSOE;
+  if (p_rchi2_ID) delete p_rchi2_ID;
+  
+  // Delete negative track parameters
+  if (n_isCB) delete n_isCB;
+  if (n_isME) delete n_isME;
+  if (n_isMSO) delete n_isMSO;
+  if (n_isMSOE) delete n_isMSOE;
+  if (n_isID) delete n_isID;
+  if (n_eta_CB) delete n_eta_CB;
+  if (n_eta_ME) delete n_eta_ME;
+  if (n_eta_MSO) delete n_eta_MSO;
+  if (n_eta_MSOE) delete n_eta_MSOE;
+  if (n_eta_ID) delete n_eta_ID;
+  if (n_phi_CB) delete n_phi_CB;
+  if (n_phi_ME) delete n_phi_ME;
+  if (n_phi_MSO) delete n_phi_MSO;
+  if (n_phi_MSOE) delete n_phi_MSOE;
+  if (n_phi_ID) delete n_phi_ID;
+  if (n_z0_CB) delete n_z0_CB;
+  if (n_z0_ME) delete n_z0_ME;
+  if (n_z0_MSO) delete n_z0_MSO;
+  if (n_z0_MSOE) delete n_z0_MSOE;
+  if (n_z0_ID) delete n_z0_ID;
+  if (n_d0sig_CB) delete n_d0sig_CB;
+  if (n_d0sig_ME) delete n_d0sig_ME;
+  if (n_d0sig_MSO) delete n_d0sig_MSO;
+  if (n_d0sig_MSOE) delete n_d0sig_MSOE;
+  if (n_d0sig_ID) delete n_d0sig_ID;
+  if (n_qOverP_CB) delete n_qOverP_CB;
+  if (n_qOverP_ME) delete n_qOverP_ME;
+  if (n_qOverP_MSO) delete n_qOverP_MSO;
+  if (n_qOverP_MSOE) delete n_qOverP_MSOE;
+  if (n_qOverP_ID) delete n_qOverP_ID;
+  if (n_dqOverP_CB) delete n_dqOverP_CB;
+  if (n_dqOverP_ME) delete n_dqOverP_ME;
+  if (n_dqOverP_MSO) delete n_dqOverP_MSO;
+  if (n_dqOverP_MSOE) delete n_dqOverP_MSOE;
+  if (n_dqOverP_ID) delete n_dqOverP_ID;
+  if (n_rchi2_CB) delete n_rchi2_CB;
+  if (n_rchi2_ME) delete n_rchi2_ME;
+  if (n_rchi2_MSO) delete n_rchi2_MSO;
+  if (n_rchi2_MSOE) delete n_rchi2_MSOE;
+  if (n_rchi2_ID) delete n_rchi2_ID;
 }
 
 StatusCode MuonSelection :: initialize ()
@@ -85,249 +187,305 @@ StatusCode MuonSelection :: initialize ()
   ANA_CHECK (m_muonSelection.initialize());
 
   // book trees
-  ANA_CHECK(book (TTree ("SelectedZDecayMuons", "Selected Z Decay Muon Pairs")));
-  TTree* zmumutree = tree ("SelectedZDecayMuons");
-  ANA_CHECK(book (TTree ("BackgroundMuons", "Low M muon pairs")));
-  TTree* vetotree = tree ("BackgroundMuons");
-
-  // book histogram for cutflow
-  int nCuts = 6;
-  ANA_CHECK(book (TH1F ("h_cutflow","h_cutflow",nCuts,0,nCuts))); 
-  ANA_CHECK(book (TH1F ("h_nMuons","h_nMuons",20,0,20))); 
-  ANA_CHECK(book (TH2F ("hh_nPlusMinusMuons","h_nPlusMinusMuons",20,0,20, 20,0,20))); 
+  ANA_CHECK(book (TTree ("RecoMouns", "Reconstructed muons")));
+  TTree* zmumutree = tree ("RecoMuons");
 
   // set branch addresses for zmumutree  
-  m_pt_CB = new std::vector<float>();
-  zmumutree->Branch("Pt_CB", &m_pt_CB);
-  m_pt_ME = new std::vector<float>();
-  zmumutree->Branch("Pt_ME", &m_pt_ME);
-  m_pt_MS = new std::vector<float>();
-  zmumutree->Branch("Pt_MS", &m_pt_MS);
-  m_pt_ID = new std::vector<float>();
-  zmumutree->Branch("Pt_ID", &m_pt_ID);
+  // event level
+  zmumutree->Branch("passGRL", &passGRL);
+  zmumutree->Branch("eventNumber", &eventNumber);
+  zmumutree->Branch("nPositiveMuons", &nPositiveMuons);
+  zmumutree->Branch("nNegativeMuons", &nNegativeMuons);
 
-  m_eta_CB = new std::vector<float>();
-  zmumutree->Branch("Eta_CB", &m_eta_CB);
-  m_eta_ME = new std::vector<float>();
-  zmumutree->Branch("Eta_ME", &m_eta_ME); 
-  m_eta_MS = new std::vector<float>();
-  zmumutree->Branch("Eta_MS", &m_eta_MS); 
-  m_eta_ID = new std::vector<float>();
-  zmumutree->Branch("Eta_ID", &m_eta_ID); 
-
-  m_phi_CB = new std::vector<float>();
-  zmumutree->Branch("Phi_CB", &m_phi_CB);
-  m_phi_ME = new std::vector<float>();
-  zmumutree->Branch("Phi_ME", &m_phi_ME);
-  m_phi_MS = new std::vector<float>();
-  zmumutree->Branch("Phi_MS", &m_phi_MS);
-  m_phi_ID = new std::vector<float>();
-  zmumutree->Branch("Phi_ID", &m_phi_ID);
-
-  m_d0sig_CB = new std::vector<float>();
-  zmumutree->Branch("d0sig_CB", &m_d0sig_CB);
-  m_d0sig_ME = new std::vector<float>();
-  zmumutree->Branch("d0sig_ME", &m_d0sig_ME);
-  m_d0sig_MS = new std::vector<float>();
-  zmumutree->Branch("d0sig_MS", &m_d0sig_MS);
-  m_d0sig_ID = new std::vector<float>();
-  zmumutree->Branch("d0sig_ID", &m_d0sig_ID);
-
-  m_z0_CB = new std::vector<float>();
-  zmumutree->Branch("z0_CB", &m_z0_CB);
-  m_z0_ME = new std::vector<float>();
-  zmumutree->Branch("z0_ME", &m_z0_ME);
-  m_z0_MS = new std::vector<float>();
-  zmumutree->Branch("z0_MS", &m_z0_MS);
-  m_z0_ID = new std::vector<float>();
-  zmumutree->Branch("z0_ID", &m_z0_ID);
+  // positive muon variables
+  p_passIDcuts = new std::vector<bool>();
+  zmumutree->Branch("p_passIDcuts", &p_passIDcuts);
+  p_passAll = new std::vector<bool>();
+  zmumutree->Branch("p_passAll", &p_passAll);  
+  p_eLoss = new std::vector<float>();
+  zmumutree->Branch("p_eLoss",&p_eLoss);
+  p_muonType = new std::vector<int>();
+  zmumutree->Branch("p_muonType", &p_muonType);
+  p_quality = new std::vector<int>();
+  zmumutree->Branch("p_quality", &p_quality);
+  p_primaryAuthor = new std::vector<int>();
+  zmumutree->Branch("p_primaryAuthor", &p_primaryAuthor);
+  p_authors = new std::vector<std::vector<int>>();
+  zmumutree->Branch("p_authors", &p_authors);
   
-  m_qOverP_CB = new std::vector<float>();
-  zmumutree->Branch("qOverP_CB", &m_qOverP_CB);
-  m_qOverP_ME = new std::vector<float>();
-  zmumutree->Branch("qOverP_ME", &m_qOverP_ME);
-  m_qOverP_MS = new std::vector<float>();
-  zmumutree->Branch("qOverP_MS", &m_qOverP_MS);
-  m_qOverP_ID = new std::vector<float>();
-  zmumutree->Branch("qOverP_ID", &m_qOverP_ID);
+  p_nPrecisionLayers = new std::vector<int>();
+  zmumutree->Branch("p_nPrecisionLayers", &p_nPrecisionLayers); 
+  p_nPrecisionHoleLayers = new std::vector<int>(); 
+  zmumutree->Branch("p_nPrecisionHoleLayers", &p_nPrecisionHoleLayers); 
+  p_nPhiLayers = new std::vector<int>(); 
+  zmumutree->Branch("p_nPhiLayers", &p_nPhiLayers); 
+  p_nPhiHoleLayers = new std::vector<int>(); 
+  zmumutree->Branch("p_nPhiHoleLayers", &p_nPhiHoleLayers); 
+  p_nTriggerLayers = new std::vector<int>(); 
+  zmumutree->Branch("p_nTriggerLayers", &p_nTriggerLayers); 
+  p_nTriggerHoleLayers = new std::vector<int>(); 
+  zmumutree->Branch("p_nTriggerHoleLayers", &p_nTriggerHoleLayers); 
+  p_innerSmallHits = new std::vector<int>(); 
+  zmumutree->Branch("p_innerSmallHits", &p_innerSmallHits); 
+  p_innerLargeHits = new std::vector<int>(); 
+  zmumutree->Branch("p_innerLargeHits", &p_innerLargeHits); 
+  p_middleSmallHits = new std::vector<int>(); 
+  zmumutree->Branch("p_middleSmallHits", &p_middleSmallHits); 
+  p_middleLargeHits = new std::vector<int>(); 
+  zmumutree->Branch("p_middleLargeHits", &p_middleLargeHits); 
+  p_outerSmallHits = new std::vector<int>(); 
+  zmumutree->Branch("p_outerSmallHits", &p_outerSmallHits); 
+  p_outerLargeHits = new std::vector<int>(); 
+  zmumutree->Branch("p_outerLargeHits", &p_outerLargeHits); 
+  p_extendedSmallHits = new std::vector<int>(); 
+  zmumutree->Branch("p_extendedSmallHits", &p_extendedSmallHits); 
+  p_extendedLargeHits = new std::vector<int>(); 
+  zmumutree->Branch("p_extendedLargeHits", &p_extendedLargeHits); 
+  p_innerSmallHoles = new std::vector<int>(); 
+  zmumutree->Branch("p_innerSmallHoles", &p_innerSmallHoles); 
+  p_innerLargeHoles = new std::vector<int>(); 
+  zmumutree->Branch("p_innerLargeHoles", &p_innerLargeHoles); 
+  p_middleSmallHoles = new std::vector<int>(); 
+  zmumutree->Branch("p_middleSmallHoles", &p_middleSmallHoles); 
+  p_middleLargeHoles = new std::vector<int>(); 
+  zmumutree->Branch("p_middleLargeHoles", &p_middleLargeHoles); 
+  p_outerSmallHoles = new std::vector<int>(); 
+  zmumutree->Branch("p_outerSmallHoles", &p_outerSmallHoles); 
+  p_outerLargeHoles = new std::vector<int>(); 
+  zmumutree->Branch("p_outerLargeHoles", &p_outerLargeHoles); 
+  p_extendedSmallHoles = new std::vector<int>(); 
+  zmumutree->Branch("p_extendedSmallHoles", &p_extendedSmallHoles); 
+  p_extendedLargeHoles = new std::vector<int>(); 
+  zmumutree->Branch("p_extendedLargeHoles", &p_extendedLargeHoles); 
   
-  m_dqOverP_CB = new std::vector<float>();
-  zmumutree->Branch("dqOverP_CB", &m_dqOverP_CB);
-  m_dqOverP_ME = new std::vector<float>();
-  zmumutree->Branch("dqOverP_ME", &m_dqOverP_ME);
-  m_dqOverP_MS = new std::vector<float>();
-  zmumutree->Branch("dqOverP_MS", &m_dqOverP_MS);
-  m_dqOverP_ID = new std::vector<float>();
-  zmumutree->Branch("dqOverP_ID", &m_dqOverP_ID);
-
-  m_chi2_CB = new std::vector<float>();
-  zmumutree->Branch("chi2_CB", &m_chi2_CB);
-  m_chi2_ME = new std::vector<float>();
-  zmumutree->Branch("chi2_ME", &m_chi2_ME);
-  m_chi2_MS = new std::vector<float>();
-  zmumutree->Branch("chi2_MS", &m_chi2_MS);
-  m_chi2_ID = new std::vector<float>();
-  zmumutree->Branch("chi2_ID", &m_chi2_ID);
-
-  m_dof_CB = new std::vector<float>();
-  zmumutree->Branch("dof_CB", &m_dof_CB);
-  m_dof_ME = new std::vector<float>();
-  zmumutree->Branch("dof_ME", &m_dof_ME);
-  m_dof_MS = new std::vector<float>();
-  zmumutree->Branch("dof_MS", &m_dof_MS);
-  m_dof_ID = new std::vector<float>();
-  zmumutree->Branch("dof_ID", &m_dof_ID);
-
-  zmumutree->Branch("m_CB", &m_m_CB);
-  zmumutree->Branch("m_ME", &m_m_ME);
-  zmumutree->Branch("m_MS", &m_m_MS);
-  zmumutree->Branch("m_ID", &m_m_ID);
+  // negative muon variables
+  n_passIDcuts = new std::vector<bool>();
+  zmumutree->Branch("n_passIDcuts", &n_passIDcuts);
+  n_passAll = new std::vector<bool>();
+  zmumutree->Branch("n_passAll", &n_passAll);  
+  n_eLoss = new std::vector<float>();
+  zmumutree->Branch("n_eLoss",&n_eLoss);
+  n_muonType = new std::vector<int>();
+  zmumutree->Branch("n_muonType", &n_muonType);
+  n_quality = new std::vector<int>();
+  zmumutree->Branch("n_quality", &n_quality);
+  n_primaryAuthor = new std::vector<int>();
+  zmumutree->Branch("n_primaryAuthor", &n_primaryAuthor);
+  n_authors = new std::vector<std::vector<int>>();
+  zmumutree->Branch("n_authors", &n_authors);
   
-  m_e_CB = new std::vector<float>();
-  zmumutree->Branch("E_CB", &m_e_CB);
-  m_e_ME = new std::vector<float>();
-  zmumutree->Branch("E_ME", &m_e_ME);
-  m_e_MS = new std::vector<float>();
-  zmumutree->Branch("E_MS", &m_e_MS);
-  m_e_ID = new std::vector<float>();
-  zmumutree->Branch("E_ID", &m_e_ID);
+  n_nPrecisionLayers = new std::vector<int>();
+  zmumutree->Branch("n_nPrecisionLayers", &n_nPrecisionLayers); 
+  n_nPrecisionHoleLayers = new std::vector<int>(); 
+  zmumutree->Branch("n_nPrecisionHoleLayers", &n_nPrecisionHoleLayers); 
+  n_nPhiLayers = new std::vector<int>(); 
+  zmumutree->Branch("n_nPhiLayers", &n_nPhiLayers); 
+  n_nPhiHoleLayers = new std::vector<int>(); 
+  zmumutree->Branch("n_nPhiHoleLayers", &n_nPhiHoleLayers); 
+  n_nTriggerLayers = new std::vector<int>(); 
+  zmumutree->Branch("n_nTriggerLayers", &n_nTriggerLayers); 
+  n_nTriggerHoleLayers = new std::vector<int>(); 
+  zmumutree->Branch("n_nTriggerHoleLayers", &n_nTriggerHoleLayers); 
+  n_innerSmallHits = new std::vector<int>(); 
+  zmumutree->Branch("n_innerSmallHits", &n_innerSmallHits); 
+  n_innerLargeHits = new std::vector<int>(); 
+  zmumutree->Branch("n_innerLargeHits", &n_innerLargeHits); 
+  n_middleSmallHits = new std::vector<int>(); 
+  zmumutree->Branch("n_middleSmallHits", &n_middleSmallHits); 
+  n_middleLargeHits = new std::vector<int>(); 
+  zmumutree->Branch("n_middleLargeHits", &n_middleLargeHits); 
+  n_outerSmallHits = new std::vector<int>(); 
+  zmumutree->Branch("n_outerSmallHits", &n_outerSmallHits); 
+  n_outerLargeHits = new std::vector<int>(); 
+  zmumutree->Branch("n_outerLargeHits", &n_outerLargeHits); 
+  n_extendedSmallHits = new std::vector<int>(); 
+  zmumutree->Branch("n_extendedSmallHits", &n_extendedSmallHits); 
+  n_extendedLargeHits = new std::vector<int>(); 
+  zmumutree->Branch("n_extendedLargeHits", &n_extendedLargeHits); 
+  n_innerSmallHoles = new std::vector<int>(); 
+  zmumutree->Branch("n_innerSmallHoles", &n_innerSmallHoles); 
+  n_innerLargeHoles = new std::vector<int>(); 
+  zmumutree->Branch("n_innerLargeHoles", &n_innerLargeHoles); 
+  n_middleSmallHoles = new std::vector<int>(); 
+  zmumutree->Branch("n_middleSmallHoles", &n_middleSmallHoles); 
+  n_middleLargeHoles = new std::vector<int>(); 
+  zmumutree->Branch("n_middleLargeHoles", &n_middleLargeHoles); 
+  n_outerSmallHoles = new std::vector<int>(); 
+  zmumutree->Branch("n_outerSmallHoles", &n_outerSmallHoles); 
+  n_outerLargeHoles = new std::vector<int>(); 
+  zmumutree->Branch("n_outerLargeHoles", &n_outerLargeHoles); 
+  n_extendedSmallHoles = new std::vector<int>(); 
+  zmumutree->Branch("n_extendedSmallHoles", &n_extendedSmallHoles); 
+  n_extendedLargeHoles = new std::vector<int>(); 
+  zmumutree->Branch("n_extendedLargeHoles", &n_extendedLargeHoles); 
   
-  m_charge_CB = new std::vector<float>();
-  zmumutree->Branch("Charge_CB", &m_charge_CB);
-  m_charge_ME = new std::vector<float>();
-  zmumutree->Branch("Charge_ME", &m_charge_ME);
-  m_charge_MS = new std::vector<float>();
-  zmumutree->Branch("Charge_MS", &m_charge_MS); 
-  m_charge_ID = new std::vector<float>();
-  zmumutree->Branch("Charge_ID", &m_charge_ID);
+  // positive muon track variables
+  p_eta_CB = new std::vector<float>();
+  zmumutree->Branch("p_eta_CB", &p_eta_CB);
+  p_eta_ME = new std::vector<float>();
+  zmumutree->Branch("p_eta_ME", &p_eta_ME); 
+  p_eta_MSO = new std::vector<float>();
+  zmumutree->Branch("p_eta_MSO", &p_eta_MSO); 
+  p_eta_MSOE = new std::vector<float>();
+  zmumutree->Branch("p_eta_MSOE", &p_eta_MSOE); 
+  p_eta_ID = new std::vector<float>();
+  zmumutree->Branch("p_eta_ID", &p_eta_ID); 
 
-  m_eLoss = new std::vector<float>();
-  zmumutree->Branch("EnergyLoss",&m_eLoss);
-  m_muonType = new std::vector<int>();
-  zmumutree->Branch("MuonType", &m_muonType);
-  m_quality = new std::vector<int>();
-  zmumutree->Branch("Quality", &m_quality);
-  m_author = new std::vector<int>();
-  zmumutree->Branch("Author", &m_author);
+  p_phi_CB = new std::vector<float>();
+  zmumutree->Branch("p_phi_CB", &p_phi_CB);
+  p_phi_ME = new std::vector<float>();
+  zmumutree->Branch("p_phi_ME", &p_phi_ME);
+  p_phi_MSO = new std::vector<float>();
+  zmumutree->Branch("p_phi_MSO", &p_phi_MSO);
+  p_phi_MSOE = new std::vector<float>();
+  zmumutree->Branch("p_phi_MSOE", &p_phi_MSOE);
+  p_phi_ID = new std::vector<float>();
+  zmumutree->Branch("p_phi_ID", &p_phi_ID);
 
-  // set branch addresses for vetotree  
-  m_pt_CB = new std::vector<float>();
-  vetotree->Branch("Pt_CB", &m_pt_CB);
-  m_pt_ME = new std::vector<float>();
-  vetotree->Branch("Pt_ME", &m_pt_ME);
-  m_pt_MS = new std::vector<float>();
-  vetotree->Branch("Pt_MS", &m_pt_MS);
-  m_pt_ID = new std::vector<float>();
-  vetotree->Branch("Pt_ID", &m_pt_ID);
+  p_d0sig_CB = new std::vector<float>();
+  zmumutree->Branch("p_d0sig_CB", &p_d0sig_CB);
+  p_d0sig_ME = new std::vector<float>();
+  zmumutree->Branch("p_d0sig_ME", &p_d0sig_ME);
+  p_d0sig_MSO = new std::vector<float>();
+  zmumutree->Branch("p_d0sig_MSO", &p_d0sig_MSO);
+  p_d0sig_MSOE = new std::vector<float>();
+  zmumutree->Branch("p_d0sig_MSOE", &p_d0sig_MSOE);
+  p_d0sig_ID = new std::vector<float>();
+  zmumutree->Branch("p_d0sig_ID", &p_d0sig_ID);
 
-  m_eta_CB = new std::vector<float>();
-  vetotree->Branch("Eta_CB", &m_eta_CB);
-  m_eta_ME = new std::vector<float>();
-  vetotree->Branch("Eta_ME", &m_eta_ME);
-  m_eta_MS = new std::vector<float>();
-  vetotree->Branch("Eta_MS", &m_eta_MS);
-  m_eta_ID = new std::vector<float>();
-  vetotree->Branch("Eta_ID", &m_eta_ID);
-
-  m_phi_CB = new std::vector<float>();
-  vetotree->Branch("Phi_CB", &m_phi_CB);
-  m_phi_ME = new std::vector<float>();
-  vetotree->Branch("Phi_ME", &m_phi_ME);
-  m_phi_MS = new std::vector<float>();
-  vetotree->Branch("Phi_MS", &m_phi_MS);
-  m_phi_ID = new std::vector<float>();
-  vetotree->Branch("Phi_ID", &m_phi_ID);
-
-  m_d0sig_CB = new std::vector<float>();
-  vetotree->Branch("d0sig_CB", &m_d0sig_CB);
-  m_d0sig_ME = new std::vector<float>();
-  vetotree->Branch("d0sig_ME", &m_d0sig_ME);
-  m_d0sig_MS = new std::vector<float>();
-  vetotree->Branch("d0sig_MS", &m_d0sig_MS);
-  m_d0sig_ID = new std::vector<float>();
-  vetotree->Branch("d0sig_ID", &m_d0sig_ID);
-
-  m_z0_CB = new std::vector<float>();
-  vetotree->Branch("z0_CB", &m_z0_CB);
-  m_z0_ME = new std::vector<float>();
-  vetotree->Branch("z0_ME", &m_z0_ME);
-  m_z0_MS = new std::vector<float>();
-  vetotree->Branch("z0_MS", &m_z0_MS);
-  m_z0_ID = new std::vector<float>();
-  vetotree->Branch("z0_ID", &m_z0_ID);
-
-  m_qOverP_CB = new std::vector<float>();
-  vetotree->Branch("qOverP_CB", &m_qOverP_CB);
-  m_qOverP_ME = new std::vector<float>();
-  vetotree->Branch("qOverP_ME", &m_qOverP_ME);
-  m_qOverP_MS = new std::vector<float>();
-  vetotree->Branch("qOverP_MS", &m_qOverP_MS);
-  m_qOverP_ID = new std::vector<float>();
-  vetotree->Branch("qOverP_ID", &m_qOverP_ID);
+  p_z0_CB = new std::vector<float>();
+  zmumutree->Branch("p_z0_CB", &p_z0_CB);
+  p_z0_ME = new std::vector<float>();
+  zmumutree->Branch("p_z0_ME", &p_z0_ME);
+  p_z0_MSO = new std::vector<float>();
+  zmumutree->Branch("p_z0_MSO", &p_z0_MSO);
+  p_z0_MSOE = new std::vector<float>();
+  zmumutree->Branch("p_z0_MSOE", &p_z0_MSOE);
+  p_z0_ID = new std::vector<float>();
+  zmumutree->Branch("p_z0_ID", &p_z0_ID);
   
-  m_dqOverP_CB = new std::vector<float>();
-  vetotree->Branch("dqOverP_CB", &m_dqOverP_CB);
-  m_dqOverP_ME = new std::vector<float>();
-  vetotree->Branch("dqOverP_ME", &m_dqOverP_ME);
-  m_dqOverP_MS = new std::vector<float>();
-  vetotree->Branch("dqOverP_MS", &m_dqOverP_MS);
-  m_dqOverP_ID = new std::vector<float>();
-  vetotree->Branch("dqOverP_ID", &m_dqOverP_ID);
-
-  m_chi2_CB = new std::vector<float>();
-  vetotree->Branch("chi2_CB", &m_chi2_CB);
-  m_chi2_ME = new std::vector<float>();
-  vetotree->Branch("chi2_ME", &m_chi2_ME);
-  m_chi2_MS = new std::vector<float>();
-  vetotree->Branch("chi2_MS", &m_chi2_MS);
-  m_chi2_ID = new std::vector<float>();
-  vetotree->Branch("chi2_ID", &m_chi2_ID);
-
-  m_dof_CB = new std::vector<float>();
-  vetotree->Branch("dof_CB", &m_dof_CB);
-  m_dof_ME = new std::vector<float>();
-  vetotree->Branch("dof_ME", &m_dof_ME);
-  m_dof_MS = new std::vector<float>();
-  vetotree->Branch("dof_MS", &m_dof_MS);
-  m_dof_ID = new std::vector<float>();
-  vetotree->Branch("dof_ID", &m_dof_ID);
+  p_qOverP_CB = new std::vector<float>();
+  zmumutree->Branch("p_qOverP_CB", &p_qOverP_CB);
+  p_qOverP_ME = new std::vector<float>();
+  zmumutree->Branch("p_qOverP_ME", &p_qOverP_ME);
+  p_qOverP_MSO = new std::vector<float>();
+  zmumutree->Branch("p_qOverP_MSO", &p_qOverP_MSO);
+  p_qOverP_MSOE = new std::vector<float>();
+  zmumutree->Branch("p_qOverP_MSOE", &p_qOverP_MSOE);
+  p_qOverP_ID = new std::vector<float>();
+  zmumutree->Branch("p_qOverP_ID", &p_qOverP_ID);
   
-  vetotree->Branch("m_CB", &m_m_CB);
-  vetotree->Branch("m_ME", &m_m_ME);
-  vetotree->Branch("m_MS", &m_m_MS);
-  vetotree->Branch("m_ID", &m_m_ID);
+  p_dqOverP_CB = new std::vector<float>();
+  zmumutree->Branch("p_dqOverP_CB", &p_dqOverP_CB);
+  p_dqOverP_ME = new std::vector<float>();
+  zmumutree->Branch("p_dqOverP_ME", &p_dqOverP_ME);
+  p_dqOverP_MSO = new std::vector<float>();
+  zmumutree->Branch("p_dqOverP_MSO", &p_dqOverP_MSO);
+  p_dqOverP_MSOE = new std::vector<float>();
+  zmumutree->Branch("p_dqOverP_MSOE", &p_dqOverP_MSOE);
+  p_dqOverP_ID = new std::vector<float>();
+  zmumutree->Branch("p_dqOverP_ID", &p_dqOverP_ID);
 
-  m_e_CB = new std::vector<float>();
-  vetotree->Branch("E_CB", &m_e_CB);
-  m_e_ME = new std::vector<float>();
-  vetotree->Branch("E_ME", &m_e_ME);
-  m_e_MS = new std::vector<float>();
-  vetotree->Branch("E_MS", &m_e_MS);
-  m_e_ID = new std::vector<float>();
-  vetotree->Branch("E_ID", &m_e_ID);
+  p_rchi2_CB = new std::vector<float>();
+  zmumutree->Branch("p_rchi2_CB", &p_rchi2_CB);
+  p_rchi2_ME = new std::vector<float>();
+  zmumutree->Branch("p_rchi2_ME", &p_rchi2_ME);
+  p_rchi2_MSO = new std::vector<float>();
+  zmumutree->Branch("p_rchi2_MSO", &p_rchi2_MSO);
+  p_rchi2_MSOE = new std::vector<float>();
+  zmumutree->Branch("p_rchi2_MSOE", &p_rchi2_MSOE);
+  p_rchi2_ID = new std::vector<float>();
+  zmumutree->Branch("p_rchi2_ID", &p_rchi2_ID);
 
-  m_charge_CB = new std::vector<float>();
-  vetotree->Branch("Charge_CB", &m_charge_CB);
-  m_charge_ME = new std::vector<float>();
-  vetotree->Branch("Charge_ME", &m_charge_ME);
-  m_charge_MS = new std::vector<float>();
-  vetotree->Branch("Charge_MS", &m_charge_MS);
-  m_charge_ID = new std::vector<float>();
-  vetotree->Branch("Charge_ID", &m_charge_ID);
+  // negative muon track variables
+  n_eta_CB = new std::vector<float>();
+  zmumutree->Branch("n_eta_CB", &n_eta_CB);
+  n_eta_ME = new std::vector<float>();
+  zmumutree->Branch("n_eta_ME", &n_eta_ME); 
+  n_eta_MSO = new std::vector<float>();
+  zmumutree->Branch("n_eta_MSO", &n_eta_MSO); 
+  n_eta_MSOE = new std::vector<float>();
+  zmumutree->Branch("n_eta_MSOE", &n_eta_MSOE); 
+  n_eta_ID = new std::vector<float>();
+  zmumutree->Branch("n_eta_ID", &n_eta_ID); 
 
-  m_eLoss = new std::vector<float>();
-  vetotree->Branch("EnergyLoss",&m_eLoss);
-  m_muonType = new std::vector<int>();
-  vetotree->Branch("MuonType", &m_muonType);
-  m_quality = new std::vector<int>();
-  vetotree->Branch("Quality", &m_quality);
-  m_author = new std::vector<int>();
-  vetotree->Branch("Author", &m_author);
+  n_phi_CB = new std::vector<float>();
+  zmumutree->Branch("n_phi_CB", &n_phi_CB);
+  n_phi_ME = new std::vector<float>();
+  zmumutree->Branch("n_phi_ME", &n_phi_ME);
+  n_phi_MSO = new std::vector<float>();
+  zmumutree->Branch("n_phi_MSO", &n_phi_MSO);
+  n_phi_MSOE = new std::vector<float>();
+  zmumutree->Branch("n_phi_MSOE", &n_phi_MSOE);
+  n_phi_ID = new std::vector<float>();
+  zmumutree->Branch("n_phi_ID", &n_phi_ID);
+
+  n_d0sig_CB = new std::vector<float>();
+  zmumutree->Branch("n_d0sig_CB", &n_d0sig_CB);
+  n_d0sig_ME = new std::vector<float>();
+  zmumutree->Branch("n_d0sig_ME", &n_d0sig_ME);
+  n_d0sig_MSO = new std::vector<float>();
+  zmumutree->Branch("n_d0sig_MSO", &n_d0sig_MSO);
+  n_d0sig_MSOE = new std::vector<float>();
+  zmumutree->Branch("n_d0sig_MSOE", &n_d0sig_MSOE);
+  n_d0sig_ID = new std::vector<float>();
+  zmumutree->Branch("n_d0sig_ID", &n_d0sig_ID);
+
+  n_z0_CB = new std::vector<float>();
+  zmumutree->Branch("n_z0_CB", &n_z0_CB);
+  n_z0_ME = new std::vector<float>();
+  zmumutree->Branch("n_z0_ME", &n_z0_ME);
+  n_z0_MSO = new std::vector<float>();
+  zmumutree->Branch("n_z0_MSO", &n_z0_MSO);
+  n_z0_MSOE = new std::vector<float>();
+  zmumutree->Branch("n_z0_MSOE", &n_z0_MSOE);
+  n_z0_ID = new std::vector<float>();
+  zmumutree->Branch("n_z0_ID", &n_z0_ID);
+  
+  n_qOverP_CB = new std::vector<float>();
+  zmumutree->Branch("n_qOverP_CB", &n_qOverP_CB);
+  n_qOverP_ME = new std::vector<float>();
+  zmumutree->Branch("n_qOverP_ME", &n_qOverP_ME);
+  n_qOverP_MSO = new std::vector<float>();
+  zmumutree->Branch("n_qOverP_MSO", &n_qOverP_MSO);
+  n_qOverP_MSOE = new std::vector<float>();
+  zmumutree->Branch("n_qOverP_MSOE", &n_qOverP_MSOE);
+  n_qOverP_ID = new std::vector<float>();
+  zmumutree->Branch("n_qOverP_ID", &n_qOverP_ID);
+  
+  n_dqOverP_CB = new std::vector<float>();
+  zmumutree->Branch("n_dqOverP_CB", &n_dqOverP_CB);
+  n_dqOverP_ME = new std::vector<float>();
+  zmumutree->Branch("n_dqOverP_ME", &n_dqOverP_ME);
+  n_dqOverP_MSO = new std::vector<float>();
+  zmumutree->Branch("n_dqOverP_MSO", &n_dqOverP_MSO);
+  n_dqOverP_MSOE = new std::vector<float>();
+  zmumutree->Branch("n_dqOverP_MSOE", &n_dqOverP_MSOE);
+  n_dqOverP_ID = new std::vector<float>();
+  zmumutree->Branch("n_dqOverP_ID", &n_dqOverP_ID);
+
+  n_rchi2_CB = new std::vector<float>();
+  zmumutree->Branch("n_rchi2_CB", &n_rchi2_CB);
+  n_rchi2_ME = new std::vector<float>();
+  zmumutree->Branch("n_rchi2_ME", &n_rchi2_ME);
+  n_rchi2_MSO = new std::vector<float>();
+  zmumutree->Branch("n_rchi2_MSO", &n_rchi2_MSO);
+  n_rchi2_MSOE = new std::vector<float>();
+  zmumutree->Branch("n_rchi2_MSOE", &n_rchi2_MSOE);
+  n_rchi2_ID = new std::vector<float>();
+  zmumutree->Branch("n_rchi2_ID", &n_rchi2_ID);
   
   return StatusCode::SUCCESS;
 }
 
-
+// function for sorting xAOD::Muons by pt in descending order
+struct CompareMuonPt
+{
+  bool operator()(const xAOD::Muon_v1*& m1, const xAOD::Muon_v1*& m2)
+  {
+    return m1->pt() > m2->pt();
+  }
+};
 
 StatusCode MuonSelection :: execute ()
 {
@@ -335,331 +493,595 @@ StatusCode MuonSelection :: execute ()
   const xAOD::EventInfo *ei = nullptr;
   ANA_CHECK (evtStore()->retrieve(ei, "EventInfo"));
 
+  // save event number
+  eventNumber = ei->eventNumber();
+
   // check if event is MC or data
   bool isMC = false;
   if (ei->eventType(xAOD::EventInfo::IS_SIMULATION)) isMC = true;
 
-  // total events
-  hist ("h_cutflow")->Fill(0.5);
-  
   // check if data passes GRL
+  passGRL = true;
   if (!isMC) {
     if (!m_grl->passRunLB(*ei)) {
-      ANA_MSG_INFO ("Skip event not on GRL");
-      return StatusCode::SUCCESS;
+      passGRL = false;
     }
   }
-
-  // passes GRL
-  hist ("h_cutflow")->Fill(1.5);
 
   // get muon container
   const xAOD::MuonContainer *muons = 0;
   ANA_CHECK (evtStore()->retrieve (muons, "Muons"));
 
+  float pvtx_z = -1e6;
+  bool correctVertex = false;
+  /*
   // get vertex container
   const xAOD::VertexContainer *vtcs = 0;
   ANA_CHECK (evtStore()->retrieve (vtcs, "PrimaryVertices"));
  
   // find the primary vertex z coordinate
-  float pvtx_z = -1e6;
-  bool correctVertex = false;
   if (correctVertex) {
     for (const xAOD::Vertex *vtx : *vtcs) {
       if (vtx->vertexType() == xAOD::VxType::PriVtx)
         pvtx_z = vtx->z();
     }
   }
-
+  */
   // skip event if no primary vertex found 
   if ( pvtx_z == -1e6 && correctVertex) {
     ANA_MSG_DEBUG("No primary vertex found! Skipping event.");
     return StatusCode::SUCCESS;
   }
 
-  // has primary vertex
-  hist ("h_cutflow")->Fill(2.5);
+  // event level
+  nPositiveMuons = 0;
+  nNegativeMuons = 0;
 
-  //pvtx_z = 0;
-  
-  m_pt_CB->clear();
-  m_pt_ME->clear();
-  m_pt_MS->clear();
-  m_pt_ID->clear();
-  m_eta_CB->clear();
-  m_eta_ME->clear();
-  m_eta_MS->clear();
-  m_eta_ID->clear();
-  m_phi_CB->clear();
-  m_phi_ME->clear();
-  m_phi_MS->clear();
-  m_phi_ID->clear();
-  m_z0_CB->clear();
-  m_z0_ME->clear();
-  m_z0_MS->clear();
-  m_z0_ID->clear();
-  m_d0sig_CB->clear();
-  m_d0sig_ME->clear();
-  m_d0sig_MS->clear();
-  m_d0sig_ID->clear();
-  m_e_CB->clear();
-  m_e_ME->clear();
-  m_e_MS->clear();
-  m_e_ID->clear();
-  m_charge_CB->clear();
-  m_charge_ME->clear();
-  m_charge_MS->clear();
-  m_charge_ID->clear();
-  m_qOverP_CB->clear();
-  m_qOverP_ME->clear();
-  m_qOverP_MS->clear();
-  m_qOverP_ID->clear();
-  m_dqOverP_CB->clear();
-  m_dqOverP_ME->clear();
-  m_dqOverP_MS->clear();
-  m_dqOverP_ID->clear();
-  m_chi2_CB->clear();
-  m_chi2_ME->clear();
-  m_chi2_MS->clear();
-  m_chi2_ID->clear();
-  m_dof_CB->clear();
-  m_dof_ME->clear();
-  m_dof_MS->clear();
-  m_dof_ID->clear();
-  m_m_CB = 0.;
-  m_m_ME = 0.;
-  m_m_MS = 0.;
-  m_m_ID = 0.;
-  m_eLoss->clear();
-  m_muonType->clear();
-  m_quality->clear();
-  m_author->clear();
+  // positive muon variables
+  p_passIDcuts->clear();
+  p_passAll->clear();
+  p_eLoss->clear();
+  p_muonType->clear();
+  p_quality->clear();
+  p_primaryAuthor->clear();
+  p_authors->clear();
+  p_nPrecisionLayers->clear();
+  p_nPrecisionHoleLayers->clear();  
+  p_nPhiLayers->clear();  
+  p_nPhiHoleLayers->clear();
+  p_nTriggerLayers->clear();
+  p_nTriggerHoleLayers->clear();
+  p_innerSmallHits->clear();
+  p_innerLargeHits->clear();
+  p_middleSmallHits->clear();
+  p_middleLargeHits->clear();
+  p_outerSmallHits->clear();
+  p_outerLargeHits->clear();
+  p_extendedSmallHits->clear();
+  p_extendedLargeHits->clear();
+  p_innerSmallHoles->clear();
+  p_innerLargeHoles->clear();
+  p_middleSmallHoles->clear();
+  p_middleLargeHoles->clear();
+  p_outerSmallHoles->clear();
+  p_outerLargeHoles->clear();
+  p_extendedSmallHoles->clear();
+  p_extendedLargeHoles->clear();
 
+  // negative muon variables
+  n_passIDcuts->clear();
+  n_passAll->clear();
+  n_eLoss->clear();
+  n_muonType->clear();
+  n_quality->clear();
+  n_primaryAuthor->clear();
+  n_authors->clear();
+  n_nPrecisionLayers->clear();
+  n_nPrecisionHoleLayers->clear();  
+  n_nPhiLayers->clear();  
+  n_nPhiHoleLayers->clear();
+  n_nTriggerLayers->clear();
+  n_nTriggerHoleLayers->clear();
+  n_innerSmallHits->clear();
+  n_innerLargeHits->clear();
+  n_middleSmallHits->clear();
+  n_middleLargeHits->clear();
+  n_outerSmallHits->clear();
+  n_outerLargeHits->clear();
+  n_extendedSmallHits->clear();
+  n_extendedLargeHits->clear();
+  n_innerSmallHoles->clear();
+  n_innerLargeHoles->clear();
+  n_middleSmallHoles->clear();
+  n_middleLargeHoles->clear();
+  n_outerSmallHoles->clear();
+  n_outerLargeHoles->clear();
+  n_extendedSmallHoles->clear();
+  n_extendedLargeHoles->clear();
 
-  double nPlusMuons = 0;
-  double nMinusMuons = 0;
-  // select muons
-  muon_1 = nullptr;
-  muon_2 = nullptr;
+  // positive muon track variables
+  p_isCB->clear();
+  p_isME->clear();
+  p_isMSO->clear();
+  p_isMSOE->clear();
+  p_isID->clear();
+  p_eta_CB->clear();
+  p_eta_ME->clear();
+  p_eta_MSO->clear();
+  p_eta_MSOE->clear();
+  p_eta_ID->clear();
+  p_phi_CB->clear();
+  p_phi_ME->clear();
+  p_phi_MSO->clear();
+  p_phi_MSOE->clear();
+  p_phi_ID->clear();
+  p_z0_CB->clear();
+  p_z0_ME->clear();
+  p_z0_MSO->clear();
+  p_z0_MSOE->clear();
+  p_z0_ID->clear();
+  p_d0sig_CB->clear();
+  p_d0sig_ME->clear();
+  p_d0sig_MSO->clear();
+  p_d0sig_MSOE->clear();
+  p_d0sig_ID->clear();
+  p_qOverP_CB->clear();
+  p_qOverP_ME->clear();
+  p_qOverP_MSO->clear();
+  p_qOverP_MSOE->clear();
+  p_qOverP_ID->clear();
+  p_dqOverP_CB->clear();
+  p_dqOverP_ME->clear();
+  p_dqOverP_MSO->clear();
+  p_dqOverP_MSOE->clear();
+  p_dqOverP_ID->clear();
+  p_rchi2_CB->clear();
+  p_rchi2_ME->clear();
+  p_rchi2_MSO->clear();
+  p_rchi2_MSOE->clear();
+  p_rchi2_ID->clear();
+
+  // negative muon track variables
+  n_isCB->clear();
+  n_isME->clear();
+  n_isMSO->clear();
+  n_isMSOE->clear();
+  n_isID->clear();
+  n_eta_CB->clear();
+  n_eta_ME->clear();
+  n_eta_MSO->clear();
+  n_eta_MSOE->clear();
+  n_eta_ID->clear();
+  n_phi_CB->clear();
+  n_phi_ME->clear();
+  n_phi_MSO->clear();
+  n_phi_MSOE->clear();
+  n_phi_ID->clear();
+  n_z0_CB->clear();
+  n_z0_ME->clear();
+  n_z0_MSO->clear();
+  n_z0_MSOE->clear();
+  n_z0_ID->clear();
+  n_d0sig_CB->clear();
+  n_d0sig_ME->clear();
+  n_d0sig_MSO->clear();
+  n_d0sig_MSOE->clear();
+  n_d0sig_ID->clear();
+  n_qOverP_CB->clear();
+  n_qOverP_ME->clear();
+  n_qOverP_MSO->clear();
+  n_qOverP_MSOE->clear();
+  n_qOverP_ID->clear();
+  n_dqOverP_CB->clear();
+  n_dqOverP_ME->clear();
+  n_dqOverP_MSO->clear();
+  n_dqOverP_MSOE->clear();
+  n_dqOverP_ID->clear();
+  n_rchi2_CB->clear();
+  n_rchi2_ME->clear();
+  n_rchi2_MSO->clear();
+  n_rchi2_MSOE->clear();
+  n_rchi2_ID->clear();
+
+  // separate muons by charge
   for (const xAOD::Muon* muon : *muons) {
     if (muon->charge() > 0) {
-      nPlusMuons++;
-      if (!muon_1) 
-        muon_1 = muon;
-      else if (muon->pt() > muon_1->pt()) 
-        muon_1 = muon;
+      nPositiveMuons++;
+      positiveMuons->push_back(muon);
     }
     if (muon->charge() < 0) {
-      nMinusMuons++;
-      if (!muon_2)
-        muon_2 = muon;
-      else if (muon->pt() > muon_2->pt())
-        muon_2 = muon; 
+      nNegativeMuons++;
+      negativeMuons->push_back(muon);
     }
   }
-  hist ("h_nMuons")->Fill(nPlusMuons+nMinusMuons);
-  hist ("hh_nPlusMinusMuons")->Fill(nPlusMuons,nMinusMuons);
 
-  // check that we found opposite sign muons
-  if (!muon_1 || !muon_2) {
-    ANA_MSG_DEBUG ("No muon pair selected");
-      return StatusCode::SUCCESS;
+  // sort muons in descending order of pt
+  std::sort(positiveMuons->begin(), positiveMuons->end(), CompareMuonPt());
+  std::sort(negativeMuons->begin(), negativeMuons->end(), CompareMuonPt());
+
+  // positive muons
+  for (const xAOD::Muon* muon : *positiveMuons) {
+    p_passIDcuts->push_back(m_muonSelection->passedIDCuts(*muon));
+    p_passAll->push_back(m_muonSelection->accept(*muon));
+    p_muonType->push_back(muon->muonType());
+    p_primaryAuthor->push_back(muon->author());
+    p_quality->push_back(m_muonSelection->getQuality(*muon));
+  
+    std::vector<int> auths(11,0);
+    if (muon->isAuthor(xAOD::Muon_v1::Author::unknown)) auths.at(0) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidCo)) auths.at(1) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::STACO)) auths.at(2) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTag)) auths.at(3) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTagIMO)) auths.at(4) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidSA)) auths.at(5) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirl)) auths.at(6) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirlLowBeta)) auths.at(7) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloTag)) auths.at(8) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloLikelihood)) auths.at(9) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::ExtrapolateMuonToIP)) auths.at(10) = 1;
+    p_authors->push_back(auths);
+    
+    float eLoss = 0.;
+    if (!muon->parameter(eLoss, xAOD::Muon::EnergyLoss) )
+      ANA_MSG_DEBUG ("Muon energy loss not available");
+    p_eLoss->push_back(eLoss * 0.001); // GeV
+
+    p_nPrecisionLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPrecisionLayers));
+    p_nPrecisionHoleLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPrecisionHoleLayers));
+    p_nPhiLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPhiLayers));
+    p_nPhiHoleLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPhiHoleLayers));
+    p_nTriggerLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfTriggerEtaLayers));
+    p_nTriggerLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfTriggerEtaHoleLayers));
+    p_innerSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerSmallHits));
+    p_innerLargeHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerLargeHits));
+    p_middleSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::middleSmallHits));
+    p_middleLargeHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::middleLargeHits));
+    p_outerSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::outerSmallHits));
+    p_outerLargeHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::outerLargeHits));
+    p_extendedSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedSmallHits));
+    p_extendedLargeHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedLargeHits));
+    p_innerSmallHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerSmallHoles));
+    p_innerLargeHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerLargeHoles));
+    p_middleSmallHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::middleSmallHoles));
+    p_middleLargeHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::middleLargeHoles));
+    p_outerSmallHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::outerSmallHoles));
+    p_outerLargeHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::outerLargeHoles));
+    p_extendedSmallHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedSmallHoles));
+    p_extendedLargeHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedLargeHoles));
+    
+    // CB tracks
+    if ((muon->combinedTrackParticleLink())) {
+      p_isCB->push_back(true);
+      CB = *muon->combinedTrackParticleLink(); 
+      p_eta_CB->push_back(CB->eta());
+      p_phi_CB->push_back(CB->phi());
+      p_d0sig_CB->push_back(xAOD::TrackingHelpers::d0significance(CB,
+                            ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      if (correctVertex) 
+        p_z0_CB->push_back(CB->z0() + CB->vz() - pvtx_z);
+      else 
+        p_z0_CB->push_back(CB->z0());
+      
+      p_qOverP_CB->push_back(CB->qOverP() / 0.001); // GeV^-1
+      p_dqOverP_CB->push_back(sqrt(CB->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
+      p_rchi2_CB->push_back(CB->chiSquared() / CB->numberDoF());
+    }
+    else {
+      p_isCB->push_back(false);
+      p_eta_CB->push_back(-1e6);
+      p_phi_CB->push_back(-1e6);
+      p_d0sig_CB->push_back(-1e6);
+      p_z0_CB->push_back(-1e6);
+      p_qOverP_CB->push_back(-1e6);
+      p_dqOverP_CB->push_back(-1e6);
+      p_rchi2_CB->push_back(-1e6);
+    } 
+
+    // ME tracks
+    if ((muon->extrapolatedMuonSpectrometerTrackParticleLink())) {
+      p_isME->push_back(true);
+      ME = *muon->extrapolatedMuonSpectrometerTrackParticleLink(); 
+      p_eta_ME->push_back(ME->eta());
+      p_phi_ME->push_back(ME->phi());
+      p_d0sig_ME->push_back(xAOD::TrackingHelpers::d0significance(ME,
+                            ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      if (correctVertex) 
+        p_z0_ME->push_back(ME->z0() + ME->vz() - pvtx_z);
+      else 
+        p_z0_ME->push_back(ME->z0());
+      
+      p_qOverP_ME->push_back(ME->qOverP() / 0.001); // GeV^-1
+      p_dqOverP_ME->push_back(sqrt(ME->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
+      p_rchi2_ME->push_back(ME->chiSquared() / ME->numberDoF());
+    }
+    else {
+      p_isME->push_back(false);
+      p_eta_ME->push_back(-1e6);
+      p_phi_ME->push_back(-1e6);
+      p_d0sig_ME->push_back(-1e6);
+      p_z0_ME->push_back(-1e6);
+      p_qOverP_ME->push_back(-1e6);
+      p_dqOverP_ME->push_back(-1e6);
+      p_rchi2_ME->push_back(-1e6);
+    }
+ 
+    // MSO tracks
+    if ((muon->muonSpectrometerTrackParticleLink())) {
+      p_isMSO->push_back(true);
+      MSO = *muon->muonSpectrometerTrackParticleLink(); 
+      p_eta_MSO->push_back(MSO->eta());
+      p_phi_MSO->push_back(MSO->phi());
+      p_d0sig_MSO->push_back(xAOD::TrackingHelpers::d0significance(MSO,
+                            ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      if (correctVertex) 
+        p_z0_MSO->push_back(MSO->z0() + MSO->vz() - pvtx_z);
+      else 
+        p_z0_MSO->push_back(MSO->z0());
+      
+      p_qOverP_MSO->push_back(MSO->qOverP() / 0.001); // GeV^-1
+      p_dqOverP_MSO->push_back(sqrt(MSO->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
+      p_rchi2_MSO->push_back(MSO->chiSquared() / MSO->numberDoF());
+    }
+    else {
+      p_isMSO->push_back(false);
+      p_eta_MSO->push_back(-1e6);
+      p_phi_MSO->push_back(-1e6);
+      p_d0sig_MSO->push_back(-1e6);
+      p_z0_MSO->push_back(-1e6);
+      p_qOverP_MSO->push_back(-1e6);
+      p_dqOverP_MSO->push_back(-1e6);
+      p_rchi2_MSO->push_back(-1e6);
+    }
+  
+    // MSOE tracks
+    if ((muon->msOnlyExtrapolatedMuonSpectrometerTrackParticleLink())) {
+      p_isMSOE->push_back(true);
+      MSOE = *muon->msOnlyExtrapolatedMuonSpectrometerTrackParticleLink(); 
+      p_eta_MSOE->push_back(MSOE->eta());
+      p_phi_MSOE->push_back(MSOE->phi());
+      p_d0sig_MSOE->push_back(xAOD::TrackingHelpers::d0significance(MSOE,
+                            ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      if (correctVertex) 
+        p_z0_MSOE->push_back(MSOE->z0() + MSOE->vz() - pvtx_z);
+      else 
+        p_z0_MSOE->push_back(MSOE->z0());
+      
+      p_qOverP_MSOE->push_back(MSOE->qOverP() / 0.001); // GeV^-1
+      p_dqOverP_MSOE->push_back(sqrt(MSOE->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
+      p_rchi2_MSOE->push_back(MSOE->chiSquared() / MSOE->numberDoF());
+    }
+    else {
+      p_isMSOE->push_back(false);
+      p_eta_MSOE->push_back(-1e6);
+      p_phi_MSOE->push_back(-1e6);
+      p_d0sig_MSOE->push_back(-1e6);
+      p_z0_MSOE->push_back(-1e6);
+      p_qOverP_MSOE->push_back(-1e6);
+      p_dqOverP_MSOE->push_back(-1e6);
+      p_rchi2_MSOE->push_back(-1e6);
+    }
+  
+    // ID tracks
+    if ((muon->inDetTrackParticleLink())) {
+      p_isID->push_back(true);
+      ID = *muon->inDetTrackParticleLink(); 
+      p_eta_ID->push_back(ID->eta());
+      p_phi_ID->push_back(ID->phi());
+      p_d0sig_ID->push_back(xAOD::TrackingHelpers::d0significance(ID,
+                            ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      if (correctVertex) 
+        p_z0_ID->push_back(ID->z0() + ID->vz() - pvtx_z);
+      else 
+        p_z0_ID->push_back(ID->z0());
+      
+      p_qOverP_ID->push_back(ID->qOverP() / 0.001); // GeV^-1
+      p_dqOverP_ID->push_back(sqrt(ID->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
+      p_rchi2_ID->push_back(ID->chiSquared() / ID->numberDoF());
+    }
+    else {
+      p_isID->push_back(false);
+      p_eta_ID->push_back(-1e6);
+      p_phi_ID->push_back(-1e6);
+      p_d0sig_ID->push_back(-1e6);
+      p_z0_ID->push_back(-1e6);
+      p_qOverP_ID->push_back(-1e6);
+      p_dqOverP_ID->push_back(-1e6);
+      p_rchi2_ID->push_back(-1e6);
+    }
   }
 
-  // found muon pair
-  hist ("h_cutflow")->Fill(3.5);
-
-  std::vector<const xAOD::Muon*> *my_muons = new std::vector<const xAOD::Muon*>();
-  if (muon_1->pt() > muon_2->pt()) {
-    my_muons->push_back(muon_1);
-    my_muons->push_back(muon_2);
-  }
-  else {
-    my_muons->push_back(muon_2);
-    my_muons->push_back(muon_1);
-  }
-
-  for (const xAOD::Muon* muon : *my_muons) {
-    // access muon object attributes not specific to tracks
-    m_muonType->push_back(muon->muonType());
-    m_author->push_back(muon->author());
-    m_quality->push_back(m_muonSelection->getQuality(*muon));
+  // negative muons
+  for (const xAOD::Muon* muon : *negativeMuons) {
+    n_passIDcuts->push_back(m_muonSelection->passedIDCuts(*muon));
+    n_passAll->push_back(m_muonSelection->accept(*muon));
+    n_muonType->push_back(muon->muonType());
+    n_primaryAuthor->push_back(muon->author());
+    n_quality->push_back(m_muonSelection->getQuality(*muon));
+  
+    std::vector<int> auths(11,0);
+    if (muon->isAuthor(xAOD::Muon_v1::Author::unknown)) auths.at(0) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidCo)) auths.at(1) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::STACO)) auths.at(2) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTag)) auths.at(3) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTagIMO)) auths.at(4) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidSA)) auths.at(5) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirl)) auths.at(6) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirlLowBeta)) auths.at(7) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloTag)) auths.at(8) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloLikelihood)) auths.at(9) = 1;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::ExtrapolateMuonToIP)) auths.at(10) = 1;
+    n_authors->push_back(auths);
   
     float eLoss = 0.;
     if (!muon->parameter(eLoss, xAOD::Muon::EnergyLoss) )
       ANA_MSG_DEBUG ("Muon energy loss not available");
-    m_eLoss->push_back(eLoss * 0.001); // GeV
+    n_eLoss->push_back(eLoss * 0.001); // GeV
 
-    // check if there's a CB track, then access attributes
-    if ((muon->combinedTrackParticleLink())) { 
-      m_pt_CB->push_back((*muon->combinedTrackParticleLink())->pt() * 0.001); // GeV
-      m_eta_CB->push_back((*muon->combinedTrackParticleLink())->eta());
-      m_phi_CB->push_back((*muon->combinedTrackParticleLink())->phi());
-      m_e_CB->push_back((*muon->combinedTrackParticleLink())->e() * 0.001); // GeV
-      m_charge_CB->push_back((*muon->combinedTrackParticleLink())->charge());
-      m_d0sig_CB->push_back(xAOD::TrackingHelpers::d0significance((*muon->combinedTrackParticleLink()),
+    n_nPrecisionLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPrecisionLayers));
+    n_nPrecisionHoleLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPrecisionHoleLayers));
+    n_nPhiLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPhiLayers));
+    n_nPhiHoleLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPhiHoleLayers));
+    n_nTriggerLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfTriggerEtaLayers));
+    n_nTriggerLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfTriggerEtaHoleLayers));
+    n_innerSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerSmallHits));
+    n_innerLargeHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerLargeHits));
+    n_middleSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::middleSmallHits));
+    n_middleLargeHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::middleLargeHits));
+    n_outerSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::outerSmallHits));
+    n_outerLargeHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::outerLargeHits));
+    n_extendedSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedSmallHits));
+    n_extendedLargeHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedLargeHits));
+    n_innerSmallHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerSmallHoles));
+    n_innerLargeHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerLargeHoles));
+    n_middleSmallHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::middleSmallHoles));
+    n_middleLargeHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::middleLargeHoles));
+    n_outerSmallHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::outerSmallHoles));
+    n_outerLargeHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::outerLargeHoles));
+    n_extendedSmallHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedSmallHoles));
+    n_extendedLargeHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedLargeHoles));
+    
+    // CB tracks
+    if ((muon->combinedTrackParticleLink())) {
+      n_isCB->push_back(true);
+      CB = *muon->combinedTrackParticleLink(); 
+      n_eta_CB->push_back(CB->eta());
+      n_phi_CB->push_back(CB->phi());
+      n_d0sig_CB->push_back(xAOD::TrackingHelpers::d0significance(CB,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
       if (correctVertex) 
-        m_z0_CB->push_back((*muon->combinedTrackParticleLink())->z0() + (*muon->combinedTrackParticleLink())->vz() - pvtx_z);
+        n_z0_CB->push_back(CB->z0() + CB->vz() - pvtx_z);
       else 
-        m_z0_CB->push_back((*muon->combinedTrackParticleLink())->z0());
+        n_z0_CB->push_back(CB->z0());
       
-      m_qOverP_CB->push_back((*muon->combinedTrackParticleLink())->qOverP() / 0.001); // GeV^-1
-      m_dqOverP_CB->push_back(sqrt((*muon->combinedTrackParticleLink())->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
-      m_chi2_CB->push_back((*muon->combinedTrackParticleLink())->chiSquared());
-      m_dof_CB->push_back((*muon->combinedTrackParticleLink())->numberDoF());
+      n_qOverP_CB->push_back(CB->qOverP() / 0.001); // GeV^-1
+      n_dqOverP_CB->push_back(sqrt(CB->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
+      n_rchi2_CB->push_back(CB->chiSquared() / CB->numberDoF());
     }
     else {
-      m_pt_CB->push_back(-1);
-      m_eta_CB->push_back(-1e6);
-      m_phi_CB->push_back(-1e6);
-      m_e_CB->push_back(-1);
-      m_charge_CB->push_back(0);
-      m_d0sig_CB->push_back(-1);
-      m_z0_CB->push_back(-1);
-      m_qOverP_CB->push_back(-1);
-      m_dqOverP_CB->push_back(-1);
-      m_chi2_CB->push_back(-1);
-      m_dof_CB->push_back(-1);
-      m_m_CB = -1;
+      n_isCB->push_back(false);
+      n_eta_CB->push_back(-1e6);
+      n_phi_CB->push_back(-1e6);
+      n_d0sig_CB->push_back(-1e6);
+      n_z0_CB->push_back(-1e6);
+      n_qOverP_CB->push_back(-1e6);
+      n_dqOverP_CB->push_back(-1e6);
+      n_rchi2_CB->push_back(-1e6);
     } 
 
-    // check if there's an ME track, then access attributes
+    // ME tracks
     if ((muon->extrapolatedMuonSpectrometerTrackParticleLink())) {
-      m_pt_ME->push_back((*muon->extrapolatedMuonSpectrometerTrackParticleLink())->pt() * 0.001); // GeV
-      m_eta_ME->push_back((*muon->extrapolatedMuonSpectrometerTrackParticleLink())->eta());
-      m_phi_ME->push_back((*muon->extrapolatedMuonSpectrometerTrackParticleLink())->phi());
-      m_e_ME->push_back((*muon->extrapolatedMuonSpectrometerTrackParticleLink())->e() * 0.001); // GeV
-      m_charge_ME->push_back((*muon->extrapolatedMuonSpectrometerTrackParticleLink())->charge());
-      m_d0sig_ME->push_back(xAOD::TrackingHelpers::d0significance((*muon->extrapolatedMuonSpectrometerTrackParticleLink()),
+      n_isME->push_back(true);
+      ME = *muon->extrapolatedMuonSpectrometerTrackParticleLink(); 
+      n_eta_ME->push_back(ME->eta());
+      n_phi_ME->push_back(ME->phi());
+      n_d0sig_ME->push_back(xAOD::TrackingHelpers::d0significance(ME,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
       if (correctVertex) 
-        m_z0_ME->push_back((*muon->extrapolatedMuonSpectrometerTrackParticleLink())->z0() + (*muon->extrapolatedMuonSpectrometerTrackParticleLink())->vz() - pvtx_z);
-      else
-        m_z0_ME->push_back((*muon->extrapolatedMuonSpectrometerTrackParticleLink())->z0());
-      
-      m_qOverP_ME->push_back((*muon->extrapolatedMuonSpectrometerTrackParticleLink())->qOverP() / 0.001); // GeV^-1
-      m_dqOverP_ME->push_back(sqrt((*muon->extrapolatedMuonSpectrometerTrackParticleLink())->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
-      m_chi2_ME->push_back((*muon->extrapolatedMuonSpectrometerTrackParticleLink())->chiSquared());
-      m_dof_ME->push_back((*muon->extrapolatedMuonSpectrometerTrackParticleLink())->numberDoF());
-    }
-    else {
-      m_pt_ME->push_back(-1);
-      m_eta_ME->push_back(-1e6);
-      m_phi_ME->push_back(-1e6);
-      m_e_ME->push_back(-1); 
-      m_charge_ME->push_back(0);
-      m_d0sig_ME->push_back(-1);
-      m_z0_ME->push_back(-1);
-      m_qOverP_ME->push_back(-1);
-      m_dqOverP_ME->push_back(-1);
-      m_chi2_ME->push_back(-1);
-      m_dof_ME->push_back(-1);
-      m_m_ME = -1;
-    }
-
-    // check if there's an MS track, then access attributes
-    if ((muon->muonSpectrometerTrackParticleLink())) {
-      m_pt_MS->push_back((*muon->muonSpectrometerTrackParticleLink())->pt() * 0.001); // GeV
-      m_eta_MS->push_back((*muon->muonSpectrometerTrackParticleLink())->eta());
-      m_phi_MS->push_back((*muon->muonSpectrometerTrackParticleLink())->phi());
-      m_e_MS->push_back((*muon->muonSpectrometerTrackParticleLink())->e() * 0.001); // GeV
-      m_charge_MS->push_back((*muon->muonSpectrometerTrackParticleLink())->charge());
-      m_d0sig_MS->push_back(xAOD::TrackingHelpers::d0significance((*muon->muonSpectrometerTrackParticleLink()),
-                            ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
-      if (correctVertex)
-        m_z0_MS->push_back((*muon->muonSpectrometerTrackParticleLink())->z0() + (*muon->muonSpectrometerTrackParticleLink())->vz() - pvtx_z);
+        n_z0_ME->push_back(ME->z0() + ME->vz() - pvtx_z);
       else 
-        m_z0_MS->push_back((*muon->muonSpectrometerTrackParticleLink())->z0());
+        n_z0_ME->push_back(ME->z0());
       
-      m_qOverP_MS->push_back((*muon->muonSpectrometerTrackParticleLink())->qOverP() / 0.001); // GeV^-1
-      m_dqOverP_MS->push_back(sqrt((*muon->muonSpectrometerTrackParticleLink())->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
-      m_chi2_MS->push_back((*muon->muonSpectrometerTrackParticleLink())->chiSquared());
-      m_dof_MS->push_back((*muon->muonSpectrometerTrackParticleLink())->numberDoF());
+      n_qOverP_ME->push_back(ME->qOverP() / 0.001); // GeV^-1
+      n_dqOverP_ME->push_back(sqrt(ME->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
+      n_rchi2_ME->push_back(ME->chiSquared() / ME->numberDoF());
     }
     else {
-      m_pt_MS->push_back(-1);
-      m_eta_MS->push_back(-1e6);
-      m_phi_MS->push_back(-1e6);
-      m_e_MS->push_back(-1);
-      m_charge_MS->push_back(0);
-      m_d0sig_MS->push_back(-1);
-      m_z0_MS->push_back(-1);
-      m_qOverP_MS->push_back(-1);
-      m_dqOverP_MS->push_back(-1);
-      m_chi2_MS->push_back(-1);
-      m_dof_MS->push_back(-1);
-      m_m_MS = -1;
+      n_isME->push_back(false);
+      n_eta_ME->push_back(-1e6);
+      n_phi_ME->push_back(-1e6);
+      n_d0sig_ME->push_back(-1e6);
+      n_z0_ME->push_back(-1e6);
+      n_qOverP_ME->push_back(-1e6);
+      n_dqOverP_ME->push_back(-1e6);
+      n_rchi2_ME->push_back(-1e6);
     }
-
-    // check if there's an ID track, then access attributes
-    if ((muon->inDetTrackParticleLink())) {
-      m_pt_ID->push_back((*muon->inDetTrackParticleLink())->pt() * 0.001); // GeV
-      m_eta_ID->push_back((*muon->inDetTrackParticleLink())->eta());
-      m_phi_ID->push_back((*muon->inDetTrackParticleLink())->phi());
-      m_e_ID->push_back((*muon->inDetTrackParticleLink())->e() * 0.001); // GeV
-      m_charge_ID->push_back((*muon->inDetTrackParticleLink())->charge());
-      m_d0sig_ID->push_back(xAOD::TrackingHelpers::d0significance((*muon->inDetTrackParticleLink()),
-                            ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
-      if (correctVertex) 
-        m_z0_ID->push_back((*muon->inDetTrackParticleLink())->z0() + (*muon->inDetTrackParticleLink())->vz() - pvtx_z);
-      else 
-        m_z0_ID->push_back((*muon->inDetTrackParticleLink())->z0());
-      
-      m_qOverP_ID->push_back((*muon->inDetTrackParticleLink())->qOverP() / 0.001); // GeV^-1
-      m_dqOverP_ID->push_back(sqrt((*muon->inDetTrackParticleLink())->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
-      m_chi2_ID->push_back((*muon->inDetTrackParticleLink())->chiSquared());
-      m_dof_ID->push_back((*muon->inDetTrackParticleLink())->numberDoF());
-    }
-    else {
-      m_pt_ID->push_back(-1); 
-      m_eta_ID->push_back(-1e6);
-      m_phi_ID->push_back(-1e6);
-      m_e_ID->push_back(-1); 
-      m_charge_ID->push_back(0);
-      m_d0sig_ID->push_back(-1);
-      m_z0_ID->push_back(-1);
-      m_qOverP_ID->push_back(-1);
-      m_dqOverP_ID->push_back(-1);
-      m_chi2_ID->push_back(-1);
-      m_dof_ID->push_back(-1);
-      m_m_ID = -1;
-    } 
-  }
-
-  // Check that both selected muons had the particle track and compute invariant mass
-  if (m_m_CB != -1) {
-    m_m_CB = sqrt(2 * m_pt_CB->at(0) * m_pt_CB->at(1)
-                    * (cosh(m_eta_CB->at(0)-m_eta_CB->at(1)) - cos(m_phi_CB->at(0)-m_phi_CB->at(1))));
-  }
-  if (m_m_ME != -1) {
-    m_m_ME = sqrt(2 * m_pt_ME->at(0) * m_pt_ME->at(1)
-                    * (cosh(m_eta_ME->at(0)-m_eta_ME->at(1)) - cos(m_phi_ME->at(0)-m_phi_ME->at(1))));
-  }
-  if (m_m_MS != -1) {
-    m_m_MS = sqrt(2 * m_pt_MS->at(0) * m_pt_MS->at(1)
-                    * (cosh(m_eta_MS->at(0)-m_eta_MS->at(1)) - cos(m_phi_MS->at(0)-m_phi_MS->at(1))));
-  }
-  if (m_m_ID != -1) {
-    m_m_ID = sqrt(2 * m_pt_ID->at(0) * m_pt_ID->at(1)
-                    * (cosh(m_eta_ID->at(0)-m_eta_ID->at(1)) - cos(m_phi_ID->at(0)-m_phi_ID->at(1))));
-  }
  
-  delete my_muons; 
+    // MSO tracks
+    if ((muon->muonSpectrometerTrackParticleLink())) {
+      n_isMSO->push_back(true);
+      MSO = *muon->muonSpectrometerTrackParticleLink(); 
+      n_eta_MSO->push_back(MSO->eta());
+      n_phi_MSO->push_back(MSO->phi());
+      n_d0sig_MSO->push_back(xAOD::TrackingHelpers::d0significance(MSO,
+                            ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      if (correctVertex) 
+        n_z0_MSO->push_back(MSO->z0() + MSO->vz() - pvtx_z);
+      else 
+        n_z0_MSO->push_back(MSO->z0());
+      
+      n_qOverP_MSO->push_back(MSO->qOverP() / 0.001); // GeV^-1
+      n_dqOverP_MSO->push_back(sqrt(MSO->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
+      n_rchi2_MSO->push_back(MSO->chiSquared() / MSO->numberDoF());
+    }
+    else {
+      n_isMSO->push_back(false);
+      n_eta_MSO->push_back(-1e6);
+      n_phi_MSO->push_back(-1e6);
+      n_d0sig_MSO->push_back(-1e6);
+      n_z0_MSO->push_back(-1e6);
+      n_qOverP_MSO->push_back(-1e6);
+      n_dqOverP_MSO->push_back(-1e6);
+      n_rchi2_MSO->push_back(-1e6);
+    }
   
-  if (m_muonSelection->accept(*muon_1) || m_muonSelection->accept(*muon_2))
-    hist ("h_cutflow")->Fill(4.5);
-   
-  // if both muons pass the selection
-  if (m_muonSelection->accept(*muon_1) && m_muonSelection->accept(*muon_2)) {
-    tree ("SelectedZDecayMuons")->Fill();
-    hist ("h_cutflow")->Fill(5.5);
+    // MSOE tracks
+    if ((muon->msOnlyExtrapolatedMuonSpectrometerTrackParticleLink())) {
+      n_isMSOE->push_back(true);
+      MSOE = *muon->msOnlyExtrapolatedMuonSpectrometerTrackParticleLink(); 
+      n_eta_MSOE->push_back(MSOE->eta());
+      n_phi_MSOE->push_back(MSOE->phi());
+      n_d0sig_MSOE->push_back(xAOD::TrackingHelpers::d0significance(MSOE,
+                            ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      if (correctVertex) 
+        n_z0_MSOE->push_back(MSOE->z0() + MSOE->vz() - pvtx_z);
+      else 
+        n_z0_MSOE->push_back(MSOE->z0());
+      
+      n_qOverP_MSOE->push_back(MSOE->qOverP() / 0.001); // GeV^-1
+      n_dqOverP_MSOE->push_back(sqrt(MSOE->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
+      n_rchi2_MSOE->push_back(MSOE->chiSquared() / MSOE->numberDoF());
+    }
+    else {
+      n_isMSOE->push_back(false);
+      n_eta_MSOE->push_back(-1e6);
+      n_phi_MSOE->push_back(-1e6);
+      n_d0sig_MSOE->push_back(-1e6);
+      n_z0_MSOE->push_back(-1e6);
+      n_qOverP_MSOE->push_back(-1e6);
+      n_dqOverP_MSOE->push_back(-1e6);
+      n_rchi2_MSOE->push_back(-1e6);
+    }
+  
+    // ID tracks
+    if ((muon->inDetTrackParticleLink())) {
+      n_isID->push_back(true);
+      ID = *muon->inDetTrackParticleLink(); 
+      n_eta_ID->push_back(ID->eta());
+      n_phi_ID->push_back(ID->phi());
+      n_d0sig_ID->push_back(xAOD::TrackingHelpers::d0significance(ID,
+                            ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      if (correctVertex) 
+        n_z0_ID->push_back(ID->z0() + ID->vz() - pvtx_z);
+      else 
+        n_z0_ID->push_back(ID->z0());
+      
+      n_qOverP_ID->push_back(ID->qOverP() / 0.001); // GeV^-1
+      n_dqOverP_ID->push_back(sqrt(ID->definingParametersCovMatrix()(4,4)) / 0.001); // GeV^-1
+      n_rchi2_ID->push_back(ID->chiSquared() / ID->numberDoF());
+    }
+    else {
+      n_isID->push_back(false);
+      n_eta_ID->push_back(-1e6);
+      n_phi_ID->push_back(-1e6);
+      n_d0sig_ID->push_back(-1e6);
+      n_z0_ID->push_back(-1e6);
+      n_qOverP_ID->push_back(-1e6);
+      n_dqOverP_ID->push_back(-1e6);
+      n_rchi2_ID->push_back(-1e6);
+    }
   }
-
-  // fill background tree if any invariant mass is < 70 GeV
-  // may change the requirement
-  if ( (0 < m_m_CB && m_m_CB < 70) || (0 < m_m_ME && m_m_ME < 70) || (0 < m_m_ID && m_m_ID < 70) )
-    tree ("BackgroundMuons")->Fill();
+  
+  tree ("RecoMuons")->Fill();
 
   return StatusCode::SUCCESS;
 }
