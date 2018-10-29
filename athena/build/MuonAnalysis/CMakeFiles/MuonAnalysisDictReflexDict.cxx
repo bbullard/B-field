@@ -251,7 +251,7 @@ nullptr};
     if (!isInitialized) {
       TROOT::RegisterModule("libMuonAnalysisDict",
         headers, includePaths, payloadCode, fwdDeclCode,
-        TriggerDictionaryInitialization_libMuonAnalysisDict_Impl, {{"namespace DataVector_detail { template <typename B> class DVLEltBase_init; }", 1},{"namespace DataVector_detail { template <typename T> class RegisterDVLEltBaseInit; }", 1},{"namespace DataVector_detail { template <typename T> class DVLEltBaseInit; }", 1},{"namespace DataVector_detail { template <typename B1, typename B2, typename B3> class VirtBases; }", 1},{"template <typename T> class DataVectorBase;", 1},{"template <typename T, typename BASE> class DataVector;", 1}}, classesHeaders, /*has no C++ module*/false);
+        TriggerDictionaryInitialization_libMuonAnalysisDict_Impl, {{"namespace DataVector_detail { template <typename B> class DVLEltBase_init; }", 1},{"namespace DataVector_detail { template <typename T> class RegisterDVLEltBaseInit; }", 1},{"namespace DataVector_detail { template <typename T> class DVLEltBaseInit; }", 1},{"namespace DataVector_detail { template <typename B1, typename B2, typename B3> class VirtBases; }", 1},{"template <typename T> class DataVectorBase;", 1},{"template <typename T, typename BASE> class DataVector;", 1}}, classesHeaders);
       isInitialized = true;
     }
   }

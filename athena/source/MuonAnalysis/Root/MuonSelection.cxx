@@ -16,10 +16,10 @@ MuonSelection :: MuonSelection (const std::string& name,
       ME (), 
       MSO (),
       MSOE (),
-      ID (),
-      positiveMuons(),
-      negativeMuons()
+      ID ()
 {
+  positiveMuons = new std::vector<const xAOD::Muon*>();
+  negativeMuons = new std::vector<const xAOD::Muon*>();
 }
 
 MuonSelection :: ~MuonSelection () {
@@ -168,6 +168,9 @@ MuonSelection :: ~MuonSelection () {
   if (n_rchi2_MSO) delete n_rchi2_MSO;
   if (n_rchi2_MSOE) delete n_rchi2_MSOE;
   if (n_rchi2_ID) delete n_rchi2_ID;
+
+  if (positiveMuons) delete positiveMuons;
+  if (negativeMuons) delete negativeMuons;
 }
 
 StatusCode MuonSelection :: initialize ()
@@ -187,8 +190,10 @@ StatusCode MuonSelection :: initialize ()
   ANA_CHECK (m_muonSelection.initialize());
 
   // book trees
-  ANA_CHECK(book (TTree ("RecoMouns", "Reconstructed muons")));
+  ANA_CHECK(book (TTree ("RecoMuons", "Reconstructed muons")));
   TTree* zmumutree = tree ("RecoMuons");
+
+  ANA_MSG_INFO ("About to initialize branches");
 
   // set branch addresses for zmumutree  
   // event level
@@ -210,7 +215,7 @@ StatusCode MuonSelection :: initialize ()
   zmumutree->Branch("p_quality", &p_quality);
   p_primaryAuthor = new std::vector<int>();
   zmumutree->Branch("p_primaryAuthor", &p_primaryAuthor);
-  p_authors = new std::vector<std::vector<int>>();
+  p_authors = new std::vector<int>();
   zmumutree->Branch("p_authors", &p_authors);
   
   p_nPrecisionLayers = new std::vector<int>();
@@ -271,7 +276,7 @@ StatusCode MuonSelection :: initialize ()
   zmumutree->Branch("n_quality", &n_quality);
   n_primaryAuthor = new std::vector<int>();
   zmumutree->Branch("n_primaryAuthor", &n_primaryAuthor);
-  n_authors = new std::vector<std::vector<int>>();
+  n_authors = new std::vector<int>();
   zmumutree->Branch("n_authors", &n_authors);
   
   n_nPrecisionLayers = new std::vector<int>();
@@ -320,6 +325,17 @@ StatusCode MuonSelection :: initialize ()
   zmumutree->Branch("n_extendedLargeHoles", &n_extendedLargeHoles); 
   
   // positive muon track variables
+  p_isCB = new std::vector<bool>();
+  zmumutree->Branch("p_isCB", &p_isCB);
+  p_isME = new std::vector<bool>();
+  zmumutree->Branch("p_isME", &p_isME);
+  p_isMSO = new std::vector<bool>();
+  zmumutree->Branch("p_isMSO", &p_isMSO);
+  p_isMSOE = new std::vector<bool>();
+  zmumutree->Branch("p_isMSOE", &p_isMSOE);
+  p_isID = new std::vector<bool>();
+  zmumutree->Branch("p_isID", &p_isID);
+  
   p_eta_CB = new std::vector<float>();
   zmumutree->Branch("p_eta_CB", &p_eta_CB);
   p_eta_ME = new std::vector<float>();
@@ -398,6 +414,17 @@ StatusCode MuonSelection :: initialize ()
   zmumutree->Branch("p_rchi2_ID", &p_rchi2_ID);
 
   // negative muon track variables
+  n_isCB = new std::vector<bool>();
+  zmumutree->Branch("n_isCB", &n_isCB);
+  n_isME = new std::vector<bool>();
+  zmumutree->Branch("n_isME", &n_isME);
+  n_isMSO = new std::vector<bool>();
+  zmumutree->Branch("n_isMSO", &n_isMSO);
+  n_isMSOE = new std::vector<bool>();
+  zmumutree->Branch("n_isMSOE", &n_isMSOE);
+  n_isID = new std::vector<bool>();
+  zmumutree->Branch("n_isID", &n_isID);
+  
   n_eta_CB = new std::vector<float>();
   zmumutree->Branch("n_eta_CB", &n_eta_CB);
   n_eta_ME = new std::vector<float>();
@@ -474,7 +501,7 @@ StatusCode MuonSelection :: initialize ()
   zmumutree->Branch("n_rchi2_MSOE", &n_rchi2_MSOE);
   n_rchi2_ID = new std::vector<float>();
   zmumutree->Branch("n_rchi2_ID", &n_rchi2_ID);
-  
+
   return StatusCode::SUCCESS;
 }
 
@@ -683,6 +710,9 @@ StatusCode MuonSelection :: execute ()
   n_rchi2_MSOE->clear();
   n_rchi2_ID->clear();
 
+  positiveMuons->clear();
+  negativeMuons->clear();
+
   // separate muons by charge
   for (const xAOD::Muon* muon : *muons) {
     if (muon->charge() > 0) {
@@ -707,19 +737,30 @@ StatusCode MuonSelection :: execute ()
     p_primaryAuthor->push_back(muon->author());
     p_quality->push_back(m_muonSelection->getQuality(*muon));
   
-    std::vector<int> auths(11,0);
-    if (muon->isAuthor(xAOD::Muon_v1::Author::unknown)) auths.at(0) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidCo)) auths.at(1) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::STACO)) auths.at(2) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTag)) auths.at(3) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTagIMO)) auths.at(4) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidSA)) auths.at(5) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirl)) auths.at(6) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirlLowBeta)) auths.at(7) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloTag)) auths.at(8) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloLikelihood)) auths.at(9) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::ExtrapolateMuonToIP)) auths.at(10) = 1;
-    p_authors->push_back(auths);
+    const int unknown = 1<<0;
+    const int MuidCo = 1<<1;
+    const int STACO = 1<<2;
+    const int MuTag = 1<<3;
+    const int MuTagIMO = 1<<4;
+    const int MuidSA = 1<<5;
+    const int MuGirl = 1<<6;
+    const int MuGirlLowBeta = 1<<7;
+    const int CaloTag = 1<<8;
+    const int CaloLikelihood = 1<<9;
+    const int ExtrapolateMuonToIP = 1<<10;
+    int authors = 0;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::unknown)) authors = authors | unknown;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidCo)) authors = authors | MuidCo;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::STACO)) authors = authors | STACO;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTag)) authors = authors | MuTag;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTagIMO)) authors = authors | MuTagIMO;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidSA)) authors = authors | MuidSA;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirl)) authors = authors | MuGirl;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirlLowBeta)) authors = authors | MuGirlLowBeta;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloTag)) authors = authors | CaloTag;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloLikelihood)) authors = authors | CaloLikelihood;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::ExtrapolateMuonToIP)) authors = authors | ExtrapolateMuonToIP;
+    p_authors->push_back(authors);
     
     float eLoss = 0.;
     if (!muon->parameter(eLoss, xAOD::Muon::EnergyLoss) )
@@ -731,7 +772,7 @@ StatusCode MuonSelection :: execute ()
     p_nPhiLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPhiLayers));
     p_nPhiHoleLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPhiHoleLayers));
     p_nTriggerLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfTriggerEtaLayers));
-    p_nTriggerLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfTriggerEtaHoleLayers));
+    p_nTriggerHoleLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfTriggerEtaHoleLayers));
     p_innerSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerSmallHits));
     p_innerLargeHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerLargeHits));
     p_middleSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::middleSmallHits));
@@ -898,20 +939,31 @@ StatusCode MuonSelection :: execute ()
     n_primaryAuthor->push_back(muon->author());
     n_quality->push_back(m_muonSelection->getQuality(*muon));
   
-    std::vector<int> auths(11,0);
-    if (muon->isAuthor(xAOD::Muon_v1::Author::unknown)) auths.at(0) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidCo)) auths.at(1) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::STACO)) auths.at(2) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTag)) auths.at(3) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTagIMO)) auths.at(4) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidSA)) auths.at(5) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirl)) auths.at(6) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirlLowBeta)) auths.at(7) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloTag)) auths.at(8) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloLikelihood)) auths.at(9) = 1;
-    if (muon->isAuthor(xAOD::Muon_v1::Author::ExtrapolateMuonToIP)) auths.at(10) = 1;
-    n_authors->push_back(auths);
-  
+    const int unknown = 1<<0;
+    const int MuidCo = 1<<1;
+    const int STACO = 1<<2;
+    const int MuTag = 1<<3;
+    const int MuTagIMO = 1<<4;
+    const int MuidSA = 1<<5;
+    const int MuGirl = 1<<6;
+    const int MuGirlLowBeta = 1<<7;
+    const int CaloTag = 1<<8;
+    const int CaloLikelihood = 1<<9;
+    const int ExtrapolateMuonToIP = 1<<10;
+    int authors = 0;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::unknown)) authors = authors | unknown;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidCo)) authors = authors | MuidCo;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::STACO)) authors = authors | STACO;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTag)) authors = authors | MuTag;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuTagIMO)) authors = authors | MuTagIMO;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuidSA)) authors = authors | MuidSA;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirl)) authors = authors | MuGirl;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::MuGirlLowBeta)) authors = authors | MuGirlLowBeta;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloTag)) authors = authors | CaloTag;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::CaloLikelihood)) authors = authors | CaloLikelihood;
+    if (muon->isAuthor(xAOD::Muon_v1::Author::ExtrapolateMuonToIP)) authors = authors | ExtrapolateMuonToIP;
+    n_authors->push_back(authors);
+
     float eLoss = 0.;
     if (!muon->parameter(eLoss, xAOD::Muon::EnergyLoss) )
       ANA_MSG_DEBUG ("Muon energy loss not available");
@@ -922,7 +974,7 @@ StatusCode MuonSelection :: execute ()
     n_nPhiLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPhiLayers));
     n_nPhiHoleLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfPhiHoleLayers));
     n_nTriggerLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfTriggerEtaLayers));
-    n_nTriggerLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfTriggerEtaHoleLayers));
+    n_nTriggerHoleLayers->push_back(muon->uint8SummaryValue(xAOD::SummaryType::numberOfTriggerEtaHoleLayers));
     n_innerSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerSmallHits));
     n_innerLargeHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::innerLargeHits));
     n_middleSmallHits->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::middleSmallHits));

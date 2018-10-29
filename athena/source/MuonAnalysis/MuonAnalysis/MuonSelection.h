@@ -51,7 +51,7 @@ private:
   std::vector<int> *p_muonType = nullptr;
   std::vector<int> *p_quality = nullptr;
   std::vector<int> *p_primaryAuthor = nullptr;
-  std::vector<std::vector<int>> *p_authors;
+  std::vector<int> *p_authors = nullptr;
   std::vector<int> *p_nPrecisionLayers = nullptr; 
   std::vector<int> *p_nPrecisionHoleLayers = nullptr; 
   std::vector<int> *p_nPhiLayers = nullptr; 
@@ -82,7 +82,7 @@ private:
   std::vector<int> *n_muonType = nullptr;
   std::vector<int> *n_quality = nullptr;
   std::vector<int> *n_primaryAuthor = nullptr;
-  std::vector<std::vector<int>> *n_authors;
+  std::vector<int> *n_authors = nullptr;
   std::vector<int> *n_nPrecisionLayers = nullptr; 
   std::vector<int> *n_nPrecisionHoleLayers = nullptr; 
   std::vector<int> *n_nPhiLayers = nullptr; 
