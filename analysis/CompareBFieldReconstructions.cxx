@@ -1367,146 +1367,72 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   TH1F* h_m_CB_o = new TH1F("h_m_CB_o","",nBins,55,110);
   h_m_CB_o->SetTitle(";m_{#mu#bar{#mu}} (GeV);Events");
   TH1F* h_m_ME_o = (TH1F*)h_m_CB_o->Clone("h_m_ME_o");
-  TH1F* h_m_MS_o = (TH1F*)h_m_CB_o->Clone("h_m_MS_o");
+  TH1F* h_m_MSO_o = (TH1F*)h_m_CB_o->Clone("h_m_MSO_o");
+  TH1F* h_m_MSOE_o = (TH1F*)h_m_CB_o->Clone("h_m_MSOE_o");
   TH1F* h_m_ID_o = (TH1F*)h_m_CB_o->Clone("h_m_ID_o");
   
   TH1F* h_m_CB_n = (TH1F*)h_m_CB_o->Clone("h_m_CB_n");
   TH1F* h_m_ME_n = (TH1F*)h_m_CB_o->Clone("h_m_ME_n");
-  TH1F* h_m_MS_n = (TH1F*)h_m_CB_o->Clone("h_m_MS_n");
+  TH1F* h_m_MSO_n = (TH1F*)h_m_CB_o->Clone("h_m_MSO_n");
+  TH1F* h_m_MSOE_n = (TH1F*)h_m_CB_o->Clone("h_m_MSOE_n");
   TH1F* h_m_ID_n = (TH1F*)h_m_CB_o->Clone("h_m_ID_n");
 
-  // pt histograms for 3 track types and 2 files
-  TH1F* h_pt_CB_o = new TH1F("h_pt_CB_o","",nBins,0,120);
-  h_pt_CB_o->SetTitle(";p_{T} (GeV);Events");
-  TH1F* h_pt_ME_o = (TH1F*)h_pt_CB_o->Clone("h_pt_ME_o");
-  TH1F* h_pt_MS_o = (TH1F*)h_pt_CB_o->Clone("h_pt_MS_o");
-  TH1F* h_pt_ID_o = (TH1F*)h_pt_CB_o->Clone("h_pt_ID_o");
-
-  TH1F* h_pt_CB_n = (TH1F*)h_pt_CB_o->Clone("h_pt_CB_n");
-  TH1F* h_pt_ME_n = (TH1F*)h_pt_CB_o->Clone("h_pt_ME_n");
-  TH1F* h_pt_MS_n = (TH1F*)h_pt_CB_o->Clone("h_pt_MS_n");
-  TH1F* h_pt_ID_n = (TH1F*)h_pt_CB_o->Clone("h_pt_ID_n");
- 
   // leading pt histograms for 3 track types and 2 files
   TH1F* h_pt1_CB_o = new TH1F("h_pt1_CB_o","",nBins,0,120);
   h_pt1_CB_o->SetTitle(";Leading p_{T} (GeV);Events");
   TH1F* h_pt1_ME_o = (TH1F*)h_pt1_CB_o->Clone("h_pt1_ME_o");
-  TH1F* h_pt1_MS_o = (TH1F*)h_pt1_CB_o->Clone("h_pt1_MS_o");
+  TH1F* h_pt1_MSO_o = (TH1F*)h_pt1_CB_o->Clone("h_pt1_MSO_o");
+  TH1F* h_pt1_MSOE_o = (TH1F*)h_pt1_CB_o->Clone("h_pt1_MSOE_o");
   TH1F* h_pt1_ID_o = (TH1F*)h_pt1_CB_o->Clone("h_pt1_ID_o");
 
   TH1F* h_pt1_CB_n = (TH1F*)h_pt1_CB_o->Clone("h_pt1_CB_n");
   TH1F* h_pt1_ME_n = (TH1F*)h_pt1_CB_o->Clone("h_pt1_ME_n");
-  TH1F* h_pt1_MS_n = (TH1F*)h_pt1_CB_o->Clone("h_pt1_MS_n");
+  TH1F* h_pt1_MSO_n = (TH1F*)h_pt1_CB_o->Clone("h_pt1_MSO_n");
+  TH1F* h_pt1_MSOE_n = (TH1F*)h_pt1_CB_o->Clone("h_pt1_MSOE_n");
   TH1F* h_pt1_ID_n = (TH1F*)h_pt1_CB_o->Clone("h_pt1_ID_n");
  
   // leading pt histograms for 3 track types and 2 files
   TH1F* h_pt2_CB_o = new TH1F("h_pt2_CB_o","",nBins,0,120);
   h_pt2_CB_o->SetTitle(";Subleading p_{T} (GeV);Events");
   TH1F* h_pt2_ME_o = (TH1F*)h_pt2_CB_o->Clone("h_pt2_ME_o");
-  TH1F* h_pt2_MS_o = (TH1F*)h_pt2_CB_o->Clone("h_pt2_MS_o");
+  TH1F* h_pt2_MSO_o = (TH1F*)h_pt2_CB_o->Clone("h_pt2_MSO_o");
+  TH1F* h_pt2_MSOE_o = (TH1F*)h_pt2_CB_o->Clone("h_pt2_MSOE_o");
   TH1F* h_pt2_ID_o = (TH1F*)h_pt2_CB_o->Clone("h_pt2_ID_o");
 
   TH1F* h_pt2_CB_n = (TH1F*)h_pt2_CB_o->Clone("h_pt2_CB_n");
   TH1F* h_pt2_ME_n = (TH1F*)h_pt2_CB_o->Clone("h_pt2_ME_n");
-  TH1F* h_pt2_MS_n = (TH1F*)h_pt2_CB_o->Clone("h_pt2_MS_n");
+  TH1F* h_pt2_MSO_n = (TH1F*)h_pt2_CB_o->Clone("h_pt2_MSO_n");
+  TH1F* h_pt2_MSOE_n = (TH1F*)h_pt2_CB_o->Clone("h_pt2_MSOE_n");
   TH1F* h_pt2_ID_n = (TH1F*)h_pt2_CB_o->Clone("h_pt2_ID_n");
-  
-  // eta histograms for 3 track types and 2 files
-  TH1F* h_eta_CB_o = new TH1F("h_eta_CB_o","",nBins,-2.7,2.7);
-  h_eta_CB_o->SetTitle(";#eta;Events");
-  TH1F* h_eta_ME_o = (TH1F*)h_eta_CB_o->Clone("h_eta_ME_o");
-  TH1F* h_eta_MS_o = (TH1F*)h_eta_CB_o->Clone("h_eta_MS_o");
-  TH1F* h_eta_ID_o = (TH1F*)h_eta_CB_o->Clone("h_eta_ID_o");
-
-  TH1F* h_eta_CB_n = (TH1F*)h_eta_CB_o->Clone("h_eta_CB_n");
-  TH1F* h_eta_ME_n = (TH1F*)h_eta_CB_o->Clone("h_eta_ME_n");
-  TH1F* h_eta_MS_n = (TH1F*)h_eta_CB_o->Clone("h_eta_MS_n");
-  TH1F* h_eta_ID_n = (TH1F*)h_eta_CB_o->Clone("h_eta_ID_n");
   
   // eta histograms for 3 track types and 2 files leading
   TH1F* h_eta1_CB_o = new TH1F("h_eta1_CB_o","",nBins,-2.7,2.7);
   h_eta1_CB_o->SetTitle(";Leading Muon #eta;Events");
   TH1F* h_eta1_ME_o = (TH1F*)h_eta1_CB_o->Clone("h_eta1_ME_o");
-  TH1F* h_eta1_MS_o = (TH1F*)h_eta1_CB_o->Clone("h_eta1_MS_o");
+  TH1F* h_eta1_MSO_o = (TH1F*)h_eta1_CB_o->Clone("h_eta1_MSO_o");
+  TH1F* h_eta1_MSOE_o = (TH1F*)h_eta1_CB_o->Clone("h_eta1_MSOE_o");
   TH1F* h_eta1_ID_o = (TH1F*)h_eta1_CB_o->Clone("h_eta1_ID_o");
 
   TH1F* h_eta1_CB_n = (TH1F*)h_eta1_CB_o->Clone("h_eta1_CB_n");
   TH1F* h_eta1_ME_n = (TH1F*)h_eta1_CB_o->Clone("h_eta1_ME_n");
-  TH1F* h_eta1_MS_n = (TH1F*)h_eta1_CB_o->Clone("h_eta1_MS_n");
+  TH1F* h_eta1_MSO_n = (TH1F*)h_eta1_CB_o->Clone("h_eta1_MSO_n");
+  TH1F* h_eta1_MSOE_n = (TH1F*)h_eta1_CB_o->Clone("h_eta1_MSOE_n");
   TH1F* h_eta1_ID_n = (TH1F*)h_eta1_CB_o->Clone("h_eta1_ID_n");
  
   // eta histograms for 3 track types and 2 files subleading
   TH1F* h_eta2_CB_o = new TH1F("h_eta2_CB_o","",nBins,-2.7,2.7);
   h_eta2_CB_o->SetTitle(";Subleading Muon #eta;Events");
   TH1F* h_eta2_ME_o = (TH1F*)h_eta2_CB_o->Clone("h_eta2_ME_o");
-  TH1F* h_eta2_MS_o = (TH1F*)h_eta2_CB_o->Clone("h_eta2_MS_o");
+  TH1F* h_eta2_MSO_o = (TH1F*)h_eta2_CB_o->Clone("h_eta2_MSO_o");
+  TH1F* h_eta2_MSOE_o = (TH1F*)h_eta2_CB_o->Clone("h_eta2_MSOE_o");
   TH1F* h_eta2_ID_o = (TH1F*)h_eta2_CB_o->Clone("h_eta2_ID_o");
 
   TH1F* h_eta2_CB_n = (TH1F*)h_eta2_CB_o->Clone("h_eta2_CB_n");
   TH1F* h_eta2_ME_n = (TH1F*)h_eta2_CB_o->Clone("h_eta2_ME_n");
-  TH1F* h_eta2_MS_n = (TH1F*)h_eta2_CB_o->Clone("h_eta2_MS_n");
+  TH1F* h_eta2_MSO_n = (TH1F*)h_eta2_CB_o->Clone("h_eta2_MSO_n");
+  TH1F* h_eta2_MSOE_n = (TH1F*)h_eta2_CB_o->Clone("h_eta2_MSOE_n");
   TH1F* h_eta2_ID_n = (TH1F*)h_eta2_CB_o->Clone("h_eta2_ID_n");
   
-  // phi histograms for 3 track types and 2 files
-  TH1F* h_phi_CB_o = new TH1F("h_phi_CB_o","",nBins,-3.15,3.15);
-  h_phi_CB_o->SetTitle(";#phi;Events");
-  TH1F* h_phi_ME_o = (TH1F*)h_phi_CB_o->Clone("h_phi_ME_o");
-  TH1F* h_phi_MS_o = (TH1F*)h_phi_CB_o->Clone("h_phi_MS_o");
-  TH1F* h_phi_ID_o = (TH1F*)h_phi_CB_o->Clone("h_phi_ID_o");
-
-  TH1F* h_phi_CB_n = (TH1F*)h_phi_CB_o->Clone("h_phi_CB_n");
-  TH1F* h_phi_ME_n = (TH1F*)h_phi_CB_o->Clone("h_phi_ME_n");
-  TH1F* h_phi_MS_n = (TH1F*)h_phi_CB_o->Clone("h_phi_MS_n");
-  TH1F* h_phi_ID_n = (TH1F*)h_phi_CB_o->Clone("h_phi_ID_n");
-
-  // z0 histograms for 3 track types and 2 files
-  TH1F* h_z0_CB_o = new TH1F("h_z0_CB_o","",nBins,-2,2);
-  h_z0_CB_o->SetTitle(";z_{0} (mm);Events");
-  TH1F* h_z0_ME_o = (TH1F*)h_z0_CB_o->Clone("h_z0_ME_o");
-  TH1F* h_z0_MS_o = (TH1F*)h_z0_CB_o->Clone("h_z0_MS_o");
-  TH1F* h_z0_ID_o = (TH1F*)h_z0_CB_o->Clone("h_z0_ID_o");
-
-  TH1F* h_z0_CB_n = (TH1F*)h_z0_CB_o->Clone("h_z0_CB_n");
-  TH1F* h_z0_ME_n = (TH1F*)h_z0_CB_o->Clone("h_z0_ME_n");
-  TH1F* h_z0_MS_n = (TH1F*)h_z0_CB_o->Clone("h_z0_MS_n");
-  TH1F* h_z0_ID_n = (TH1F*)h_z0_CB_o->Clone("h_z0_ID_n");
-
-  // d0sig histograms for 3 track types and 2 files
-  TH1F* h_d0sig_CB_o = new TH1F("h_d0sig_CB_o","",nBins,-5,5);
-  h_d0sig_CB_o->SetTitle(";d_{0} Significance;Events");
-  TH1F* h_d0sig_ME_o = (TH1F*)h_d0sig_CB_o->Clone("h_d0sig_ME_o");
-  TH1F* h_d0sig_MS_o = (TH1F*)h_d0sig_CB_o->Clone("h_d0sig_MS_o");
-  TH1F* h_d0sig_ID_o = (TH1F*)h_d0sig_CB_o->Clone("h_d0sig_ID_o");
-
-  TH1F* h_d0sig_CB_n = (TH1F*)h_d0sig_CB_o->Clone("h_d0sig_CB_n");
-  TH1F* h_d0sig_ME_n = (TH1F*)h_d0sig_CB_o->Clone("h_d0sig_ME_n");
-  TH1F* h_d0sig_MS_n = (TH1F*)h_d0sig_CB_o->Clone("h_d0sig_MS_n");
-  TH1F* h_d0sig_ID_n = (TH1F*)h_d0sig_CB_o->Clone("h_d0sig_ID_n");
-
-  // energy histograms for 3 track types and 2 files
-  TH1F* h_e_CB_o = new TH1F("h_e_CB_o","",nBins,0,400);
-  h_e_CB_o->SetTitle(";E (GeV);Events");
-  TH1F* h_e_ME_o = (TH1F*)h_e_CB_o->Clone("h_e_ME_o");
-  TH1F* h_e_MS_o = (TH1F*)h_e_CB_o->Clone("h_e_MS_o");
-  TH1F* h_e_ID_o = (TH1F*)h_e_CB_o->Clone("h_e_ID_o");
-
-  TH1F* h_e_CB_n = (TH1F*)h_e_CB_o->Clone("h_e_CB_n");
-  TH1F* h_e_ME_n = (TH1F*)h_e_CB_o->Clone("h_e_ME_n");
-  TH1F* h_e_MS_n = (TH1F*)h_e_CB_o->Clone("h_e_MS_n");
-  TH1F* h_e_ID_n = (TH1F*)h_e_CB_o->Clone("h_e_ID_n");
-
-  // p_z of Z 
-  TH1F* h_pzmumu_CB_o = new TH1F("h_pzmumu_CB_o","",nBins,-500,500);
-  h_pzmumu_CB_o->SetTitle(";P_{z}^{#mu#mu} (GeV);Events");
-  TH1F* h_pzmumu_ME_o = (TH1F*)h_pzmumu_CB_o->Clone("h_pzmumu_ME_o");
-  TH1F* h_pzmumu_MS_o = (TH1F*)h_pzmumu_CB_o->Clone("h_pzmumu_MS_o");
-  TH1F* h_pzmumu_ID_o = (TH1F*)h_pzmumu_CB_o->Clone("h_pzmumu_ID_o");
-
-  TH1F* h_pzmumu_CB_n = (TH1F*)h_pzmumu_CB_o->Clone("h_pzmumu_CB_n");
-  TH1F* h_pzmumu_ME_n = (TH1F*)h_pzmumu_CB_o->Clone("h_pzmumu_ME_n");
-  TH1F* h_pzmumu_MS_n = (TH1F*)h_pzmumu_CB_o->Clone("h_pzmumu_MS_n");
-  TH1F* h_pzmumu_ID_n = (TH1F*)h_pzmumu_CB_o->Clone("h_pzmumu_ID_n");
- 
   // author
   TH1F* h_author1_o = new TH1F("h_author1_o","",6,0,6);
   h_author1_o->SetTitle(";Leading Muon Author;Events");
@@ -1517,220 +1443,99 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   TH1F* h_author2_n = (TH1F*)h_author2_o->Clone("h_author2_o");
 
   // quality
-  TH1F* h_quality1_o = new TH1F("h_quality1_o","",2,0,2);
-  h_quality1_o->SetTitle(";Leading Muon Quality;Events");
-  TH1F* h_quality2_o = new TH1F("h_quality2_o","",2,0,2);
-  h_quality2_o->SetTitle(";Subleading Muon Quality;Events");
+  TH1F* h_allQuality_o = new TH1F("h_allQuality_o","",4,0,4);
+  h_allQuality_o->SetTitle(";Muon Quality;Events");
+  TH1F* h_quality_o = new TH1F("h_quality_o","",4,0,4);
+  h_quality_o->SetTitle(";Highest P_{T} Muons Quality;Events");
   
-  TH1F* h_quality1_n = (TH1F*)h_quality1_o->Clone("h_quality1_o");
-  TH1F* h_quality2_n = (TH1F*)h_quality2_o->Clone("h_quality2_o");
+  TH1F* h_allQuality_n = (TH1F*)h_allQuality_o->Clone("h_allQuality_o");
+  TH1F* h_quality_n = (TH1F*)h_quality_o->Clone("h_quality_o");
   
-  // type
-  TH1F* h_type1_o = new TH1F("h_type1_o","",4,0,4);
-  h_type1_o->SetTitle(";Leading Muon Type;Events");
-  TH1F* h_type2_o = new TH1F("h_type2_o","",4,0,4);
-  h_type2_o->SetTitle(";Subleading Muon Type;Events");
-  
-  TH1F* h_type1_n = (TH1F*)h_type1_o->Clone("h_type1_o");
-  TH1F* h_type2_n = (TH1F*)h_type2_o->Clone("h_type2_o");
-  
-  // rho 
-  TH1F* h_rho_ME_o = new TH1F("h_rho_ME_o","",nBins,-.4,.4);
-  h_rho_ME_o->SetTitle(";#rho_{ME};Events");
-  TH1F* h_rho_MS_o = (TH1F*)h_rho_ME_o->Clone("h_rho_MS_o");
-  h_rho_MS_o->SetTitle(";#rho_{MS};Events");
-
-  TH1F* h_rho_ME_n = (TH1F*)h_rho_ME_o->Clone("h_rho_ME_n");
-  TH1F* h_rho_MS_n = (TH1F*)h_rho_ME_o->Clone("h_rho_MS_n");
-
   // rho leading 
   TH1F* h_rho1_ME_o = new TH1F("h_rho1_ME_o","",nBins,-.4,.4);
   h_rho1_ME_o->SetTitle(";Leading Muon #rho_{ME};Events");
-  TH1F* h_rho1_MS_o = (TH1F*)h_rho1_ME_o->Clone("h_rho1_MS_o");
-  h_rho1_MS_o->SetTitle(";Leading Muon #rho_{MS};Events");
+  TH1F* h_rho1_MSO_o = (TH1F*)h_rho1_ME_o->Clone("h_rho1_MSO_o");
+  h_rho1_MSO_o->SetTitle(";Leading Muon #rho_{MS};Events");
 
   TH1F* h_rho1_ME_n = (TH1F*)h_rho1_ME_o->Clone("h_rho1_ME_n");
-  TH1F* h_rho1_MS_n = (TH1F*)h_rho1_MS_o->Clone("h_rho1_MS_n");
+  TH1F* h_rho1_MSO_n = (TH1F*)h_rho1_MSO_o->Clone("h_rho1_MSO_n");
   
   // rho subleading
   TH1F* h_rho2_ME_o = new TH1F("h_rho2_ME_o","",nBins,-.4,.4);
   h_rho2_ME_o->SetTitle(";Subleading Muon #rho_{ME};Events");
-  TH1F* h_rho2_MS_o = (TH1F*)h_rho2_ME_o->Clone("h_rho2_MS_o");
-  h_rho2_MS_o->SetTitle(";Subleading Muon #rho_{MS};Events");
+  TH1F* h_rho2_MSO_o = (TH1F*)h_rho2_ME_o->Clone("h_rho2_MSO_o");
+  h_rho2_MSO_o->SetTitle(";Subleading Muon #rho_{MS};Events");
 
   TH1F* h_rho2_ME_n = (TH1F*)h_rho2_ME_o->Clone("h_rho2_ME_n");
-  TH1F* h_rho2_MS_n = (TH1F*)h_rho2_MS_o->Clone("h_rho2_MS_n");
+  TH1F* h_rho2_MSO_n = (TH1F*)h_rho2_MSO_o->Clone("h_rho2_MSO_n");
   
-  // dR (MS or ME) and ID
-  TH1F* h_dR_ME_o = new TH1F("h_dR_ME_o","",nBins,0,.01);
-  h_dR_ME_o->SetTitle(";#Delta R_{ME,ID};Events");
-  TH1F* h_dR_MS_o = new TH1F("h_dR_MS_o","",nBins,0,0.05);
-  h_dR_MS_o->SetTitle(";#Delta R_{MS,ID};Events");
-
-  TH1F* h_dR_ME_n = (TH1F*)h_dR_ME_o->Clone("h_dR_ME_n");
-  TH1F* h_dR_MS_n = (TH1F*)h_dR_MS_o->Clone("h_dR_MS_n");
-  
-  // dR (MS or ME) and ID leading
+  // dR (MSOE or ME) and ID leading
   TH1F* h_dR1_ME_o = new TH1F("h_dR1_ME_o","",nBins,0,.01);
   h_dR1_ME_o->SetTitle(";Leading Muon #Delta R_{ME,ID};Events");
-  TH1F* h_dR1_MS_o = new TH1F("h_dR1_MS_o","",nBins,0,0.05);
-  h_dR1_MS_o->SetTitle(";Leading Muon #Delta R_{MS,ID};Events");
+  TH1F* h_dR1_MSOE_o = new TH1F("h_dR1_MSOE_o","",nBins,0,0.05);
+  h_dR1_MSOE_o->SetTitle(";Leading Muon #Delta R_{MSOE,ID};Events");
 
   TH1F* h_dR1_ME_n = (TH1F*)h_dR1_ME_o->Clone("h_dR1_ME_n");
-  TH1F* h_dR1_MS_n = (TH1F*)h_dR1_MS_o->Clone("h_dR1_MS_n");
+  TH1F* h_dR1_MSOE_n = (TH1F*)h_dR1_MSOE_o->Clone("h_dR1_MSOE_n");
 
-  // dR (MS or ME) and ID subleading
+  // dR (MSOE or ME) and ID subleading
   TH1F* h_dR2_ME_o = new TH1F("h_dR2_ME_o","",nBins,0,.01);
   h_dR2_ME_o->SetTitle(";Subleading Muon #Delta R_{ME,ID};Events");
-  TH1F* h_dR2_MS_o = new TH1F("h_dR2_MS_o","",nBins,0,.05);
-  h_dR2_MS_o->SetTitle(";Subleading Muon #Delta R_{MS,ID};Events");
+  TH1F* h_dR2_MSOE_o = new TH1F("h_dR2_MSOE_o","",nBins,0,.05);
+  h_dR2_MSOE_o->SetTitle(";Subleading Muon #Delta R_{MSOE,ID};Events");
 
   TH1F* h_dR2_ME_n = (TH1F*)h_dR2_ME_o->Clone("h_dR2_ME_n");
-  TH1F* h_dR2_MS_n = (TH1F*)h_dR2_MS_o->Clone("h_dR2_MS_n");
+  TH1F* h_dR2_MSOE_n = (TH1F*)h_dR2_MSOE_o->Clone("h_dR2_MSOE_n");
   
   // add histograms to vectors for formatting
   std::vector<TH1F*> *vh_o = new std::vector<TH1F*>();
   std::vector<TH1F*> *vh_n = new std::vector<TH1F*>();
-  
-  // old histograms
-  vh_o->push_back(h_m_CB_o);
-  vh_o->push_back(h_m_ME_o);
-  vh_o->push_back(h_m_MS_o);
-  vh_o->push_back(h_m_ID_o);
-  vh_o->push_back(h_pt_CB_o);
-  vh_o->push_back(h_pt_ME_o);
-  vh_o->push_back(h_pt_MS_o);
-  vh_o->push_back(h_pt_ID_o);
-  vh_o->push_back(h_pt1_CB_o);
-  vh_o->push_back(h_pt1_ME_o);
-  vh_o->push_back(h_pt1_MS_o);
-  vh_o->push_back(h_pt1_ID_o);
-  vh_o->push_back(h_pt2_CB_o);
-  vh_o->push_back(h_pt2_ME_o);
-  vh_o->push_back(h_pt2_MS_o);
-  vh_o->push_back(h_pt2_ID_o);
-  vh_o->push_back(h_eta_CB_o);
-  vh_o->push_back(h_eta_ME_o);
-  vh_o->push_back(h_eta_MS_o);
-  vh_o->push_back(h_eta_ID_o);
-  vh_o->push_back(h_eta1_CB_o);
-  vh_o->push_back(h_eta1_ME_o);
-  vh_o->push_back(h_eta1_MS_o);
-  vh_o->push_back(h_eta1_ID_o);
-  vh_o->push_back(h_eta2_CB_o);
-  vh_o->push_back(h_eta2_ME_o);
-  vh_o->push_back(h_eta2_MS_o);
-  vh_o->push_back(h_eta2_ID_o);
-  vh_o->push_back(h_phi_CB_o);
-  vh_o->push_back(h_phi_ME_o);
-  vh_o->push_back(h_phi_MS_o);
-  vh_o->push_back(h_phi_ID_o);
-  vh_o->push_back(h_z0_CB_o);
-  vh_o->push_back(h_z0_ME_o);
-  vh_o->push_back(h_z0_MS_o);
-  vh_o->push_back(h_z0_ID_o);
-  vh_o->push_back(h_d0sig_CB_o);
-  vh_o->push_back(h_d0sig_ME_o);
-  vh_o->push_back(h_d0sig_MS_o);
-  vh_o->push_back(h_d0sig_ID_o);
-  vh_o->push_back(h_e_CB_o);
-  vh_o->push_back(h_e_ME_o);
-  vh_o->push_back(h_e_MS_o);
-  vh_o->push_back(h_e_ID_o);
-  vh_o->push_back(h_pzmumu_CB_o);
-  vh_o->push_back(h_pzmumu_ME_o);
-  vh_o->push_back(h_pzmumu_MS_o);
-  vh_o->push_back(h_pzmumu_ID_o);
-  vh_o->push_back(h_author1_o);
-  vh_o->push_back(h_author2_o);
-  vh_o->push_back(h_type1_o);
-  vh_o->push_back(h_type2_o);
-  vh_o->push_back(h_quality1_o);
-  vh_o->push_back(h_quality2_o);
-  vh_o->push_back(h_dR_ME_o);
-  vh_o->push_back(h_dR_MS_o);
-  vh_o->push_back(h_dR1_ME_o);
-  vh_o->push_back(h_dR1_MS_o);
-  vh_o->push_back(h_dR2_ME_o);
-  vh_o->push_back(h_dR2_MS_o);
-  vh_o->push_back(h_rho_ME_o);
-  vh_o->push_back(h_rho_MS_o);
-  vh_o->push_back(h_rho1_ME_o);
-  vh_o->push_back(h_rho1_MS_o);
-  vh_o->push_back(h_rho2_ME_o);
-  vh_o->push_back(h_rho2_MS_o);
+  std::vector<int> *maxFactor = new std::vector<int>();
 
-  vh_n->push_back(h_m_CB_n);
-  vh_n->push_back(h_m_ME_n);
-  vh_n->push_back(h_m_MS_n);
-  vh_n->push_back(h_m_ID_n);
-  vh_n->push_back(h_pt_CB_n);
-  vh_n->push_back(h_pt_ME_n);
-  vh_n->push_back(h_pt_MS_n);
-  vh_n->push_back(h_pt_ID_n);
-  vh_n->push_back(h_pt1_CB_n);
-  vh_n->push_back(h_pt1_ME_n);
-  vh_n->push_back(h_pt1_MS_n);
-  vh_n->push_back(h_pt1_ID_n);
-  vh_n->push_back(h_pt2_CB_n);
-  vh_n->push_back(h_pt2_ME_n);
-  vh_n->push_back(h_pt2_MS_n);
-  vh_n->push_back(h_pt2_ID_n);
-  vh_n->push_back(h_eta_CB_n);
-  vh_n->push_back(h_eta_ME_n);
-  vh_n->push_back(h_eta_MS_n);
-  vh_n->push_back(h_eta_ID_n);
-  vh_n->push_back(h_eta1_CB_n);
-  vh_n->push_back(h_eta1_ME_n);
-  vh_n->push_back(h_eta1_MS_n);
-  vh_n->push_back(h_eta1_ID_n);
-  vh_n->push_back(h_eta2_CB_n);
-  vh_n->push_back(h_eta2_ME_n);
-  vh_n->push_back(h_eta2_MS_n);
-  vh_n->push_back(h_eta2_ID_n);
-  vh_n->push_back(h_phi_CB_n);
-  vh_n->push_back(h_phi_ME_n);
-  vh_n->push_back(h_phi_MS_n);
-  vh_n->push_back(h_phi_ID_n);
-  vh_n->push_back(h_z0_CB_n);
-  vh_n->push_back(h_z0_ME_n);
-  vh_n->push_back(h_z0_MS_n);
-  vh_n->push_back(h_z0_ID_n);
-  vh_n->push_back(h_d0sig_CB_n);
-  vh_n->push_back(h_d0sig_ME_n);
-  vh_n->push_back(h_d0sig_MS_n);
-  vh_n->push_back(h_d0sig_ID_n);
-  vh_n->push_back(h_e_CB_n);
-  vh_n->push_back(h_e_ME_n);
-  vh_n->push_back(h_e_MS_n);
-  vh_n->push_back(h_e_ID_n);
-  vh_n->push_back(h_pzmumu_CB_n);
-  vh_n->push_back(h_pzmumu_ME_n);
-  vh_n->push_back(h_pzmumu_MS_n);
-  vh_n->push_back(h_pzmumu_ID_n);
-  vh_n->push_back(h_author1_n);
-  vh_n->push_back(h_author2_n);
-  vh_n->push_back(h_type1_n);
-  vh_n->push_back(h_type2_n);
-  vh_n->push_back(h_quality1_n);
-  vh_n->push_back(h_quality2_n);
-  vh_n->push_back(h_dR_ME_n);
-  vh_n->push_back(h_dR_MS_n);
-  vh_n->push_back(h_dR1_ME_n);
-  vh_n->push_back(h_dR1_MS_n);
-  vh_n->push_back(h_dR2_ME_n);
-  vh_n->push_back(h_dR2_MS_n);
-  vh_n->push_back(h_rho_ME_n);
-  vh_n->push_back(h_rho_MS_n);
-  vh_n->push_back(h_rho1_ME_n);
-  vh_n->push_back(h_rho1_MS_n);
-  vh_n->push_back(h_rho2_ME_n);
-  vh_n->push_back(h_rho2_MS_n);
-  
+  // push back vector of histograms and plot range scalings            
+  vh_o->push_back(h_m_CB_o);        vh_n->push_back(h_m_CB_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_m_ME_o);        vh_n->push_back(h_m_ME_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_m_MSO_o);       vh_n->push_back(h_m_MSO_n);       maxFactor->push_back(1.05);
+  vh_o->push_back(h_m_MSOE_o);      vh_n->push_back(h_m_MSOE_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_m_ID_o);        vh_n->push_back(h_m_ID_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt1_CB_o);      vh_n->push_back(h_pt1_CB_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt1_ME_o);      vh_n->push_back(h_pt1_ME_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt1_MSO_o);     vh_n->push_back(h_pt1_MSO_n);     maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt1_MSOE_o);    vh_n->push_back(h_pt1_MSOE_n);    maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt1_ID_o);      vh_n->push_back(h_pt1_ID_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt2_CB_o);      vh_n->push_back(h_pt2_CB_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt2_ME_o);      vh_n->push_back(h_pt2_ME_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt2_MSO_o);     vh_n->push_back(h_pt2_MSO_n);     maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt2_MSOE_o);    vh_n->push_back(h_pt2_MSOE_n);    maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt2_ID_o);      vh_n->push_back(h_pt2_ID_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_eta1_CB_o);     vh_n->push_back(h_eta1_CB_n);     maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta1_ME_o);     vh_n->push_back(h_eta1_ME_n);     maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta1_MSO_o);    vh_n->push_back(h_eta1_MSO_n);    maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta1_MSOE_o);   vh_n->push_back(h_eta1_MSOE_n);   maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta1_ID_o);     vh_n->push_back(h_eta1_ID_n);     maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta2_CB_o);     vh_n->push_back(h_eta2_CB_n);     maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta2_ME_o);     vh_n->push_back(h_eta2_ME_n);     maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta2_MSO_o);    vh_n->push_back(h_eta2_MSO_n);    maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta2_MSOE_o);   vh_n->push_back(h_eta2_MSOE_n);   maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta2_ID_o);     vh_n->push_back(h_eta2_ID_n);     maxFactor->push_back(1.3);
+  vh_o->push_back(h_author1_o);     vh_n->push_back(h_author1_n);     maxFactor->push_back(1.05);
+  vh_o->push_back(h_author2_o);     vh_n->push_back(h_author2_n);     maxFactor->push_back(1.05);
+  vh_o->push_back(h_quality_o);     vh_n->push_back(h_quality_n);     maxFactor->push_back(1.05);
+  vh_o->push_back(h_allQuality_o);  vh_n->push_back(h_allQuality_n);  maxFactor->push_back(1.05);
+  vh_o->push_back(h_rho1_ME_o);     vh_n->push_back(h_rho1_ME_n);     maxFactor->push_back(1.05);
+  vh_o->push_back(h_rho1_MSO_o);    vh_n->push_back(h_rho1_MSO_n);    maxFactor->push_back(1.05);
+  vh_o->push_back(h_rho2_ME_o);     vh_n->push_back(h_rho2_ME_n);     maxFactor->push_back(1.05);
+  vh_o->push_back(h_rho2_MSO_o);    vh_n->push_back(h_rho2_MSO_n);    maxFactor->push_back(1.05);
+  vh_o->push_back(h_dR1_ME_o);      vh_n->push_back(h_dR1_ME_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_dR1_MSOE_o);    vh_n->push_back(h_dR1_MSOE_n);    maxFactor->push_back(1.05);
+  vh_o->push_back(h_dR2_ME_o);      vh_n->push_back(h_dR2_ME_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_dR2_MSOE_o);    vh_n->push_back(h_dR2_MSOE_n);    maxFactor->push_back(1.05);
+
+
   // check that the vectors have the same size
-  if ( vh_o->size() != vh_n->size()) 
+  if ( vh_o->size() != vh_n->size() || vh_o->size() != maxFactor->size()) 
     std::cout << "Warning: histogram vector sizes unequal between two maps" << std::endl;
-
+  
   // format histograms
   for (int i = 0; i < vh_o->size(); i++) {
     vh_o->at(i)->SetLineColor(kBlack); 
@@ -1753,469 +1558,805 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   long int nLeadingPlus_o = 0;
   long int nEvents_noBadMS_o = 0;
   long int nLeadingPlus_noBadMS_o = 0;
+
+  // event level  
+  TTreeReader reader_old("RecoMuons", f_recoOld);
+  TTreeReaderValue<bool> passGRL_o(reader_old, "passGRL");
+  TTreeReaderValue<unsigned long long> eventNumber_o(reader_old, "eventNumber");
+  TTreeReaderValue<unsigned int> nPositiveMuons_o(reader_old, "nPositiveMuons");
+  TTreeReaderValue<unsigned int> nNegativeMuons_o(reader_old, "nNegativeMuons");
   
-  TTreeReader reader_old("SelectedZDecayMuons", f_recoOld);
-  TTreeReaderValue<vector<float>> pt_CB_o(reader_old, "Pt_CB");
-  TTreeReaderValue<vector<float>> pt_ME_o(reader_old, "Pt_ME");
-  TTreeReaderValue<vector<float>> pt_MS_o(reader_old, "Pt_MS");
-  TTreeReaderValue<vector<float>> pt_ID_o(reader_old, "Pt_ID");
-  TTreeReaderValue<vector<float>> eta_CB_o(reader_old, "Eta_CB");
-  TTreeReaderValue<vector<float>> eta_ME_o(reader_old, "Eta_ME");
-  TTreeReaderValue<vector<float>> eta_MS_o(reader_old, "Eta_MS");
-  TTreeReaderValue<vector<float>> eta_ID_o(reader_old, "Eta_ID");
-  TTreeReaderValue<vector<float>> phi_CB_o(reader_old, "Phi_CB");
-  TTreeReaderValue<vector<float>> phi_ME_o(reader_old, "Phi_ME");
-  TTreeReaderValue<vector<float>> phi_MS_o(reader_old, "Phi_MS");
-  TTreeReaderValue<vector<float>> phi_ID_o(reader_old, "Phi_ID");
-  TTreeReaderValue<vector<float>> d0sig_CB_o(reader_old, "d0sig_CB");
-  TTreeReaderValue<vector<float>> d0sig_ME_o(reader_old, "d0sig_ME");
-  TTreeReaderValue<vector<float>> d0sig_MS_o(reader_old, "d0sig_MS");
-  TTreeReaderValue<vector<float>> d0sig_ID_o(reader_old, "d0sig_ID");
-  TTreeReaderValue<vector<float>> z0_CB_o(reader_old, "z0_CB");
-  TTreeReaderValue<vector<float>> z0_ME_o(reader_old, "z0_ME");
-  TTreeReaderValue<vector<float>> z0_MS_o(reader_old, "z0_MS");
-  TTreeReaderValue<vector<float>> z0_ID_o(reader_old, "z0_ID");
-  TTreeReaderValue<vector<float>> qOverP_CB_o(reader_old, "qOverP_CB");
-  TTreeReaderValue<vector<float>> qOverP_ME_o(reader_old, "qOverP_ME");
-  TTreeReaderValue<vector<float>> qOverP_MS_o(reader_old, "qOverP_MS");
-  TTreeReaderValue<vector<float>> qOverP_ID_o(reader_old, "qOverP_ID");
-  TTreeReaderValue<vector<float>> dqOverP_CB_o(reader_old, "dqOverP_CB");
-  TTreeReaderValue<vector<float>> dqOverP_ME_o(reader_old, "dqOverP_ME");
-  TTreeReaderValue<vector<float>> dqOverP_MS_o(reader_old, "dqOverP_MS");
-  TTreeReaderValue<vector<float>> dqOverP_ID_o(reader_old, "dqOverP_ID");
-  TTreeReaderValue<vector<float>> chi2_CB_o(reader_old, "chi2_CB");
-  TTreeReaderValue<vector<float>> chi2_ME_o(reader_old, "chi2_ME");
-  TTreeReaderValue<vector<float>> chi2_MS_o(reader_old, "chi2_MS");
-  TTreeReaderValue<vector<float>> chi2_ID_o(reader_old, "chi2_ID");
-  TTreeReaderValue<vector<float>> dof_CB_o(reader_old, "dof_CB");
-  TTreeReaderValue<vector<float>> dof_ME_o(reader_old, "dof_ME");
-  TTreeReaderValue<vector<float>> dof_MS_o(reader_old, "dof_MS");
-  TTreeReaderValue<vector<float>> dof_ID_o(reader_old, "dof_ID");
-  TTreeReaderValue<float> m_CB_o(reader_old, "m_CB");
-  TTreeReaderValue<float> m_ME_o(reader_old, "m_ME");
-  TTreeReaderValue<float> m_MS_o(reader_old, "m_MS");
-  TTreeReaderValue<float> m_ID_o(reader_old, "m_ID");
-  TTreeReaderValue<vector<float>> e_CB_o(reader_old, "E_CB");
-  TTreeReaderValue<vector<float>> e_ME_o(reader_old, "E_ME");
-  TTreeReaderValue<vector<float>> e_MS_o(reader_old, "E_MS");
-  TTreeReaderValue<vector<float>> e_ID_o(reader_old, "E_ID");
-  TTreeReaderValue<vector<float>> charge_CB_o(reader_old, "Charge_CB");
-  TTreeReaderValue<vector<float>> charge_ME_o(reader_old, "Charge_ME");
-  TTreeReaderValue<vector<float>> charge_MS_o(reader_old, "Charge_MS");
-  TTreeReaderValue<vector<float>> charge_ID_o(reader_old, "Charge_ID");
-  TTreeReaderValue<vector<float>> eLoss_o(reader_old, "EnergyLoss");
-  TTreeReaderValue<vector<int>> muonType_o(reader_old, "MuonType");
-  TTreeReaderValue<vector<int>> quality_o(reader_old, "Quality");
-  TTreeReaderValue<vector<int>> author_o(reader_old, "Author");
+  // positive muon variables
+  TTreeReaderValue<vector<bool>> p_passIDcuts_o(reader_old, "p_passIDcuts");
+  TTreeReaderValue<vector<bool>> p_passAll_o(reader_old, "p_passAll");
+  TTreeReaderValue<vector<float>> p_eLoss_o(reader_old, "p_eLoss");
+  TTreeReaderValue<vector<int>> p_muonType_o(reader_old, "p_muonType");
+  TTreeReaderValue<vector<int>> p_quality_o(reader_old, "p_quality");
+  TTreeReaderValue<vector<int>> p_primaryAuthor_o(reader_old, "p_primaryAuthor");
+  TTreeReaderValue<vector<int>> p_authors_o(reader_old, "p_authors");
+  TTreeReaderValue<vector<int>> p_nPrecisionLayers_o(reader_old, "p_nPrecisionLayers");
+  TTreeReaderValue<vector<int>> p_nPrecisionHoleLayers_o(reader_old, "p_nPrecisionHoleLayers");
+  TTreeReaderValue<vector<int>> p_innerSmallHits_o(reader_old, "p_innerSmallHits");
+  TTreeReaderValue<vector<int>> p_innerLargeHits_o(reader_old, "p_innerLargeHits");
+  TTreeReaderValue<vector<int>> p_middleSmallHits_o(reader_old, "p_middleSmallHits");
+  TTreeReaderValue<vector<int>> p_middleLargeHits_o(reader_old, "p_middleLargeHits");
+  TTreeReaderValue<vector<int>> p_outerSmallHits_o(reader_old, "p_outerSmallHits");
+  TTreeReaderValue<vector<int>> p_outerLargeHits_o(reader_old, "p_outerLargeHits");
+  TTreeReaderValue<vector<int>> p_extendedSmallHits_o(reader_old, "p_extendedSmallHits");
+  TTreeReaderValue<vector<int>> p_extendedLargeHits_o(reader_old, "p_extendedLargeHits"); 
+  TTreeReaderValue<vector<int>> p_innerSmallHoles_o(reader_old, "p_innerSmallHoles");
+  TTreeReaderValue<vector<int>> p_innerLargeHoles_o(reader_old, "p_innerLargeHoles");
+  TTreeReaderValue<vector<int>> p_middleSmallHoles_o(reader_old, "p_middleSmallHoles");
+  TTreeReaderValue<vector<int>> p_middleLargeHoles_o(reader_old, "p_middleLargeHoles");
+  TTreeReaderValue<vector<int>> p_outerSmallHoles_o(reader_old, "p_outerSmallHoles");
+  TTreeReaderValue<vector<int>> p_outerLargeHoles_o(reader_old, "p_outerLargeHoles");
+  TTreeReaderValue<vector<int>> p_extendedSmallHoles_o(reader_old, "p_extendedSmallHoles");
+  TTreeReaderValue<vector<int>> p_extendedLargeHoles_o(reader_old, "p_extendedLargeHoles");
+
+  // negative muon variables
+  TTreeReaderValue<vector<bool>> n_passIDcuts_o(reader_old, "n_passIDcuts");
+  TTreeReaderValue<vector<bool>> n_passAll_o(reader_old, "n_passAll");
+  TTreeReaderValue<vector<float>> n_eLoss_o(reader_old, "n_eLoss");
+  TTreeReaderValue<vector<int>> n_muonType_o(reader_old, "n_muonType");
+  TTreeReaderValue<vector<int>> n_quality_o(reader_old, "n_quality");
+  TTreeReaderValue<vector<int>> n_primaryAuthor_o(reader_old, "n_primaryAuthor");
+  TTreeReaderValue<vector<int>> n_authors_o(reader_old, "n_authors");
+  TTreeReaderValue<vector<int>> n_nPrecisionLayers_o(reader_old, "n_nPrecisionLayers");
+  TTreeReaderValue<vector<int>> n_nPrecisionHoleLayers_o(reader_old, "n_nPrecisionHoleLayers");
+  TTreeReaderValue<vector<int>> n_innerSmallHits_o(reader_old, "n_innerSmallHits");
+  TTreeReaderValue<vector<int>> n_innerLargeHits_o(reader_old, "n_innerLargeHits");
+  TTreeReaderValue<vector<int>> n_middleSmallHits_o(reader_old, "n_middleSmallHits");
+  TTreeReaderValue<vector<int>> n_middleLargeHits_o(reader_old, "n_middleLargeHits");
+  TTreeReaderValue<vector<int>> n_outerSmallHits_o(reader_old, "n_outerSmallHits");
+  TTreeReaderValue<vector<int>> n_outerLargeHits_o(reader_old, "n_outerLargeHits");
+  TTreeReaderValue<vector<int>> n_extendedSmallHits_o(reader_old, "n_extendedSmallHits");
+  TTreeReaderValue<vector<int>> n_extendedLargeHits_o(reader_old, "n_extendedLargeHits"); 
+  TTreeReaderValue<vector<int>> n_innerSmallHoles_o(reader_old, "n_innerSmallHoles");
+  TTreeReaderValue<vector<int>> n_innerLargeHoles_o(reader_old, "n_innerLargeHoles");
+  TTreeReaderValue<vector<int>> n_middleSmallHoles_o(reader_old, "n_middleSmallHoles");
+  TTreeReaderValue<vector<int>> n_middleLargeHoles_o(reader_old, "n_middleLargeHoles");
+  TTreeReaderValue<vector<int>> n_outerSmallHoles_o(reader_old, "n_outerSmallHoles");
+  TTreeReaderValue<vector<int>> n_outerLargeHoles_o(reader_old, "n_outerLargeHoles");
+  TTreeReaderValue<vector<int>> n_extendedSmallHoles_o(reader_old, "n_extendedSmallHoles");
+  TTreeReaderValue<vector<int>> n_extendedLargeHoles_o(reader_old, "n_extendedLargeHoles");
+
+  // positive muon track variables
+  TTreeReaderValue<vector<bool>> p_isCB_o(reader_old, "p_isCB");
+  TTreeReaderValue<vector<bool>> p_isME_o(reader_old, "p_isME");
+  TTreeReaderValue<vector<bool>> p_isMSO_o(reader_old, "p_isMSO");
+  TTreeReaderValue<vector<bool>> p_isMSOE_o(reader_old, "p_isMSOE");
+  TTreeReaderValue<vector<bool>> p_isID_o(reader_old, "p_isID");
+  TTreeReaderValue<vector<float>> p_eta_CB_o(reader_old, "p_eta_CB");
+  TTreeReaderValue<vector<float>> p_eta_ME_o(reader_old, "p_eta_ME");
+  TTreeReaderValue<vector<float>> p_eta_MSO_o(reader_old, "p_eta_MSO");
+  TTreeReaderValue<vector<float>> p_eta_MSOE_o(reader_old, "p_eta_MSOE");
+  TTreeReaderValue<vector<float>> p_eta_ID_o(reader_old, "p_eta_ID");
+  TTreeReaderValue<vector<float>> p_phi_CB_o(reader_old, "p_phi_CB");
+  TTreeReaderValue<vector<float>> p_phi_ME_o(reader_old, "p_phi_ME");
+  TTreeReaderValue<vector<float>> p_phi_MSO_o(reader_old, "p_phi_MSO");
+  TTreeReaderValue<vector<float>> p_phi_MSOE_o(reader_old, "p_phi_MSOE");
+  TTreeReaderValue<vector<float>> p_phi_ID_o(reader_old, "p_phi_ID");
+  TTreeReaderValue<vector<float>> p_d0sig_CB_o(reader_old, "p_d0sig_CB");
+  TTreeReaderValue<vector<float>> p_d0sig_ME_o(reader_old, "p_d0sig_ME");
+  TTreeReaderValue<vector<float>> p_d0sig_MSO_o(reader_old, "p_d0sig_MSO");
+  TTreeReaderValue<vector<float>> p_d0sig_MSOE_o(reader_old, "p_d0sig_MSOE");
+  TTreeReaderValue<vector<float>> p_d0sig_ID_o(reader_old, "p_d0sig_ID");
+  TTreeReaderValue<vector<float>> p_z0_CB_o(reader_old, "p_z0_CB");
+  TTreeReaderValue<vector<float>> p_z0_ME_o(reader_old, "p_z0_ME");
+  TTreeReaderValue<vector<float>> p_z0_MSO_o(reader_old, "p_z0_MSO");
+  TTreeReaderValue<vector<float>> p_z0_MSOE_o(reader_old, "p_z0_MSOE");
+  TTreeReaderValue<vector<float>> p_z0_ID_o(reader_old, "p_z0_ID");
+  TTreeReaderValue<vector<float>> p_qOverP_CB_o(reader_old, "p_qOverP_CB");
+  TTreeReaderValue<vector<float>> p_qOverP_ME_o(reader_old, "p_qOverP_ME");
+  TTreeReaderValue<vector<float>> p_qOverP_MSO_o(reader_old, "p_qOverP_MSO");
+  TTreeReaderValue<vector<float>> p_qOverP_MSOE_o(reader_old, "p_qOverP_MSOE");
+  TTreeReaderValue<vector<float>> p_qOverP_ID_o(reader_old, "p_qOverP_ID");
+  TTreeReaderValue<vector<float>> p_dqOverP_CB_o(reader_old, "p_dqOverP_CB");
+  TTreeReaderValue<vector<float>> p_dqOverP_ME_o(reader_old, "p_dqOverP_ME");
+  TTreeReaderValue<vector<float>> p_dqOverP_MSO_o(reader_old, "p_dqOverP_MSO");
+  TTreeReaderValue<vector<float>> p_dqOverP_MSOE_o(reader_old, "p_dqOverP_MSOE");
+  TTreeReaderValue<vector<float>> p_dqOverP_ID_o(reader_old, "p_dqOverP_ID");
+  TTreeReaderValue<vector<float>> p_rchi2_CB_o(reader_old, "p_rchi2_CB");
+  TTreeReaderValue<vector<float>> p_rchi2_ME_o(reader_old, "p_rchi2_ME");
+  TTreeReaderValue<vector<float>> p_rchi2_MSO_o(reader_old, "p_rchi2_MSO");
+  TTreeReaderValue<vector<float>> p_rchi2_MSOE_o(reader_old, "p_rchi2_MSOE");
+  TTreeReaderValue<vector<float>> p_rchi2_ID_o(reader_old, "p_rchi2_ID");
+  
+  // negative muon track variables
+  TTreeReaderValue<vector<bool>> n_isCB_o(reader_old, "n_isCB");
+  TTreeReaderValue<vector<bool>> n_isME_o(reader_old, "n_isME");
+  TTreeReaderValue<vector<bool>> n_isMSO_o(reader_old, "n_isMSO");
+  TTreeReaderValue<vector<bool>> n_isMSOE_o(reader_old, "n_isMSOE");
+  TTreeReaderValue<vector<bool>> n_isID_o(reader_old, "n_isID");
+  TTreeReaderValue<vector<float>> n_eta_CB_o(reader_old, "n_eta_CB");
+  TTreeReaderValue<vector<float>> n_eta_ME_o(reader_old, "n_eta_ME");
+  TTreeReaderValue<vector<float>> n_eta_MSO_o(reader_old, "n_eta_MSO");
+  TTreeReaderValue<vector<float>> n_eta_MSOE_o(reader_old, "n_eta_MSOE");
+  TTreeReaderValue<vector<float>> n_eta_ID_o(reader_old, "n_eta_ID");
+  TTreeReaderValue<vector<float>> n_phi_CB_o(reader_old, "n_phi_CB");
+  TTreeReaderValue<vector<float>> n_phi_ME_o(reader_old, "n_phi_ME");
+  TTreeReaderValue<vector<float>> n_phi_MSO_o(reader_old, "n_phi_MSO");
+  TTreeReaderValue<vector<float>> n_phi_MSOE_o(reader_old, "n_phi_MSOE");
+  TTreeReaderValue<vector<float>> n_phi_ID_o(reader_old, "n_phi_ID");
+  TTreeReaderValue<vector<float>> n_d0sig_CB_o(reader_old, "n_d0sig_CB");
+  TTreeReaderValue<vector<float>> n_d0sig_ME_o(reader_old, "n_d0sig_ME");
+  TTreeReaderValue<vector<float>> n_d0sig_MSO_o(reader_old, "n_d0sig_MSO");
+  TTreeReaderValue<vector<float>> n_d0sig_MSOE_o(reader_old, "n_d0sig_MSOE");
+  TTreeReaderValue<vector<float>> n_d0sig_ID_o(reader_old, "n_d0sig_ID");
+  TTreeReaderValue<vector<float>> n_z0_CB_o(reader_old, "n_z0_CB");
+  TTreeReaderValue<vector<float>> n_z0_ME_o(reader_old, "n_z0_ME");
+  TTreeReaderValue<vector<float>> n_z0_MSO_o(reader_old, "n_z0_MSO");
+  TTreeReaderValue<vector<float>> n_z0_MSOE_o(reader_old, "n_z0_MSOE");
+  TTreeReaderValue<vector<float>> n_z0_ID_o(reader_old, "n_z0_ID");
+  TTreeReaderValue<vector<float>> n_qOverP_CB_o(reader_old, "n_qOverP_CB");
+  TTreeReaderValue<vector<float>> n_qOverP_ME_o(reader_old, "n_qOverP_ME");
+  TTreeReaderValue<vector<float>> n_qOverP_MSO_o(reader_old, "n_qOverP_MSO");
+  TTreeReaderValue<vector<float>> n_qOverP_MSOE_o(reader_old, "n_qOverP_MSOE");
+  TTreeReaderValue<vector<float>> n_qOverP_ID_o(reader_old, "n_qOverP_ID");
+  TTreeReaderValue<vector<float>> n_dqOverP_CB_o(reader_old, "n_dqOverP_CB");
+  TTreeReaderValue<vector<float>> n_dqOverP_ME_o(reader_old, "n_dqOverP_ME");
+  TTreeReaderValue<vector<float>> n_dqOverP_MSO_o(reader_old, "n_dqOverP_MSO");
+  TTreeReaderValue<vector<float>> n_dqOverP_MSOE_o(reader_old, "n_dqOverP_MSOE");
+  TTreeReaderValue<vector<float>> n_dqOverP_ID_o(reader_old, "n_dqOverP_ID");
+  TTreeReaderValue<vector<float>> n_rchi2_CB_o(reader_old, "n_rchi2_CB");
+  TTreeReaderValue<vector<float>> n_rchi2_ME_o(reader_old, "n_rchi2_ME");
+  TTreeReaderValue<vector<float>> n_rchi2_MSO_o(reader_old, "n_rchi2_MSO");
+  TTreeReaderValue<vector<float>> n_rchi2_MSOE_o(reader_old, "n_rchi2_MSOE");
+  TTreeReaderValue<vector<float>> n_rchi2_ID_o(reader_old, "n_rchi2_ID");
   
   // loop through TTreeReader
   while (reader_old.Next()) {
-    //if (pt_CB_o->at(0) < 0 or pt_CB_o->at(0) > 25) continue;
-    //if (pt_CB_o->at(0) < 25) continue;
     nEvents_o++;
-    if (charge_CB_o->at(0) == 1) 
+    for (int i = 0; i < *nPositiveMuons_o; i++) {
+      if (i == 0) h_quality_o->Fill(p_quality_o->at(i));
+      h_allQuality_o->Fill(p_quality_o->at(i));
+    }
+    for (int i = 0; i < *nNegativeMuons_o; i++) {
+      if (i == 0) h_quality_o->Fill(n_quality_o->at(i));
+      h_allQuality_o->Fill(n_quality_o->at(i));
+    }
+
+    // skip event if event not on GRL
+    if (!*passGRL_o) continue;
+ 
+    // skip event if no pairs are found in event
+    if (*nPositiveMuons_o == 0 || *nNegativeMuons_o == 0) continue;
+
+    // skip event if muons are not tight or medium quality 
+    if (p_quality_o->at(0) > 1 || n_quality_o->at(0) > 1) continue;
+
+    // skip event if muons fail ID cuts
+    if (!p_passIDcuts_o->at(0) || !n_passIDcuts_o->at(0))  continue;
+
+    // find charge of leading muon
+    double pt_p, pt_n;
+    int q_lead = -1;
+    if (p_isCB_o->at(0)) pt_p = cosh(p_eta_CB_o->at(0)) / p_qOverP_CB_o->at(0);
+    else pt_p = p_pt_ME_o->at(0);
+    if (n_isCB_o->at(0)) pt_n = -cosh(n_eta_CB_o->at(0)) / n_qOverP_CB_o->at(0);
+    else pt_n = n_pt_ME_o->at(0);
+    
+    if (pt_p > pt_n) {
       nLeadingPlus_o++;
+      q_lead = 1;
+    }
   
-    if (pt_MS_o->at(0) > 0 and pt_MS_o->at(0) < 10000){
+    if (p_pt_MSO_o->at(0) > 0 and p_pt_MSO_o->at(0) < 10000){
       nEvents_noBadMS_o++;
-      if (charge_CB_o->at(0) == 1) 
+      if (q_lead == 1) 
         nLeadingPlus_noBadMS_o++;
     }
  
-    h_author1_o->Fill(author_o->at(0)); 
-    h_author2_o->Fill(author_o->at(1)); 
-    h_quality1_o->Fill(quality_o->at(0)); 
-    h_quality2_o->Fill(quality_o->at(1)); 
-    h_type1_o->Fill(muonType_o->at(0)); 
-    h_type2_o->Fill(muonType_o->at(1)); 
-    
-    // fill invariant mass and pz_mumu
+    // fill primary author
+    if (q_lead == 1) {
+      h_author1_o->Fill(p_primaryAuthor_o->at(0)); 
+      h_author2_o->Fill(n_primaryAuthor_o->at(0)); 
+    }
+    else {
+      h_author1_o->Fill(n_primaryAuthor_o->at(0)); 
+      h_author2_o->Fill(p_primaryAuthor_o->at(0)); 
+    }
+  
+    // fill invariant mass
     TLorentzVector v1, v2;
-    if (*m_CB_o > 0) {
-      h_m_CB_o->Fill(*m_CB_o);
-      v1.SetPtEtaPhiM(pt_CB_o->at(0), eta_CB_o->at(0), phi_CB_o->at(0), .106);
-      v2.SetPtEtaPhiM(pt_CB_o->at(1), eta_CB_o->at(1), phi_CB_o->at(1), .106); 
-      h_pzmumu_CB_o->Fill(v1.Pz()+v2.Pz());
+    if (p_isCB_o->at(0) and n_isCB_o->at(0)) {
+      v1.SetPtEtaPhiM(cosh(p_eta_CB_o->at(0)) / p_qOverP_CB_o->at(0), p_eta_CB_o->at(0), p_phi_CB_o->at(0), .106);
+      v2.SetPtEtaPhiM(-cosh(n_eta_CB_o->at(0)) / n_qOverP_CB_o->at(0), n_eta_CB_o->at(0), n_phi_CB_o->at(0), .106); 
+      h_m_CB_o->Fill((v1+v2).M());
     }
-    if (*m_ME_o > 0) {
-      h_m_ME_o->Fill(*m_ME_o);
-      v1.SetPtEtaPhiM(pt_ME_o->at(0), eta_ME_o->at(0), phi_ME_o->at(0), .106);
-      v2.SetPtEtaPhiM(pt_ME_o->at(1), eta_ME_o->at(1), phi_ME_o->at(1), .106); 
-      h_pzmumu_ME_o->Fill(v1.Pz()+v2.Pz());
+    if (p_isME_o->at(0) and n_isME_o->at(0)) {
+      v1.SetPtEtaPhiM(cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0), p_eta_ME_o->at(0), p_phi_ME_o->at(0), .106);
+      v2.SetPtEtaPhiM(-cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0), n_eta_ME_o->at(0), n_phi_ME_o->at(0), .106); 
+      h_m_ME_o->Fill((v1+v2).M());
     }
-    if (*m_MS_o > 0) {
-      h_m_MS_o->Fill(*m_MS_o);
-      v1.SetPtEtaPhiM(pt_MS_o->at(0), eta_MS_o->at(0), phi_MS_o->at(0), .106);
-      v2.SetPtEtaPhiM(pt_MS_o->at(1), eta_MS_o->at(1), phi_MS_o->at(1), .106); 
-      h_pzmumu_MS_o->Fill(v1.Pz()+v2.Pz());
+    if (p_isMSO_o->at(0) and n_isMSO_o->at(0)) {
+      v1.SetPtEtaPhiM(cosh(p_eta_MSO_o->at(0)) / p_qOverP_MSO_o->at(0), p_eta_MSO_o->at(0), p_phi_MSO_o->at(0), .106);
+      v2.SetPtEtaPhiM(-cosh(n_eta_MSO_o->at(0)) / n_qOverP_MSO_o->at(0), n_eta_MSO_o->at(0), n_phi_MSO_o->at(0), .106); 
+      h_m_MSO_o->Fill((v1+v2).M());
     }
-    if (*m_ID_o > 0) {
-      h_m_ID_o->Fill(*m_ID_o);
-      v1.SetPtEtaPhiM(pt_ID_o->at(0), eta_ID_o->at(0), phi_ID_o->at(0), .106);
-      v2.SetPtEtaPhiM(pt_ID_o->at(1), eta_ID_o->at(1), phi_ID_o->at(1), .106); 
-      h_pzmumu_ID_o->Fill(v1.Pz()+v2.Pz());
+    if (p_isMSOE_o->at(0) and n_isMSOE_o->at(0)) {
+      v1.SetPtEtaPhiM(cosh(p_eta_MSOE_o->at(0)) / p_qOverP_MSOE_o->at(0), p_eta_MSOE_o->at(0), p_phi_MSOE_o->at(0), .106);
+      v2.SetPtEtaPhiM(-cosh(n_eta_MSOE_o->at(0)) / n_qOverP_MSOE_o->at(0), n_eta_MSOE_o->at(0), n_phi_MSOE_o->at(0), .106); 
+      h_m_MSOE_o->Fill((v1+v2).M());
+    }
+    if (p_isID_o->at(0) and n_isID_o->at(0)) {
+      v1.SetPtEtaPhiM(cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0), p_eta_ID_o->at(0), p_phi_ID_o->at(0), .106);
+      v2.SetPtEtaPhiM(-cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0), n_eta_ID_o->at(0), n_phi_ID_o->at(0), .106); 
+      h_m_ID_o->Fill((v1+v2).M());
     }
  
     // fill leading/subleading variable histograms
-    if (pt_CB_o->at(0) != -1) { 
-      h_pt1_CB_o->Fill(pt_CB_o->at(0));
-      h_eta1_CB_o->Fill(eta_CB_o->at(0)); 
-    }
-    if (pt_CB_o->at(1) != -1) {
-      h_pt2_CB_o->Fill(pt_CB_o->at(1)); 
-      h_eta2_CB_o->Fill(eta_CB_o->at(1)); 
-    }
-    if (pt_ME_o->at(0) != -1) {
-      h_pt1_ME_o->Fill(pt_ME_o->at(0)); 
-      h_eta1_ME_o->Fill(eta_ME_o->at(0)); 
-    }
-    if (pt_ME_o->at(1) != -1) {
-      h_pt2_ME_o->Fill(pt_ME_o->at(1)); 
-      h_eta2_ME_o->Fill(eta_ME_o->at(1)); 
-    }
-    if (pt_MS_o->at(0) != -1) {
-      h_pt1_MS_o->Fill(pt_MS_o->at(0)); 
-      h_eta1_MS_o->Fill(eta_MS_o->at(0)); 
-    }
-    if (pt_MS_o->at(1) != -1) {
-      h_pt2_MS_o->Fill(pt_MS_o->at(1)); 
-      h_eta2_MS_o->Fill(eta_MS_o->at(1)); 
-    }
-    if (pt_ID_o->at(0) != -1) {
-      h_pt1_ID_o->Fill(pt_ID_o->at(0)); 
-      h_eta1_ID_o->Fill(eta_ID_o->at(0));
-      
-      if (pt_ME_o->at(0) != -1) {
-        h_rho1_ME_o->Fill((pt_ME_o->at(0)-pt_ID_o->at(0))/pt_ID_o->at(0));
-        h_dR1_ME_o->Fill(sqrt( pow(eta_ID_o->at(0)-eta_ME_o->at(0),2) + pow(phi_ID_o->at(0)-phi_ME_o->at(0),2)));
-      } 
-      if (pt_MS_o->at(0) != -1) {
-        h_rho1_MS_o->Fill((pt_MS_o->at(0)-pt_ID_o->at(0))/pt_ID_o->at(0));
-        h_dR1_MS_o->Fill(sqrt( pow(eta_ID_o->at(0)-eta_MS_o->at(0),2) + pow(phi_ID_o->at(0)-phi_MS_o->at(0),2)));
-      } 
-    }
-    if (pt_ID_o->at(1) != -1) {
-      h_pt2_ID_o->Fill(pt_ID_o->at(1)); 
-      h_eta2_ID_o->Fill(eta_ID_o->at(1)); 
-      
-      if (pt_ME_o->at(1) != -1) {
-        h_rho2_ME_o->Fill((pt_ME_o->at(1)-pt_ID_o->at(1))/pt_ID_o->at(1));
-        h_dR2_ME_o->Fill(sqrt( pow(eta_ID_o->at(1)-eta_ME_o->at(1),2) + pow(phi_ID_o->at(1)-phi_ME_o->at(1),2)));
-      } 
-      if (pt_MS_o->at(1) != -1) {
-        h_rho2_MS_o->Fill((pt_MS_o->at(1)-pt_ID_o->at(1))/pt_ID_o->at(1));
-        h_dR2_MS_o->Fill(sqrt( pow(eta_ID_o->at(1)-eta_MS_o->at(1),2) + pow(phi_ID_o->at(1)-phi_MS_o->at(1),2)));
-      } 
-    }
-  
-    // loop over two muons
-    for (int i = 0; i < 2; i++) {
-      // if CB muon
-      if (pt_CB_o->at(i) != -1) {
-        h_pt_CB_o->Fill(pt_CB_o->at(i));
-        h_eta_CB_o->Fill(eta_CB_o->at(i));
-        h_phi_CB_o->Fill(phi_CB_o->at(i));
-        h_z0_CB_o->Fill(z0_CB_o->at(i));
-        h_d0sig_CB_o->Fill(d0sig_CB_o->at(i));
-        h_e_CB_o->Fill(e_CB_o->at(i));
+    if (q_lead == 1) {
+      if (p_isCB_o->at(0)) {
+        h_pt1_CB_o->Fill(p_pt_CB_o->at(0)); 
+        h_eta1_CB_o->Fill(p_eta_CB_o->at(0));
       }
-  
-      // if ME muon
-      if (pt_ME_o->at(i) != -1) {
-        h_pt_ME_o->Fill(pt_ME_o->at(i));
-        h_eta_ME_o->Fill(eta_ME_o->at(i));
-        h_phi_ME_o->Fill(phi_ME_o->at(i));
-        h_z0_ME_o->Fill(z0_ME_o->at(i));
-        h_d0sig_ME_o->Fill(d0sig_ME_o->at(i));
-        h_e_ME_o->Fill(e_ME_o->at(i));
+      if (n_isCB_o->at(0)) {
+        h_pt2_CB_o->Fill(n_pt_CB_o->at(0)); 
+        h_eta2_CB_o->Fill(n_eta_CB_o->at(0));
       }
-
-      // if MS muon
-      if (pt_MS_o->at(i) != -1) {
-        h_pt_MS_o->Fill(pt_MS_o->at(i));
-        h_eta_MS_o->Fill(eta_MS_o->at(i));
-        h_phi_MS_o->Fill(phi_MS_o->at(i));
-        h_z0_MS_o->Fill(z0_MS_o->at(i));
-        h_d0sig_MS_o->Fill(d0sig_MS_o->at(i));
-        h_e_MS_o->Fill(e_MS_o->at(i));
+    
+      if (p_isME_o->at(0)) {
+        h_pt1_ME_o->Fill(p_pt_ME_o->at(0)); 
+        h_eta1_ME_o->Fill(p_eta_ME_o->at(0));
       }
-
-      // if ID muon
-      if (pt_ID_o->at(i) != -1) {
-        h_pt_ID_o->Fill(pt_ID_o->at(i));
-        h_eta_ID_o->Fill(eta_ID_o->at(i));
-        h_phi_ID_o->Fill(phi_ID_o->at(i));
-        h_z0_ID_o->Fill(z0_ID_o->at(i));
-        h_d0sig_ID_o->Fill(d0sig_ID_o->at(i));
-        h_e_ID_o->Fill(e_ID_o->at(i));
-        
-        // fill rho, dR ME
-        if (pt_ME_o->at(i) != -1) {
-          h_rho_ME_o->Fill((pt_ME_o->at(i)-pt_ID_o->at(i))/pt_ID_o->at(i));
-          h_dR_ME_o->Fill(sqrt( pow(eta_ID_o->at(i)-eta_ME_o->at(i),2) + pow(phi_ID_o->at(i)-phi_ME_o->at(i),2)));
-        } 
-        // fill rho, dR MS
-        if (pt_MS_o->at(i) != -1) {
-          h_rho_MS_o->Fill((pt_MS_o->at(i)-pt_ID_o->at(i))/pt_ID_o->at(i)); 
-          h_dR_MS_o->Fill(sqrt( pow(eta_ID_o->at(i)-eta_MS_o->at(i),2) + pow(phi_ID_o->at(i)-phi_MS_o->at(i),2)));
+      if (n_isME_o->at(0)) {
+        h_pt2_ME_o->Fill(n_pt_ME_o->at(0)); 
+        h_eta2_ME_o->Fill(n_eta_ME_o->at(0));
+      }
+    
+      if (p_isMSO_o->at(0)) {
+        h_pt1_MSO_o->Fill(p_pt_MSO_o->at(0)); 
+        h_eta1_MSO_o->Fill(p_eta_MSO_o->at(0));
+      }
+      if (n_isMSO_o->at(0)) {
+        h_pt2_MSO_o->Fill(n_pt_MSO_o->at(0)); 
+        h_eta2_MSO_o->Fill(n_eta_MSO_o->at(0));
+      }
+    
+      if (p_isMSOE_o->at(0)) {
+        h_pt1_MSOE_o->Fill(p_pt_MSOE_o->at(0)); 
+        h_eta1_MSOE_o->Fill(p_eta_MSOE_o->at(0));
+      }
+      if (n_isMSOE_o->at(0)) {
+        h_pt2_MSOE_o->Fill(n_pt_MSOE_o->at(0)); 
+        h_eta2_MSOE_o->Fill(n_eta_MSOE_o->at(0));
+      }
+    
+      if (p_isID_o->at(0)) {
+        h_pt1_ID_o->Fill(p_pt_ID_o->at(0)); 
+        h_eta1_ID_o->Fill(p_eta_ID_o->at(0));
+        if (p_isME_o->at(0)) {
+          double ptID = cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0);
+          double ptME = cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0);
+          h_rho1_ME_o->Fill((ptME-ptID)/ptID);
+          h_dR1_ME_o->Fill(sqrt( pow(p_eta_ID_o->at(0)-p_eta_ME_o->at(0),2) + pow(p_phi_ID_o->at(0)-p_phi_ME_o->at(0),2)));
         }
+        if (p_isMSO_o->at(0)) {
+          double ptID = cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0);
+          double ptMSO = cosh(p_eta_MSO_o->at(0)) / p_qOverP_MSO_o->at(0);
+          h_rho1_MSO_o->Fill((ptMSO-ptID)/ptID);
+        }
+        if (p_isMSOE_o->at(0))
+          h_dR1_MSOE_o->Fill(sqrt( pow(p_eta_ID_o->at(0)-p_eta_MSOE_o->at(0),2) + pow(p_phi_ID_o->at(0)-p_phi_MSOE_o->at(0),2)));
+      }
+      if (n_isID_o->at(0)) {
+        h_pt2_ID_o->Fill(n_pt_ID_o->at(0)); 
+        h_eta2_ID_o->Fill(n_eta_ID_o->at(0));
+        if (n_isME_o->at(0)) {
+          double ptID = cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0);
+          double ptME = cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0);
+          h_rho2_ME_o->Fill((ptME-ptID)/ptID);
+          h_dR2_ME_o->Fill(sqrt( pow(n_eta_ID_o->at(0)-n_eta_ME_o->at(0),2) + pow(n_phi_ID_o->at(0)-n_phi_ME_o->at(0),2)));
+        }
+        if (n_isMSO_o->at(0)) {
+          double ptID = cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0);
+          double ptMSO = cosh(n_eta_MSO_o->at(0)) / n_qOverP_MSO_o->at(0);
+          h_rho2_MSO_o->Fill((ptMSO-ptID)/ptID);
+        }
+        if (n_isMSOE_o->at(0))
+          h_dR2_MSOE_o->Fill(sqrt( pow(n_eta_ID_o->at(0)-n_eta_MSOE_o->at(0),2) + pow(n_phi_ID_o->at(0)-n_phi_MSOE_o->at(0),2)));
+      }
+    }
+    // if negative muon is primary
+    else {
+      if (p_isCB_o->at(0)) {
+        h_pt2_CB_o->Fill(p_pt_CB_o->at(0)); 
+        h_eta2_CB_o->Fill(p_eta_CB_o->at(0));
+      }
+      if (n_isCB_o->at(0)) {
+        h_pt1_CB_o->Fill(n_pt_CB_o->at(0)); 
+        h_eta1_CB_o->Fill(n_eta_CB_o->at(0));
+      }
+    
+      if (p_isME_o->at(0)) {
+        h_pt2_ME_o->Fill(p_pt_ME_o->at(0)); 
+        h_eta2_ME_o->Fill(p_eta_ME_o->at(0));
+      }
+      if (n_isME_o->at(0)) {
+        h_pt1_ME_o->Fill(n_pt_ME_o->at(0)); 
+        h_eta1_ME_o->Fill(n_eta_ME_o->at(0));
+      }
+    
+      if (p_isMSO_o->at(0)) {
+        h_pt2_MSO_o->Fill(p_pt_MSO_o->at(0)); 
+        h_eta2_MSO_o->Fill(p_eta_MSO_o->at(0));
+      }
+      if (n_isMSO_o->at(0)) {
+        h_pt1_MSO_o->Fill(n_pt_MSO_o->at(0)); 
+        h_eta1_MSO_o->Fill(n_eta_MSO_o->at(0));
+      }
+    
+      if (p_isMSOE_o->at(0)) {
+        h_pt2_MSOE_o->Fill(p_pt_MSOE_o->at(0)); 
+        h_eta2_MSOE_o->Fill(p_eta_MSOE_o->at(0));
+      }
+      if (n_isMSOE_o->at(0)) {
+        h_pt1_MSOE_o->Fill(n_pt_MSOE_o->at(0)); 
+        h_eta1_MSOE_o->Fill(n_eta_MSOE_o->at(0));
+      }
+    
+      if (p_isID_o->at(0)) {
+        h_pt2_ID_o->Fill(p_pt_ID_o->at(0)); 
+        h_eta2_ID_o->Fill(p_eta_ID_o->at(0));
+        if (p_isME_o->at(0)) {
+          double ptID = cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0);
+          double ptME = cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0);
+          h_rho2_ME_o->Fill((ptME-ptID)/ptID);
+          h_dR2_ME_o->Fill(sqrt( pow(p_eta_ID_o->at(0)-p_eta_ME_o->at(0),2) + pow(p_phi_ID_o->at(0)-p_phi_ME_o->at(0),2)));
+        }
+        if (p_isMSO_o->at(0)) {
+          double ptID = cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0);
+          double ptMSO = cosh(p_eta_MSO_o->at(0)) / p_qOverP_MSO_o->at(0);
+          h_rho2_MSO_o->Fill((ptMSO-ptID)/ptID);
+        }
+        if (p_isMSOE_o->at(0))
+          h_dR2_MSOE_o->Fill(sqrt( pow(p_eta_ID_o->at(0)-p_eta_MSOE_o->at(0),2) + pow(p_phi_ID_o->at(0)-p_phi_MSOE_o->at(0),2)));
+      }
+      if (n_isID_o->at(0)) {
+        h_pt1_ID_o->Fill(n_pt_ID_o->at(0)); 
+        h_eta1_ID_o->Fill(n_eta_ID_o->at(0));
+        if (n_isME_o->at(0)) {
+          double ptID = cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0);
+          double ptME = cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0);
+          h_rho1_ME_o->Fill((ptME-ptID)/ptID);
+          h_dR1_ME_o->Fill(sqrt( pow(n_eta_ID_o->at(0)-n_eta_ME_o->at(0),2) + pow(n_phi_ID_o->at(0)-n_phi_ME_o->at(0),2)));
+        }
+        if (n_isMSO_o->at(0)) {
+          double ptID = cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0);
+          double ptMSO = cosh(n_eta_MSO_o->at(0)) / n_qOverP_MSO_o->at(0);
+          h_rho1_MSO_o->Fill((ptMSO-ptID)/ptID);
+        }
+        if (n_isMSOE_o->at(0))
+          h_dR1_MSOE_o->Fill(sqrt( pow(n_eta_ID_o->at(0)-n_eta_MSOE_o->at(0),2) + pow(n_phi_ID_o->at(0)-n_phi_MSOE_o->at(0),2)));
       }
     }
   }
   delete f_recoOld;
 
+
   // load new file and set up reader
   TFile* f_recoNew = new TFile(Form("ntuples_muonSelection/%s", newFileName.c_str()));
   if (!f_recoNew) cout << "Warning: could not open file " << newFileName << endl;
   string newMapName = "2016";
- 
+
   long int nEvents_n = 0;
   long int nLeadingPlus_n = 0;
   long int nEvents_noBadMS_n = 0;
   long int nLeadingPlus_noBadMS_n = 0;
+
+  // event level  
+  TTreeReader reader_new("RecoMuons", f_recoNew);
+  TTreeReaderValue<bool> passGRL_n(reader_new, "passGRL");
+  TTreeReaderValue<unsigned long long> eventNumber_n(reader_new, "eventNumber");
+  TTreeReaderValue<unsigned int> nPositiveMuons_n(reader_new, "nPositiveMuons");
+  TTreeReaderValue<unsigned int> nNegativeMuons_n(reader_new, "nNegativeMuons");
   
-  TTreeReader reader_new("SelectedZDecayMuons", f_recoNew);
-  TTreeReaderValue<vector<float>> pt_CB_n(reader_new, "Pt_CB");
-  TTreeReaderValue<vector<float>> pt_ME_n(reader_new, "Pt_ME");
-  TTreeReaderValue<vector<float>> pt_MS_n(reader_new, "Pt_MS");
-  TTreeReaderValue<vector<float>> pt_ID_n(reader_new, "Pt_ID");
-  TTreeReaderValue<vector<float>> eta_CB_n(reader_new, "Eta_CB");
-  TTreeReaderValue<vector<float>> eta_ME_n(reader_new, "Eta_ME");
-  TTreeReaderValue<vector<float>> eta_MS_n(reader_new, "Eta_MS");
-  TTreeReaderValue<vector<float>> eta_ID_n(reader_new, "Eta_ID");
-  TTreeReaderValue<vector<float>> phi_CB_n(reader_new, "Phi_CB");
-  TTreeReaderValue<vector<float>> phi_ME_n(reader_new, "Phi_ME");
-  TTreeReaderValue<vector<float>> phi_MS_n(reader_new, "Phi_MS");
-  TTreeReaderValue<vector<float>> phi_ID_n(reader_new, "Phi_ID");
-  TTreeReaderValue<vector<float>> d0sig_CB_n(reader_new, "d0sig_CB");
-  TTreeReaderValue<vector<float>> d0sig_ME_n(reader_new, "d0sig_ME");
-  TTreeReaderValue<vector<float>> d0sig_MS_n(reader_new, "d0sig_MS");
-  TTreeReaderValue<vector<float>> d0sig_ID_n(reader_new, "d0sig_ID");
-  TTreeReaderValue<vector<float>> z0_CB_n(reader_new, "z0_CB");
-  TTreeReaderValue<vector<float>> z0_ME_n(reader_new, "z0_ME");
-  TTreeReaderValue<vector<float>> z0_MS_n(reader_new, "z0_MS");
-  TTreeReaderValue<vector<float>> z0_ID_n(reader_new, "z0_ID");
-  TTreeReaderValue<vector<float>> qOverP_CB_n(reader_new, "qOverP_CB");
-  TTreeReaderValue<vector<float>> qOverP_ME_n(reader_new, "qOverP_ME");
-  TTreeReaderValue<vector<float>> qOverP_MS_n(reader_new, "qOverP_MS");
-  TTreeReaderValue<vector<float>> qOverP_ID_n(reader_new, "qOverP_ID");
-  TTreeReaderValue<vector<float>> dqOverP_CB_n(reader_new, "dqOverP_CB");
-  TTreeReaderValue<vector<float>> dqOverP_ME_n(reader_new, "dqOverP_ME");
-  TTreeReaderValue<vector<float>> dqOverP_MS_n(reader_new, "dqOverP_MS");
-  TTreeReaderValue<vector<float>> dqOverP_ID_n(reader_new, "dqOverP_ID");
-  TTreeReaderValue<vector<float>> chi2_CB_n(reader_new, "chi2_CB");
-  TTreeReaderValue<vector<float>> chi2_ME_n(reader_new, "chi2_ME");
-  TTreeReaderValue<vector<float>> chi2_MS_n(reader_new, "chi2_MS");
-  TTreeReaderValue<vector<float>> chi2_ID_n(reader_new, "chi2_ID");
-  TTreeReaderValue<vector<float>> dof_CB_n(reader_new, "dof_CB");
-  TTreeReaderValue<vector<float>> dof_ME_n(reader_new, "dof_ME");
-  TTreeReaderValue<vector<float>> dof_MS_n(reader_new, "dof_MS");
-  TTreeReaderValue<vector<float>> dof_ID_n(reader_new, "dof_ID");
-  TTreeReaderValue<float> m_CB_n(reader_new, "m_CB");
-  TTreeReaderValue<float> m_ME_n(reader_new, "m_ME");
-  TTreeReaderValue<float> m_MS_n(reader_new, "m_MS");
-  TTreeReaderValue<float> m_ID_n(reader_new, "m_ID");
-  TTreeReaderValue<vector<float>> e_CB_n(reader_new, "E_CB");
-  TTreeReaderValue<vector<float>> e_ME_n(reader_new, "E_ME");
-  TTreeReaderValue<vector<float>> e_MS_n(reader_new, "E_MS");
-  TTreeReaderValue<vector<float>> e_ID_n(reader_new, "E_ID");
-  TTreeReaderValue<vector<float>> charge_CB_n(reader_new, "Charge_CB");
-  TTreeReaderValue<vector<float>> charge_ME_n(reader_new, "Charge_ME");
-  TTreeReaderValue<vector<float>> charge_MS_n(reader_new, "Charge_MS");
-  TTreeReaderValue<vector<float>> charge_ID_n(reader_new, "Charge_ID");
-  TTreeReaderValue<vector<float>> eLoss_n(reader_new, "EnergyLoss");
-  TTreeReaderValue<vector<int>> muonType_n(reader_new, "MuonType");
-  TTreeReaderValue<vector<int>> quality_n(reader_new, "Quality");
-  TTreeReaderValue<vector<int>> author_n(reader_new, "Author");
+  // positive muon variables
+  TTreeReaderValue<vector<bool>> p_passIDcuts_n(reader_new, "p_passIDcuts");
+  TTreeReaderValue<vector<bool>> p_passAll_n(reader_new, "p_passAll");
+  TTreeReaderValue<vector<float>> p_eLoss_n(reader_new, "p_eLoss");
+  TTreeReaderValue<vector<int>> p_muonType_n(reader_new, "p_muonType");
+  TTreeReaderValue<vector<int>> p_quality_n(reader_new, "p_quality");
+  TTreeReaderValue<vector<int>> p_primaryAuthor_n(reader_new, "p_primaryAuthor");
+  TTreeReaderValue<vector<int>> p_authors_n(reader_new, "p_authors");
+  TTreeReaderValue<vector<int>> p_nPrecisionLayers_n(reader_new, "p_nPrecisionLayers");
+  TTreeReaderValue<vector<int>> p_nPrecisionHoleLayers_n(reader_new, "p_nPrecisionHoleLayers");
+  TTreeReaderValue<vector<int>> p_innerSmallHits_n(reader_new, "p_innerSmallHits");
+  TTreeReaderValue<vector<int>> p_innerLargeHits_n(reader_new, "p_innerLargeHits");
+  TTreeReaderValue<vector<int>> p_middleSmallHits_n(reader_new, "p_middleSmallHits");
+  TTreeReaderValue<vector<int>> p_middleLargeHits_n(reader_new, "p_middleLargeHits");
+  TTreeReaderValue<vector<int>> p_outerSmallHits_n(reader_new, "p_outerSmallHits");
+  TTreeReaderValue<vector<int>> p_outerLargeHits_n(reader_new, "p_outerLargeHits");
+  TTreeReaderValue<vector<int>> p_extendedSmallHits_n(reader_new, "p_extendedSmallHits");
+  TTreeReaderValue<vector<int>> p_extendedLargeHits_n(reader_new, "p_extendedLargeHits"); 
+  TTreeReaderValue<vector<int>> p_innerSmallHoles_n(reader_new, "p_innerSmallHoles");
+  TTreeReaderValue<vector<int>> p_innerLargeHoles_n(reader_new, "p_innerLargeHoles");
+  TTreeReaderValue<vector<int>> p_middleSmallHoles_n(reader_new, "p_middleSmallHoles");
+  TTreeReaderValue<vector<int>> p_middleLargeHoles_n(reader_new, "p_middleLargeHoles");
+  TTreeReaderValue<vector<int>> p_outerSmallHoles_n(reader_new, "p_outerSmallHoles");
+  TTreeReaderValue<vector<int>> p_outerLargeHoles_n(reader_new, "p_outerLargeHoles");
+  TTreeReaderValue<vector<int>> p_extendedSmallHoles_n(reader_new, "p_extendedSmallHoles");
+  TTreeReaderValue<vector<int>> p_extendedLargeHoles_n(reader_new, "p_extendedLargeHoles");
+
+  // negative muon variables
+  TTreeReaderValue<vector<bool>> n_passIDcuts_n(reader_new, "n_passIDcuts");
+  TTreeReaderValue<vector<bool>> n_passAll_n(reader_new, "n_passAll");
+  TTreeReaderValue<vector<float>> n_eLoss_n(reader_new, "n_eLoss");
+  TTreeReaderValue<vector<int>> n_muonType_n(reader_new, "n_muonType");
+  TTreeReaderValue<vector<int>> n_quality_n(reader_new, "n_quality");
+  TTreeReaderValue<vector<int>> n_primaryAuthor_n(reader_new, "n_primaryAuthor");
+  TTreeReaderValue<vector<int>> n_authors_n(reader_new, "n_authors");
+  TTreeReaderValue<vector<int>> n_nPrecisionLayers_n(reader_new, "n_nPrecisionLayers");
+  TTreeReaderValue<vector<int>> n_nPrecisionHoleLayers_n(reader_new, "n_nPrecisionHoleLayers");
+  TTreeReaderValue<vector<int>> n_innerSmallHits_n(reader_new, "n_innerSmallHits");
+  TTreeReaderValue<vector<int>> n_innerLargeHits_n(reader_new, "n_innerLargeHits");
+  TTreeReaderValue<vector<int>> n_middleSmallHits_n(reader_new, "n_middleSmallHits");
+  TTreeReaderValue<vector<int>> n_middleLargeHits_n(reader_new, "n_middleLargeHits");
+  TTreeReaderValue<vector<int>> n_outerSmallHits_n(reader_new, "n_outerSmallHits");
+  TTreeReaderValue<vector<int>> n_outerLargeHits_n(reader_new, "n_outerLargeHits");
+  TTreeReaderValue<vector<int>> n_extendedSmallHits_n(reader_new, "n_extendedSmallHits");
+  TTreeReaderValue<vector<int>> n_extendedLargeHits_n(reader_new, "n_extendedLargeHits"); 
+  TTreeReaderValue<vector<int>> n_innerSmallHoles_n(reader_new, "n_innerSmallHoles");
+  TTreeReaderValue<vector<int>> n_innerLargeHoles_n(reader_new, "n_innerLargeHoles");
+  TTreeReaderValue<vector<int>> n_middleSmallHoles_n(reader_new, "n_middleSmallHoles");
+  TTreeReaderValue<vector<int>> n_middleLargeHoles_n(reader_new, "n_middleLargeHoles");
+  TTreeReaderValue<vector<int>> n_outerSmallHoles_n(reader_new, "n_outerSmallHoles");
+  TTreeReaderValue<vector<int>> n_outerLargeHoles_n(reader_new, "n_outerLargeHoles");
+  TTreeReaderValue<vector<int>> n_extendedSmallHoles_n(reader_new, "n_extendedSmallHoles");
+  TTreeReaderValue<vector<int>> n_extendedLargeHoles_n(reader_new, "n_extendedLargeHoles");
+
+  // positive muon track variables
+  TTreeReaderValue<vector<bool>> p_isCB_n(reader_new, "p_isCB");
+  TTreeReaderValue<vector<bool>> p_isME_n(reader_new, "p_isME");
+  TTreeReaderValue<vector<bool>> p_isMSO_n(reader_new, "p_isMSO");
+  TTreeReaderValue<vector<bool>> p_isMSOE_n(reader_new, "p_isMSOE");
+  TTreeReaderValue<vector<bool>> p_isID_n(reader_new, "p_isID");
+  TTreeReaderValue<vector<float>> p_eta_CB_n(reader_new, "p_eta_CB");
+  TTreeReaderValue<vector<float>> p_eta_ME_n(reader_new, "p_eta_ME");
+  TTreeReaderValue<vector<float>> p_eta_MSO_n(reader_new, "p_eta_MSO");
+  TTreeReaderValue<vector<float>> p_eta_MSOE_n(reader_new, "p_eta_MSOE");
+  TTreeReaderValue<vector<float>> p_eta_ID_n(reader_new, "p_eta_ID");
+  TTreeReaderValue<vector<float>> p_phi_CB_n(reader_new, "p_phi_CB");
+  TTreeReaderValue<vector<float>> p_phi_ME_n(reader_new, "p_phi_ME");
+  TTreeReaderValue<vector<float>> p_phi_MSO_n(reader_new, "p_phi_MSO");
+  TTreeReaderValue<vector<float>> p_phi_MSOE_n(reader_new, "p_phi_MSOE");
+  TTreeReaderValue<vector<float>> p_phi_ID_n(reader_new, "p_phi_ID");
+  TTreeReaderValue<vector<float>> p_d0sig_CB_n(reader_new, "p_d0sig_CB");
+  TTreeReaderValue<vector<float>> p_d0sig_ME_n(reader_new, "p_d0sig_ME");
+  TTreeReaderValue<vector<float>> p_d0sig_MSO_n(reader_new, "p_d0sig_MSO");
+  TTreeReaderValue<vector<float>> p_d0sig_MSOE_n(reader_new, "p_d0sig_MSOE");
+  TTreeReaderValue<vector<float>> p_d0sig_ID_n(reader_new, "p_d0sig_ID");
+  TTreeReaderValue<vector<float>> p_z0_CB_n(reader_new, "p_z0_CB");
+  TTreeReaderValue<vector<float>> p_z0_ME_n(reader_new, "p_z0_ME");
+  TTreeReaderValue<vector<float>> p_z0_MSO_n(reader_new, "p_z0_MSO");
+  TTreeReaderValue<vector<float>> p_z0_MSOE_n(reader_new, "p_z0_MSOE");
+  TTreeReaderValue<vector<float>> p_z0_ID_n(reader_new, "p_z0_ID");
+  TTreeReaderValue<vector<float>> p_qOverP_CB_n(reader_new, "p_qOverP_CB");
+  TTreeReaderValue<vector<float>> p_qOverP_ME_n(reader_new, "p_qOverP_ME");
+  TTreeReaderValue<vector<float>> p_qOverP_MSO_n(reader_new, "p_qOverP_MSO");
+  TTreeReaderValue<vector<float>> p_qOverP_MSOE_n(reader_new, "p_qOverP_MSOE");
+  TTreeReaderValue<vector<float>> p_qOverP_ID_n(reader_new, "p_qOverP_ID");
+  TTreeReaderValue<vector<float>> p_dqOverP_CB_n(reader_new, "p_dqOverP_CB");
+  TTreeReaderValue<vector<float>> p_dqOverP_ME_n(reader_new, "p_dqOverP_ME");
+  TTreeReaderValue<vector<float>> p_dqOverP_MSO_n(reader_new, "p_dqOverP_MSO");
+  TTreeReaderValue<vector<float>> p_dqOverP_MSOE_n(reader_new, "p_dqOverP_MSOE");
+  TTreeReaderValue<vector<float>> p_dqOverP_ID_n(reader_new, "p_dqOverP_ID");
+  TTreeReaderValue<vector<float>> p_rchi2_CB_n(reader_new, "p_rchi2_CB");
+  TTreeReaderValue<vector<float>> p_rchi2_ME_n(reader_new, "p_rchi2_ME");
+  TTreeReaderValue<vector<float>> p_rchi2_MSO_n(reader_new, "p_rchi2_MSO");
+  TTreeReaderValue<vector<float>> p_rchi2_MSOE_n(reader_new, "p_rchi2_MSOE");
+  TTreeReaderValue<vector<float>> p_rchi2_ID_n(reader_new, "p_rchi2_ID");
+  
+  // negative muon track variables
+  TTreeReaderValue<vector<bool>> n_isCB_n(reader_new, "n_isCB");
+  TTreeReaderValue<vector<bool>> n_isME_n(reader_new, "n_isME");
+  TTreeReaderValue<vector<bool>> n_isMSO_n(reader_new, "n_isMSO");
+  TTreeReaderValue<vector<bool>> n_isMSOE_n(reader_new, "n_isMSOE");
+  TTreeReaderValue<vector<bool>> n_isID_n(reader_new, "n_isID");
+  TTreeReaderValue<vector<float>> n_eta_CB_n(reader_new, "n_eta_CB");
+  TTreeReaderValue<vector<float>> n_eta_ME_n(reader_new, "n_eta_ME");
+  TTreeReaderValue<vector<float>> n_eta_MSO_n(reader_new, "n_eta_MSO");
+  TTreeReaderValue<vector<float>> n_eta_MSOE_n(reader_new, "n_eta_MSOE");
+  TTreeReaderValue<vector<float>> n_eta_ID_n(reader_new, "n_eta_ID");
+  TTreeReaderValue<vector<float>> n_phi_CB_n(reader_new, "n_phi_CB");
+  TTreeReaderValue<vector<float>> n_phi_ME_n(reader_new, "n_phi_ME");
+  TTreeReaderValue<vector<float>> n_phi_MSO_n(reader_new, "n_phi_MSO");
+  TTreeReaderValue<vector<float>> n_phi_MSOE_n(reader_new, "n_phi_MSOE");
+  TTreeReaderValue<vector<float>> n_phi_ID_n(reader_new, "n_phi_ID");
+  TTreeReaderValue<vector<float>> n_d0sig_CB_n(reader_new, "n_d0sig_CB");
+  TTreeReaderValue<vector<float>> n_d0sig_ME_n(reader_new, "n_d0sig_ME");
+  TTreeReaderValue<vector<float>> n_d0sig_MSO_n(reader_new, "n_d0sig_MSO");
+  TTreeReaderValue<vector<float>> n_d0sig_MSOE_n(reader_new, "n_d0sig_MSOE");
+  TTreeReaderValue<vector<float>> n_d0sig_ID_n(reader_new, "n_d0sig_ID");
+  TTreeReaderValue<vector<float>> n_z0_CB_n(reader_new, "n_z0_CB");
+  TTreeReaderValue<vector<float>> n_z0_ME_n(reader_new, "n_z0_ME");
+  TTreeReaderValue<vector<float>> n_z0_MSO_n(reader_new, "n_z0_MSO");
+  TTreeReaderValue<vector<float>> n_z0_MSOE_n(reader_new, "n_z0_MSOE");
+  TTreeReaderValue<vector<float>> n_z0_ID_n(reader_new, "n_z0_ID");
+  TTreeReaderValue<vector<float>> n_qOverP_CB_n(reader_new, "n_qOverP_CB");
+  TTreeReaderValue<vector<float>> n_qOverP_ME_n(reader_new, "n_qOverP_ME");
+  TTreeReaderValue<vector<float>> n_qOverP_MSO_n(reader_new, "n_qOverP_MSO");
+  TTreeReaderValue<vector<float>> n_qOverP_MSOE_n(reader_new, "n_qOverP_MSOE");
+  TTreeReaderValue<vector<float>> n_qOverP_ID_n(reader_new, "n_qOverP_ID");
+  TTreeReaderValue<vector<float>> n_dqOverP_CB_n(reader_new, "n_dqOverP_CB");
+  TTreeReaderValue<vector<float>> n_dqOverP_ME_n(reader_new, "n_dqOverP_ME");
+  TTreeReaderValue<vector<float>> n_dqOverP_MSO_n(reader_new, "n_dqOverP_MSO");
+  TTreeReaderValue<vector<float>> n_dqOverP_MSOE_n(reader_new, "n_dqOverP_MSOE");
+  TTreeReaderValue<vector<float>> n_dqOverP_ID_n(reader_new, "n_dqOverP_ID");
+  TTreeReaderValue<vector<float>> n_rchi2_CB_n(reader_new, "n_rchi2_CB");
+  TTreeReaderValue<vector<float>> n_rchi2_ME_n(reader_new, "n_rchi2_ME");
+  TTreeReaderValue<vector<float>> n_rchi2_MSO_n(reader_new, "n_rchi2_MSO");
+  TTreeReaderValue<vector<float>> n_rchi2_MSOE_n(reader_new, "n_rchi2_MSOE");
+  TTreeReaderValue<vector<float>> n_rchi2_ID_n(reader_new, "n_rchi2_ID");
   
   // loop through TTreeReader
   while (reader_new.Next()) {
-    //if (pt_CB_n->at(0) < 0 or pt_CB_n->at(0) > 25) continue;
-    //if (pt_CB_n->at(0) < 25) continue;
     nEvents_n++;
-    if (charge_CB_n->at(0) == 1) 
-      nLeadingPlus_n++;
+    for (int i = 0; i < *nPositiveMuons_n; i++) {
+      if (i == 0) h_quality_n->Fill(p_quality_n->at(i));
+      h_allQuality_n->Fill(p_quality_n->at(i));
+    }
+    for (int i = 0; i < *nNegativeMuons_n; i++) {
+      if (i == 0) h_quality_n->Fill(n_quality_n->at(i));
+      h_allQuality_n->Fill(n_quality_n->at(i));
+    }
+
+    // skip event if event not on GRL
+    if (!*passGRL_n) continue;
+ 
+    // skip event if no pairs are found in event
+    if (*nPositiveMuons_n == 0 || *nNegativeMuons_n == 0) continue;
+
+    // skip event if muons are not tight or medium quality 
+    if (p_quality_n->at(0) > 1 || n_quality_n->at(0) > 1) continue;
+
+    // skip event if muons fail ID cuts
+    if (!p_passIDcuts_n->at(0) || !n_passIDcuts_n->at(0))  continue;
+
+    // find charge of leading muon
+    double pt_p, pt_n;
+    int q_lead = -1;
+    if (p_isCB_n->at(0)) pt_p = cosh(p_eta_CB_n->at(0)) / p_qOverP_CB_n->at(0);
+    else pt_p = p_pt_ME_n->at(0);
+    if (n_isCB_n->at(0)) pt_n = -cosh(n_eta_CB_n->at(0)) / n_qOverP_CB_n->at(0);
+    else pt_n = n_pt_ME_n->at(0);
     
-    if (pt_MS_n->at(0) > 0 and pt_MS_n->at(0) < 10000){
+    if (pt_p > pt_n) {
+      nLeadingPlus_n++;
+      q_lead = 1;
+    }
+  
+    if (p_pt_MSO_n->at(0) > 0 and p_pt_MSO_n->at(0) < 10000){
       nEvents_noBadMS_n++;
-      if (charge_CB_n->at(0) == 1) 
+      if (q_lead == 1) 
         nLeadingPlus_noBadMS_n++;
     }
-
-    h_author1_n->Fill(author_n->at(0)); 
-    h_author2_n->Fill(author_n->at(1)); 
-    h_quality1_n->Fill(quality_n->at(0)); 
-    h_quality2_n->Fill(quality_n->at(1)); 
-    h_type1_n->Fill(muonType_n->at(0)); 
-    h_type2_n->Fill(muonType_n->at(1)); 
-
-    // fill invariant mass and pz_mumu
+ 
+    // fill primary author
+    if (q_lead == 1) {
+      h_author1_n->Fill(p_primaryAuthor_n->at(0)); 
+      h_author2_n->Fill(n_primaryAuthor_n->at(0)); 
+    }
+    else {
+      h_author1_n->Fill(n_primaryAuthor_n->at(0)); 
+      h_author2_n->Fill(p_primaryAuthor_n->at(0)); 
+    }
+  
+    // fill invariant mass
     TLorentzVector v1, v2;
-    if (*m_CB_n > 0) {
-      h_m_CB_n->Fill(*m_CB_n);
-      v1.SetPtEtaPhiM(pt_CB_n->at(0), eta_CB_n->at(0), phi_CB_n->at(0), .106);
-      v2.SetPtEtaPhiM(pt_CB_n->at(1), eta_CB_n->at(1), phi_CB_n->at(1), .106); 
-      h_pzmumu_CB_n->Fill(v1.Pz()+v2.Pz());
+    if (p_isCB_n->at(0) and n_isCB_n->at(0)) {
+      v1.SetPtEtaPhiM(cosh(p_eta_CB_n->at(0)) / p_qOverP_CB_n->at(0), p_eta_CB_n->at(0), p_phi_CB_n->at(0), .106);
+      v2.SetPtEtaPhiM(-cosh(n_eta_CB_n->at(0)) / n_qOverP_CB_n->at(0), n_eta_CB_n->at(0), n_phi_CB_n->at(0), .106); 
+      h_m_CB_n->Fill((v1+v2).M());
     }
-    if (*m_ME_n > 0) {
-      h_m_ME_n->Fill(*m_ME_n);
-      v1.SetPtEtaPhiM(pt_ME_n->at(0), eta_ME_n->at(0), phi_ME_n->at(0), .106);
-      v2.SetPtEtaPhiM(pt_ME_n->at(1), eta_ME_n->at(1), phi_ME_n->at(1), .106); 
-      h_pzmumu_ME_n->Fill(v1.Pz()+v2.Pz());
+    if (p_isME_n->at(0) and n_isME_n->at(0)) {
+      v1.SetPtEtaPhiM(cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0), p_eta_ME_n->at(0), p_phi_ME_n->at(0), .106);
+      v2.SetPtEtaPhiM(-cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0), n_eta_ME_n->at(0), n_phi_ME_n->at(0), .106); 
+      h_m_ME_n->Fill((v1+v2).M());
     }
-    if (*m_MS_n > 0) {
-      h_m_MS_n->Fill(*m_MS_n);
-      v1.SetPtEtaPhiM(pt_MS_n->at(0), eta_MS_n->at(0), phi_MS_n->at(0), .106);
-      v2.SetPtEtaPhiM(pt_MS_n->at(1), eta_MS_n->at(1), phi_MS_n->at(1), .106); 
-      h_pzmumu_MS_n->Fill(v1.Pz()+v2.Pz());
+    if (p_isMSO_n->at(0) and n_isMSO_n->at(0)) {
+      v1.SetPtEtaPhiM(cosh(p_eta_MSO_n->at(0)) / p_qOverP_MSO_n->at(0), p_eta_MSO_n->at(0), p_phi_MSO_n->at(0), .106);
+      v2.SetPtEtaPhiM(-cosh(n_eta_MSO_n->at(0)) / n_qOverP_MSO_n->at(0), n_eta_MSO_n->at(0), n_phi_MSO_n->at(0), .106); 
+      h_m_MSO_n->Fill((v1+v2).M());
     }
-    if (*m_ID_n > 0) {
-      h_m_ID_n->Fill(*m_ID_n);
-      v1.SetPtEtaPhiM(pt_ID_n->at(0), eta_ID_n->at(0), phi_ID_n->at(0), .106);
-      v2.SetPtEtaPhiM(pt_ID_n->at(1), eta_ID_n->at(1), phi_ID_n->at(1), .106); 
-      h_pzmumu_ID_n->Fill(v1.Pz()+v2.Pz());
+    if (p_isMSOE_n->at(0) and n_isMSOE_n->at(0)) {
+      v1.SetPtEtaPhiM(cosh(p_eta_MSOE_n->at(0)) / p_qOverP_MSOE_n->at(0), p_eta_MSOE_n->at(0), p_phi_MSOE_n->at(0), .106);
+      v2.SetPtEtaPhiM(-cosh(n_eta_MSOE_n->at(0)) / n_qOverP_MSOE_n->at(0), n_eta_MSOE_n->at(0), n_phi_MSOE_n->at(0), .106); 
+      h_m_MSOE_n->Fill((v1+v2).M());
     }
-  
+    if (p_isID_n->at(0) and n_isID_n->at(0)) {
+      v1.SetPtEtaPhiM(cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0), p_eta_ID_n->at(0), p_phi_ID_n->at(0), .106);
+      v2.SetPtEtaPhiM(-cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0), n_eta_ID_n->at(0), n_phi_ID_n->at(0), .106); 
+      h_m_ID_n->Fill((v1+v2).M());
+    }
+ 
     // fill leading/subleading variable histograms
-    if (pt_CB_n->at(0) != -1) { 
-      h_pt1_CB_n->Fill(pt_CB_n->at(0));
-      h_eta1_CB_n->Fill(eta_CB_n->at(0)); 
-    }
-    if (pt_CB_n->at(1) != -1) {
-      h_pt2_CB_n->Fill(pt_CB_n->at(1)); 
-      h_eta2_CB_n->Fill(eta_CB_n->at(1)); 
-    }
-    if (pt_ME_n->at(0) != -1) {
-      h_pt1_ME_n->Fill(pt_ME_n->at(0)); 
-      h_eta1_ME_n->Fill(eta_ME_n->at(0)); 
-    }
-    if (pt_ME_n->at(1) != -1) {
-      h_pt2_ME_n->Fill(pt_ME_n->at(1)); 
-      h_eta2_ME_n->Fill(eta_ME_n->at(1)); 
-    }
-    if (pt_MS_n->at(0) != -1) {
-      h_pt1_MS_n->Fill(pt_MS_n->at(0)); 
-      h_eta1_MS_n->Fill(eta_MS_n->at(0)); 
-    }
-    if (pt_MS_n->at(1) != -1) {
-      h_pt2_MS_n->Fill(pt_MS_n->at(1)); 
-      h_eta2_MS_n->Fill(eta_MS_n->at(1)); 
-    }
-    if (pt_ID_n->at(0) != -1) {
-      h_pt1_ID_n->Fill(pt_ID_n->at(0)); 
-      h_eta1_ID_n->Fill(eta_ID_n->at(0));
-      
-      if (pt_ME_n->at(0) != -1) {
-        h_rho1_ME_n->Fill((pt_ME_n->at(0)-pt_ID_n->at(0))/pt_ID_n->at(0));
-        h_dR1_ME_n->Fill(sqrt( pow(eta_ID_n->at(0)-eta_ME_n->at(0),2) + pow(phi_ID_n->at(0)-phi_ME_n->at(0),2)));
-      } 
-      if (pt_MS_n->at(0) != -1) {
-        h_rho1_MS_n->Fill((pt_MS_n->at(0)-pt_ID_n->at(0))/pt_ID_n->at(0));
-        h_dR1_MS_n->Fill(sqrt( pow(eta_ID_n->at(0)-eta_MS_n->at(0),2) + pow(phi_ID_n->at(0)-phi_MS_n->at(0),2)));
-      } 
-    }
-    if (pt_ID_n->at(1) != -1) {
-      h_pt2_ID_n->Fill(pt_ID_n->at(1)); 
-      h_eta2_ID_n->Fill(eta_ID_n->at(1)); 
-      
-      if (pt_ME_n->at(1) != -1) {
-        h_rho2_ME_n->Fill((pt_ME_n->at(1)-pt_ID_n->at(1))/pt_ID_n->at(1));
-        h_dR2_ME_n->Fill(sqrt( pow(eta_ID_n->at(1)-eta_ME_n->at(1),2) + pow(phi_ID_n->at(1)-phi_ME_n->at(1),2)));
-      } 
-      if (pt_MS_n->at(1) != -1) {
-        h_rho2_MS_n->Fill((pt_MS_n->at(1)-pt_ID_n->at(1))/pt_ID_n->at(1));
-        h_dR2_MS_n->Fill(sqrt( pow(eta_ID_n->at(1)-eta_MS_n->at(1),2) + pow(phi_ID_n->at(1)-phi_MS_n->at(1),2)));
-      } 
-    }
+    if (q_lead == 1) {
+      if (p_isCB_n->at(0)) {
+        h_pt1_CB_n->Fill(p_pt_CB_n->at(0)); 
+        h_eta1_CB_n->Fill(p_eta_CB_n->at(0));
+      }
+      if (n_isCB_n->at(0)) {
+        h_pt2_CB_n->Fill(n_pt_CB_n->at(0)); 
+        h_eta2_CB_n->Fill(n_eta_CB_n->at(0));
+      }
     
-    // loop over two muons
-    for (int i = 0; i < 2; i++) {
-      // if CB muon
-      if (pt_CB_n->at(i) != -1) {
-        h_pt_CB_n->Fill(pt_CB_n->at(i));
-        h_eta_CB_n->Fill(eta_CB_n->at(i));
-        h_phi_CB_n->Fill(phi_CB_n->at(i));
-        h_z0_CB_n->Fill(z0_CB_n->at(i));
-        h_d0sig_CB_n->Fill(d0sig_CB_n->at(i));
-        h_e_CB_n->Fill(e_CB_n->at(i));
+      if (p_isME_n->at(0)) {
+        h_pt1_ME_n->Fill(p_pt_ME_n->at(0)); 
+        h_eta1_ME_n->Fill(p_eta_ME_n->at(0));
       }
-  
-      // if ME muon
-      if (pt_ME_n->at(i) != -1) {
-        h_pt_ME_n->Fill(pt_ME_n->at(i));
-        h_eta_ME_n->Fill(eta_ME_n->at(i));
-        h_phi_ME_n->Fill(phi_ME_n->at(i));
-        h_z0_ME_n->Fill(z0_ME_n->at(i));
-        h_d0sig_ME_n->Fill(d0sig_ME_n->at(i));
-        h_e_ME_n->Fill(e_ME_n->at(i));
+      if (n_isME_n->at(0)) {
+        h_pt2_ME_n->Fill(n_pt_ME_n->at(0)); 
+        h_eta2_ME_n->Fill(n_eta_ME_n->at(0));
       }
-
-      // if MS muon
-      if (pt_MS_n->at(i) != -1) {
-        h_pt_MS_n->Fill(pt_MS_n->at(i));
-        h_eta_MS_n->Fill(eta_MS_n->at(i));
-        h_phi_MS_n->Fill(phi_MS_n->at(i));
-        h_z0_MS_n->Fill(z0_MS_n->at(i));
-        h_d0sig_MS_n->Fill(d0sig_MS_n->at(i));
-        h_e_MS_n->Fill(e_MS_n->at(i));
+    
+      if (p_isMSO_n->at(0)) {
+        h_pt1_MSO_n->Fill(p_pt_MSO_n->at(0)); 
+        h_eta1_MSO_n->Fill(p_eta_MSO_n->at(0));
       }
-
-      // if ID muon
-      if (pt_ID_n->at(i) != -1) {
-        h_pt_ID_n->Fill(pt_ID_n->at(i));
-        h_eta_ID_n->Fill(eta_ID_n->at(i));
-        h_phi_ID_n->Fill(phi_ID_n->at(i));
-        h_z0_ID_n->Fill(z0_ID_n->at(i));
-        h_d0sig_ID_n->Fill(d0sig_ID_n->at(i));
-        h_e_ID_n->Fill(e_ID_n->at(i));
-        
-        // fill rho, dR ME
-        if (pt_ME_n->at(i) != -1) {
-          h_rho_ME_n->Fill((pt_ME_n->at(i)-pt_ID_n->at(i))/pt_ID_n->at(i));
-          h_dR_ME_n->Fill(sqrt( pow(eta_ID_n->at(i)-eta_ME_n->at(i),2) + pow(phi_ID_n->at(i)-phi_ME_n->at(i),2)));
-        } 
-        // fill rho, dR MS
-        if (pt_MS_n->at(i) != -1) {
-          h_rho_MS_n->Fill((pt_MS_n->at(i)-pt_ID_n->at(i))/pt_ID_n->at(i)); 
-          h_dR_MS_n->Fill(sqrt( pow(eta_ID_n->at(i)-eta_MS_n->at(i),2) + pow(phi_ID_n->at(i)-phi_MS_n->at(i),2)));
+      if (n_isMSO_n->at(0)) {
+        h_pt2_MSO_n->Fill(n_pt_MSO_n->at(0)); 
+        h_eta2_MSO_n->Fill(n_eta_MSO_n->at(0));
+      }
+    
+      if (p_isMSOE_n->at(0)) {
+        h_pt1_MSOE_n->Fill(p_pt_MSOE_n->at(0)); 
+        h_eta1_MSOE_n->Fill(p_eta_MSOE_n->at(0));
+      }
+      if (n_isMSOE_n->at(0)) {
+        h_pt2_MSOE_n->Fill(n_pt_MSOE_n->at(0)); 
+        h_eta2_MSOE_n->Fill(n_eta_MSOE_n->at(0));
+      }
+    
+      if (p_isID_n->at(0)) {
+        h_pt1_ID_n->Fill(p_pt_ID_n->at(0)); 
+        h_eta1_ID_n->Fill(p_eta_ID_n->at(0));
+        if (p_isME_n->at(0)) {
+          double ptID = cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0);
+          double ptME = cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0);
+          h_rho1_ME_n->Fill((ptME-ptID)/ptID);
+          h_dR1_ME_n->Fill(sqrt( pow(p_eta_ID_n->at(0)-p_eta_ME_n->at(0),2) + pow(p_phi_ID_n->at(0)-p_phi_ME_n->at(0),2)));
         }
+        if (p_isMSO_n->at(0)) {
+          double ptID = cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0);
+          double ptMSO = cosh(p_eta_MSO_n->at(0)) / p_qOverP_MSO_n->at(0);
+          h_rho1_MSO_n->Fill((ptMSO-ptID)/ptID);
+        }
+        if (p_isMSOE_n->at(0))
+          h_dR1_MSOE_n->Fill(sqrt( pow(p_eta_ID_n->at(0)-p_eta_MSOE_n->at(0),2) + pow(p_phi_ID_n->at(0)-p_phi_MSOE_n->at(0),2)));
+      }
+      if (n_isID_n->at(0)) {
+        h_pt2_ID_n->Fill(n_pt_ID_n->at(0)); 
+        h_eta2_ID_n->Fill(n_eta_ID_n->at(0));
+        if (n_isME_n->at(0)) {
+          double ptID = cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0);
+          double ptME = cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0);
+          h_rho2_ME_n->Fill((ptME-ptID)/ptID);
+          h_dR2_ME_n->Fill(sqrt( pow(n_eta_ID_n->at(0)-n_eta_ME_n->at(0),2) + pow(n_phi_ID_n->at(0)-n_phi_ME_n->at(0),2)));
+        }
+        if (n_isMSO_n->at(0)) {
+          double ptID = cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0);
+          double ptMSO = cosh(n_eta_MSO_n->at(0)) / n_qOverP_MSO_n->at(0);
+          h_rho2_MSO_n->Fill((ptMSO-ptID)/ptID);
+        }
+        if (n_isMSOE_n->at(0))
+          h_dR2_MSOE_n->Fill(sqrt( pow(n_eta_ID_n->at(0)-n_eta_MSOE_n->at(0),2) + pow(n_phi_ID_n->at(0)-n_phi_MSOE_n->at(0),2)));
+      }
+    }
+    // if negative muon is primary
+    else {
+      if (p_isCB_n->at(0)) {
+        h_pt2_CB_n->Fill(p_pt_CB_n->at(0)); 
+        h_eta2_CB_n->Fill(p_eta_CB_n->at(0));
+      }
+      if (n_isCB_n->at(0)) {
+        h_pt1_CB_n->Fill(n_pt_CB_n->at(0)); 
+        h_eta1_CB_n->Fill(n_eta_CB_n->at(0));
+      }
+    
+      if (p_isME_n->at(0)) {
+        h_pt2_ME_n->Fill(p_pt_ME_n->at(0)); 
+        h_eta2_ME_n->Fill(p_eta_ME_n->at(0));
+      }
+      if (n_isME_n->at(0)) {
+        h_pt1_ME_n->Fill(n_pt_ME_n->at(0)); 
+        h_eta1_ME_n->Fill(n_eta_ME_n->at(0));
+      }
+    
+      if (p_isMSO_n->at(0)) {
+        h_pt2_MSO_n->Fill(p_pt_MSO_n->at(0)); 
+        h_eta2_MSO_n->Fill(p_eta_MSO_n->at(0));
+      }
+      if (n_isMSO_n->at(0)) {
+        h_pt1_MSO_n->Fill(n_pt_MSO_n->at(0)); 
+        h_eta1_MSO_n->Fill(n_eta_MSO_n->at(0));
+      }
+    
+      if (p_isMSOE_n->at(0)) {
+        h_pt2_MSOE_n->Fill(p_pt_MSOE_n->at(0)); 
+        h_eta2_MSOE_n->Fill(p_eta_MSOE_n->at(0));
+      }
+      if (n_isMSOE_n->at(0)) {
+        h_pt1_MSOE_n->Fill(n_pt_MSOE_n->at(0)); 
+        h_eta1_MSOE_n->Fill(n_eta_MSOE_n->at(0));
+      }
+    
+      if (p_isID_n->at(0)) {
+        h_pt2_ID_n->Fill(p_pt_ID_n->at(0)); 
+        h_eta2_ID_n->Fill(p_eta_ID_n->at(0));
+        if (p_isME_n->at(0)) {
+          double ptID = cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0);
+          double ptME = cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0);
+          h_rho2_ME_n->Fill((ptME-ptID)/ptID);
+          h_dR2_ME_n->Fill(sqrt( pow(p_eta_ID_n->at(0)-p_eta_ME_n->at(0),2) + pow(p_phi_ID_n->at(0)-p_phi_ME_n->at(0),2)));
+        }
+        if (p_isMSO_n->at(0)) {
+          double ptID = cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0);
+          double ptMSO = cosh(p_eta_MSO_n->at(0)) / p_qOverP_MSO_n->at(0);
+          h_rho2_MSO_n->Fill((ptMSO-ptID)/ptID);
+        }
+        if (p_isMSOE_n->at(0))
+          h_dR2_MSOE_n->Fill(sqrt( pow(p_eta_ID_n->at(0)-p_eta_MSOE_n->at(0),2) + pow(p_phi_ID_n->at(0)-p_phi_MSOE_n->at(0),2)));
+      }
+      if (n_isID_n->at(0)) {
+        h_pt1_ID_n->Fill(n_pt_ID_n->at(0)); 
+        h_eta1_ID_n->Fill(n_eta_ID_n->at(0));
+        if (n_isME_n->at(0)) {
+          double ptID = cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0);
+          double ptME = cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0);
+          h_rho1_ME_n->Fill((ptME-ptID)/ptID);
+          h_dR1_ME_n->Fill(sqrt( pow(n_eta_ID_n->at(0)-n_eta_ME_n->at(0),2) + pow(n_phi_ID_n->at(0)-n_phi_ME_n->at(0),2)));
+        }
+        if (n_isMSO_n->at(0)) {
+          double ptID = cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0);
+          double ptMSO = cosh(n_eta_MSO_n->at(0)) / n_qOverP_MSO_n->at(0);
+          h_rho1_MSO_n->Fill((ptMSO-ptID)/ptID);
+        }
+        if (n_isMSOE_n->at(0))
+          h_dR1_MSOE_n->Fill(sqrt( pow(n_eta_ID_n->at(0)-n_eta_MSOE_n->at(0),2) + pow(n_phi_ID_n->at(0)-n_phi_MSOE_n->at(0),2)));
       }
     }
   }
   delete f_recoNew;
+  
 
   // plotting for invariant mass
   // gaussian fits
   h_m_CB_o->Fit("gaus","","", 85, 95);
   h_m_ME_o->Fit("gaus","","", 85, 95);
-  h_m_MS_o->Fit("gaus","","", 79, 89);
+  h_m_MSO_o->Fit("gaus","","", 79, 89);
+  h_m_MSOE_o->Fit("gaus","","", 85, 95);
   h_m_ID_o->Fit("gaus","","", 85, 95);
   h_m_CB_n->Fit("gaus","","", 85, 95);
   h_m_ME_n->Fit("gaus","","", 85, 95);
-  h_m_MS_n->Fit("gaus","","", 79, 89);
+  h_m_MSO_n->Fit("gaus","","", 79, 89);
+  h_m_MSOE_n->Fit("gaus","","", 85, 95);
   h_m_ID_n->Fit("gaus","","", 85, 95);
 
   TF1* f_m_CB_o = h_m_CB_o->GetFunction("gaus");
   TF1* f_m_ME_o = h_m_ME_o->GetFunction("gaus");
-  TF1* f_m_MS_o = h_m_MS_o->GetFunction("gaus");
+  TF1* f_m_MSO_o = h_m_MSO_o->GetFunction("gaus");
+  TF1* f_m_MSOE_o = h_m_MSOE_o->GetFunction("gaus");
   TF1* f_m_ID_o = h_m_ID_o->GetFunction("gaus");
   TF1* f_m_CB_n = h_m_CB_n->GetFunction("gaus");
   TF1* f_m_ME_n = h_m_ME_n->GetFunction("gaus");
-  TF1* f_m_MS_n = h_m_MS_n->GetFunction("gaus");
+  TF1* f_m_MSO_n = h_m_MSO_n->GetFunction("gaus");
+  TF1* f_m_MSOE_n = h_m_MSOE_n->GetFunction("gaus");
   TF1* f_m_ID_n = h_m_ID_n->GetFunction("gaus");
   
   // top left legend
   TLegend *l_tl;
   // top left labels
-  TPaveText *t_tl_CB, *t_tl_ME, *t_tl_MS, *t_tl_ID;
+  TPaveText *t_tl_CB, *t_tl_ME, *t_tl_MSO, *t_tl_MSOE, *t_tl_ID;
 
   // top right legend
   TLegend *l_tr;
   // top right labels
-  TPaveText *t_tr_CB, *t_tr_ME, *t_tr_MS, *t_tr_ID;
+  TPaveText *t_tr_CB, *t_tr_ME, *t_tr_MSO, *t_tr_MSOE, *t_tr_ID;
   
   // top center labels
-  TPaveText *t_tc_CB, *t_tc_ME, *t_tc_MS, *t_tc_ID;
+  TPaveText *t_tc_CB, *t_tc_ME, *t_tc_MSO, *t_tc_MSOE, *t_tc_ID;
 
   // top left legend
   l_tl = new TLegend(.12,.76,.5,.88);
@@ -2235,7 +2376,8 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   t_tl_CB->SetBorderSize(0);
   t_tl_CB->SetTextAlign(10);
   t_tl_ME = new TPaveText(*t_tl_CB);
-  t_tl_MS = new TPaveText(*t_tl_CB);
+  t_tl_MSO = new TPaveText(*t_tl_CB);
+  t_tl_MSOE = new TPaveText(*t_tl_CB);
   t_tl_ID = new TPaveText(*t_tl_CB);
   
   t_tl_CB->AddText("#bf{Combined Muons}");
@@ -2249,7 +2391,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   t_tl_CB->AddText(Form("#bf{#sigma (%s): %.2f #pm %.2f}", newMapName.c_str(),
                     f_m_CB_n->GetParameter(2),f_m_CB_n->GetParError(2)));
   
-  t_tl_ME->AddText("#bf{MS Extrapolated Muons}");
+  t_tl_ME->AddText("#bf{ME Muons}");
   t_tl_ME->AddText("");
   t_tl_ME->AddText(Form("#bf{#mu (%s): %.2f #pm %.2f}", oldMapName.c_str(),
                     f_m_ME_o->GetParameter(1),f_m_ME_o->GetParError(1)));
@@ -2260,16 +2402,27 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   t_tl_ME->AddText(Form("#bf{#sigma (%s): %.2f #pm %.2f}", newMapName.c_str(),
                     f_m_ME_n->GetParameter(2),f_m_ME_n->GetParError(2)));
   
-  t_tl_MS->AddText("#bf{MS Only Muons}");
-  t_tl_MS->AddText("");
-  t_tl_MS->AddText(Form("#bf{#mu (%s): %.2f #pm %.2f}", oldMapName.c_str(),
-                    f_m_MS_o->GetParameter(1),f_m_MS_o->GetParError(1)));
-  t_tl_MS->AddText(Form("#bf{#sigma (%s): %.2f #pm %.2f}", oldMapName.c_str(),
-                    f_m_MS_o->GetParameter(2),f_m_MS_o->GetParError(2)));
-  t_tl_MS->AddText(Form("#bf{#mu (%s): %.2f #pm %.2f}", newMapName.c_str(),
-                    f_m_MS_n->GetParameter(1),f_m_MS_n->GetParError(1)));
-  t_tl_MS->AddText(Form("#bf{#sigma (%s): %.2f #pm %.2f}", newMapName.c_str(),
-                    f_m_MS_n->GetParameter(2),f_m_MS_n->GetParError(2)));
+  t_tl_MSO->AddText("#bf{MS Muons}");
+  t_tl_MSO->AddText("");
+  t_tl_MSO->AddText(Form("#bf{#mu (%s): %.2f #pm %.2f}", oldMapName.c_str(),
+                    f_m_MSO_o->GetParameter(1),f_m_MSO_o->GetParError(1)));
+  t_tl_MSO->AddText(Form("#bf{#sigma (%s): %.2f #pm %.2f}", oldMapName.c_str(),
+                    f_m_MSO_o->GetParameter(2),f_m_MSO_o->GetParError(2)));
+  t_tl_MSO->AddText(Form("#bf{#mu (%s): %.2f #pm %.2f}", newMapName.c_str(),
+                    f_m_MSO_n->GetParameter(1),f_m_MSO_n->GetParError(1)));
+  t_tl_MSO->AddText(Form("#bf{#sigma (%s): %.2f #pm %.2f}", newMapName.c_str(),
+                    f_m_MSO_n->GetParameter(2),f_m_MSO_n->GetParError(2)));
+  
+  t_tl_MSOE->AddText("#bf{MS Only Extrapolated Muons}");
+  t_tl_MSOE->AddText("");
+  t_tl_MSOE->AddText(Form("#bf{#mu (%s): %.2f #pm %.2f}", oldMapName.c_str(),
+                    f_m_MSOE_o->GetParameter(1),f_m_MSOE_o->GetParError(1)));
+  t_tl_MSOE->AddText(Form("#bf{#sigma (%s): %.2f #pm %.2f}", oldMapName.c_str(),
+                    f_m_MSOE_o->GetParameter(2),f_m_MSOE_o->GetParError(2)));
+  t_tl_MSOE->AddText(Form("#bf{#mu (%s): %.2f #pm %.2f}", newMapName.c_str(),
+                    f_m_MSOE_n->GetParameter(1),f_m_MSOE_n->GetParError(1)));
+  t_tl_MSOE->AddText(Form("#bf{#sigma (%s): %.2f #pm %.2f}", newMapName.c_str(),
+                    f_m_MSOE_n->GetParameter(2),f_m_MSOE_n->GetParError(2)));
   
   t_tl_ID->AddText("#bf{ID Muons}");
   t_tl_ID->AddText("");
@@ -2290,11 +2443,13 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   t_tc_CB->SetBorderSize(0);
   t_tc_CB->SetTextAlign(30);
   t_tc_ME = new TPaveText(*t_tc_CB);
-  t_tc_MS = new TPaveText(*t_tc_CB);
+  t_tc_MSO = new TPaveText(*t_tc_CB);
+  t_tc_MSOE = new TPaveText(*t_tc_CB);
   t_tc_ID = new TPaveText(*t_tc_CB);
   t_tc_CB->AddText("#bf{Combined Muons}");
-  t_tc_ME->AddText("#bf{MS Extrapolated Muons}");
-  t_tc_MS->AddText("#bf{MS Only Muons}");
+  t_tc_ME->AddText("#bf{ME Muons}");
+  t_tc_MSO->AddText("#bf{MS Muons}");
+  t_tc_MSOE->AddText("#bf{MS Only Extrapolated Muons}");
   t_tc_ID->AddText("#bf{ID Muons}");
   
   // top right labels
@@ -2305,52 +2460,34 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   t_tr_CB->SetBorderSize(0);
   t_tr_CB->SetTextAlign(30);
   t_tr_ME = new TPaveText(*t_tr_CB);
-  t_tr_MS = new TPaveText(*t_tr_CB);
+  t_tr_MSO = new TPaveText(*t_tr_CB);
+  t_tr_MSOE = new TPaveText(*t_tr_CB);
   t_tr_ID = new TPaveText(*t_tr_CB);
   t_tr_CB->AddText("#bf{Combined Muons}");
-  t_tr_ME->AddText("#bf{MS Extrapolated Muons}");
-  t_tr_MS->AddText("#bf{MS Only Muons}");
+  t_tr_ME->AddText("#bf{ME Muons}");
+  t_tr_MSO->AddText("#bf{MS Muons}");
+  t_tr_MSOE->AddText("#bf{MS Only Extrapolated Muons}");
   t_tr_ID->AddText("#bf{ID Muons}");
   
   // vector of legends
   std::vector<TLegend*> *vl = new std::vector<TLegend*>();
   // m
-  vl->push_back(l_tl); vl->push_back(l_tl); vl->push_back(l_tl); vl->push_back(l_tl);
-  // pt
-  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr);  
+  vl->push_back(l_tl); vl->push_back(l_tl); vl->push_back(l_tl); vl->push_back(l_tl); vl->push_back(l_tl);
   // pt leading
-  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr);  
+  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); 
   // pt subleading
-  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr);  
-  // eta
-  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr);  
+  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); 
   // eta leading
-  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr);  
+  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); 
   // eta subleading
-  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr);  
-  // phi
-  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr);  
-  // z0
-  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr);  
-  // dosig
-  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr);  
-  // e
-  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr);  
-  // pzmumu
-  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr);  
+  vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); vl->push_back(l_tr); 
   // author
   vl->push_back(l_tr); vl->push_back(l_tr);
-  // type
-  vl->push_back(l_tr); vl->push_back(l_tr);
   // quality
-  vl->push_back(l_tr); vl->push_back(l_tr);
-  // dR
   vl->push_back(l_tr); vl->push_back(l_tr);
   // dR leading
   vl->push_back(l_tr); vl->push_back(l_tr);
   // dR subleading
-  vl->push_back(l_tr); vl->push_back(l_tr);
-  // rho
   vl->push_back(l_tr); vl->push_back(l_tr);
   // rho leading
   vl->push_back(l_tr); vl->push_back(l_tr);
@@ -2360,86 +2497,28 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   // vector of tpavetext labels
   std::vector<TPaveText*> *vt = new std::vector<TPaveText*>();
   // m
-  vt->push_back(t_tl_CB); vt->push_back(t_tl_ME); vt->push_back(t_tl_MS); vt->push_back(t_tl_ID);
-  // pt
-  vt->push_back(t_tr_CB); vt->push_back(t_tr_ME); vt->push_back(t_tr_MS); vt->push_back(t_tr_ID);  
+  vt->push_back(t_tl_CB); vt->push_back(t_tl_ME); vt->push_back(t_tl_MSO); vt->push_back(t_tl_MSOE); vt->push_back(t_tl_ID);
   // pt leading
-  vt->push_back(t_tr_CB); vt->push_back(t_tr_ME); vt->push_back(t_tr_MS); vt->push_back(t_tr_ID);  
+  vt->push_back(t_tr_CB); vt->push_back(t_tr_ME); vt->push_back(t_tr_MSO); vt->push_back(t_tr_MSOE); vt->push_back(t_tr_ID);  
   // pt subleading
-  vt->push_back(t_tr_CB); vt->push_back(t_tr_ME); vt->push_back(t_tr_MS); vt->push_back(t_tr_ID);  
-  // eta
-  vt->push_back(t_tc_CB); vt->push_back(t_tc_ME); vt->push_back(t_tc_MS); vt->push_back(t_tc_ID);  
+  vt->push_back(t_tr_CB); vt->push_back(t_tr_ME); vt->push_back(t_tr_MSO); vt->push_back(t_tr_MSOE); vt->push_back(t_tr_ID);  
   // eta leading
-  vt->push_back(t_tc_CB); vt->push_back(t_tc_ME); vt->push_back(t_tc_MS); vt->push_back(t_tc_ID);  
+  vt->push_back(t_tc_CB); vt->push_back(t_tc_ME); vt->push_back(t_tc_MSO); vt->push_back(t_tc_MSOE); vt->push_back(t_tc_ID);  
   // eta subleading
-  vt->push_back(t_tc_CB); vt->push_back(t_tc_ME); vt->push_back(t_tc_MS); vt->push_back(t_tc_ID);  
-  // phi
-  vt->push_back(t_tc_CB); vt->push_back(t_tc_ME); vt->push_back(t_tc_MS); vt->push_back(t_tc_ID);  
-  // z0
-  vt->push_back(t_tc_CB); vt->push_back(t_tc_ME); vt->push_back(t_tc_MS); vt->push_back(t_tc_ID);  
-  // dosig
-  vt->push_back(t_tr_CB); vt->push_back(t_tr_ME); vt->push_back(t_tr_MS); vt->push_back(t_tr_ID);  
-  // e
-  vt->push_back(t_tr_CB); vt->push_back(t_tr_ME); vt->push_back(t_tr_MS); vt->push_back(t_tr_ID);  
-  // pzmumu
-  vt->push_back(t_tr_CB); vt->push_back(t_tr_ME); vt->push_back(t_tr_MS); vt->push_back(t_tr_ID);  
+  vt->push_back(t_tc_CB); vt->push_back(t_tc_ME); vt->push_back(t_tc_MSO); vt->push_back(t_tc_MSOE); vt->push_back(t_tc_ID);  
   // author
-  vt->push_back(t_tr_CB); vt->push_back(t_tr_CB);
-  // type
-  vt->push_back(t_tr_CB); vt->push_back(t_tr_CB);
+  vt->push_back(nullptr); vt->push_back(nullptr);
   // quality
-  vt->push_back(t_tr_CB); vt->push_back(t_tr_CB);
-  // dR
   vt->push_back(nullptr); vt->push_back(nullptr);
   // dR leading
   vt->push_back(nullptr); vt->push_back(nullptr);
   // dR subleading
-  vt->push_back(nullptr); vt->push_back(nullptr);
-  // rho
   vt->push_back(nullptr); vt->push_back(nullptr);
   // rho leading
   vt->push_back(nullptr); vt->push_back(nullptr);
   // rho subleading
   vt->push_back(nullptr); vt->push_back(nullptr);
 
-  // currently plotting 10 variables 
-  const int Nvar = 12*4 + 2*3 + 2*2*3;
-  double maxFactor[Nvar] = {};
-  for (int i = 0; i < 4; i++) {
-    maxFactor[0*4+i] = 1.05; // m
-    maxFactor[1*4+i] = 1.05; // pt
-    maxFactor[2*4+i] = 1.05; // pt leading
-    maxFactor[3*4+i] = 1.05; // pt subleading
-    maxFactor[4*4+i] = 1.3; // eta
-    maxFactor[5*4+i] = 1.3; // eta leading
-    maxFactor[6*4+i] = 1.3; // eta subleading
-    maxFactor[7*4+i] = 1.3; // phi
-    maxFactor[8*4+i] = 1.3; // z0
-    maxFactor[9*4+i] = 1.05; // d0sig
-    maxFactor[10*4+i] = 1.05; // e
-    maxFactor[11*4+i] = 1.05; // pzmumu
-  }
-  maxFactor[48] = 1.05; // author
-  maxFactor[49] = 1.05;
-  maxFactor[50] = 1.05; // quality
-  maxFactor[51] = 1.05;
-  maxFactor[52] = 1.05; // type
-  maxFactor[53] = 1.05;
-  maxFactor[54] = 1.05; // dR
-  maxFactor[55] = 1.05;
-  maxFactor[56] = 1.05; // dR leading
-  maxFactor[57] = 1.05;
-  maxFactor[58] = 1.05; // dR subleading
-  maxFactor[59] = 1.05;
-  maxFactor[60] = 1.05; // rho
-  maxFactor[61] = 1.05;
-  maxFactor[62] = 1.05; // rho leading
-  maxFactor[63] = 1.05;
-  maxFactor[64] = 1.05; // rho subleading
-  maxFactor[65] = 1.05;
-
-  bool skip[Nvar] = {};
-  
   // set histogram max values
   double max = 0, n_min = min(nEvents_o, nEvents_n);
   for (int i = 0; i < vh_o->size(); i++) {
@@ -2447,11 +2526,10 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
       vh_o->at(i)->Scale(n_min/nEvents_o);
       vh_n->at(i)->Scale(n_min/nEvents_n);
     }
-    else skip[i] = true;
 
     max = 0;
     max = std::max(vh_o->at(i)->GetMaximum(), vh_n->at(i)->GetMaximum());
-    max *= maxFactor[i];
+    max *= maxFactor->at(i);
 
     vh_o->at(i)->SetMaximum(max);
     vh_n->at(i)->SetMaximum(max);
@@ -2468,7 +2546,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
                     oldMapName, newMapName, file_prefix);
   }
   ratioCan->Close();
-  
+
   cout << oldMapName << endl
        << "-------------------------------------------------" << endl
        << "Fraction of positive leading muons: " << (double)nLeadingPlus_o/(double)nEvents_o*100. << " +/- " << .5/sqrt((double)nEvents_o)*100. << " %" << endl
@@ -2481,13 +2559,14 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
        << "Total number of events: " << nEvents_n << endl
        << "Fraction of positive leading muons (no bad MS muons): " << (double)nLeadingPlus_noBadMS_n/(double)nEvents_noBadMS_n*100. << " +/- " << .5/sqrt((double)nEvents_noBadMS_n)*100. << " %" << endl
        << "Total number of events (no bad MS muons): " << nEvents_noBadMS_n << endl;
-
+ 
   for (int i = 0; i < vh_o->size(); i++) {
     delete vh_o->at(i);
     delete vh_n->at(i);
   }
   delete vh_o;
   delete vh_n;
+  delete maxFactor;
   delete l_tl;
   delete t_tl_CB; 
   delete t_tl_ME; 
@@ -2640,79 +2719,11 @@ void MakeChargePlots(string file_prefix, string fileName) {
 
 /**************************************************************************************************/
 
-void MakeCutflows(string file_prefix, string oldFileName, string newFileName) {
-  gStyle->SetOptStat(0);
-  gStyle->SetLegendBorderSize(0);
-  gStyle->SetPadBorderSize(2);
-  gStyle->SetTitleFontSize(0.075);
-  
-  TCanvas *can = new TCanvas("can","",1000,1000);
-
-  TFile* f_old = new TFile(Form("ntuples_muonSelection/%s", oldFileName.c_str()));
-  if (!f_old) cout << "Warning: could not open file " << oldFileName << endl;
-  TH1F* h_cutflowOld = (TH1F*)f_old->Get("h_cutflow"); 
-
-  TFile* f_new = new TFile(Form("ntuples_muonSelection/%s", newFileName.c_str()));
-  if (!f_new) cout << "Warning: could not open file " << newFileName << endl;
-  TH1F* h_cutflowNew = (TH1F*)f_new->Get("h_cutflow"); 
-  
-  h_cutflowOld->Scale(1/h_cutflowOld->GetBinContent(1));
-  h_cutflowOld->SetLineWidth(2);
-  h_cutflowOld->SetLineColor(kBlack);
-  h_cutflowOld->SetFillColor(18);
-  h_cutflowOld->SetFillStyle(1001);  
-
-  h_cutflowNew->Scale(1/h_cutflowNew->GetBinContent(1));
-  h_cutflowNew->SetLineWidth(2);
-  h_cutflowNew->SetLineColor(kAzure-2);
-  h_cutflowNew->SetFillColor(38);
-  h_cutflowNew->SetFillStyle(3006);  
-  
-  h_cutflowOld->SetMaximum(1.2);
-  h_cutflowOld->SetMinimum(0);
-  h_cutflowOld->SetTitle(";Selection Stage;Fraction of Total");
-
-  string oldMapName = "Run I";
-  string newMapName = "2016";
-  
-  // top right legend
-  TLegend* l_tr = new TLegend(.66,.76,.89,.88);
-  l_tr->AddEntry(h_cutflowOld, Form("%s Map",oldMapName.c_str()), "lf");
-  l_tr->AddEntry(h_cutflowNew, Form("%s Map",newMapName.c_str()), "lf");
-
-  // top center labels
-  TPaveText* t_tc = new TPaveText(.39,.82,.67,.86,"NDC");
-  t_tc->AddText("#it{ATLAS} #bf{Internal}");
-  t_tc->SetFillColor(0);
-  t_tc->SetLineColor(0);
-  t_tc->SetBorderSize(0);
-  t_tc->SetTextAlign(31);
- 
-  can->Divide(3,2);
-  h_cutflowOld->Draw("hist");
-  h_cutflowNew->Draw("hist same");
-  l_tr->Draw();
-  //t_tc->Draw();
-  can->Print(Form("plots/%s_cutflows.png", file_prefix.c_str()));
-  can->Close();
-  delete can;
-  
-  delete h_cutflowOld;
-  delete h_cutflowNew;
-  delete l_tr;
-  delete t_tc;
-  delete f_old;
-  delete f_new;
-}
-
-/**************************************************************************************************/
-
-
 void GeneratePlots() {
   // declare and print file prefix
   //string file_prefix = "TEST_";
   string file_prefix = "bbullard.00340072";
-  string oldFileName = "bbullard.00340072.RunI.root";
+  string oldFileName = "test.root";
   string newFileName = "bbullard.00340072.2016.root";
 
   cout << "Old map reconstruction: " << oldFileName << endl;
@@ -2723,5 +2734,4 @@ void GeneratePlots() {
   //MakeProfilePlots(file_prefix, oldFileName, newFileName);
   //MakeChargePlots(file_prefix, oldFileName);
   //MakeChargePlots(file_prefix, newFileName);
-  //MakeCutflows(file_prefix, oldFileName, newFileName); 
 }
