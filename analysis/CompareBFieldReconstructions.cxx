@@ -13,6 +13,7 @@
 #include <TPaveText.h>
 #include <TLorentzVector.h>
 #include <TLatex.h>
+#include <fstream>
 
 using namespace std;
 
@@ -1490,7 +1491,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   // add histograms to vectors for formatting
   std::vector<TH1F*> *vh_o = new std::vector<TH1F*>();
   std::vector<TH1F*> *vh_n = new std::vector<TH1F*>();
-  std::vector<int> *maxFactor = new std::vector<int>();
+  std::vector<double> *maxFactor = new std::vector<double>();
 
   // push back vector of histograms and plot range scalings            
   vh_o->push_back(h_m_CB_o);        vh_n->push_back(h_m_CB_n);        maxFactor->push_back(1.05);
@@ -1550,9 +1551,17 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   }
 
   // load old file and set up reader
-  TFile* f_recoOld = new TFile(Form("ntuples_muonSelection/%s", oldFileName.c_str()));
-  if (!f_recoOld) cout << "Warning: could not open file " << oldFileName << endl;
-  string oldMapName = "Run I";
+  //TFile* f_recoOld = new TFile(Form("ntuples_muonSelection/%s", oldFileName.c_str()));
+  //if (!f_recoOld) cout << "Warning: could not open file " << oldFileName << endl;
+  
+  TChain chainOld("RecoMuons");
+  std::ifstream recoOldFileNames("AODfiles_test.txt");
+  string fileNameOld;
+  while (recoOldFileNames >> fileNameOld) 
+    chainOld.Add(fileNameOld.c_str());
+  
+  string oldMapName = "Official AOD";
+  //string oldMapName = "Run I";
 
   long int nEvents_o = 0;
   long int nLeadingPlus_o = 0;
@@ -1560,7 +1569,8 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   long int nLeadingPlus_noBadMS_o = 0;
 
   // event level  
-  TTreeReader reader_old("RecoMuons", f_recoOld);
+  TTreeReader reader_old(&chainOld);
+  //TTreeReader reader_old("RecoMuons", f_recoOld);
   TTreeReaderValue<bool> passGRL_o(reader_old, "passGRL");
   TTreeReaderValue<unsigned long long> eventNumber_o(reader_old, "eventNumber");
   TTreeReaderValue<unsigned int> nPositiveMuons_o(reader_old, "nPositiveMuons");
@@ -1570,6 +1580,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   TTreeReaderValue<vector<bool>> p_passIDcuts_o(reader_old, "p_passIDcuts");
   TTreeReaderValue<vector<bool>> p_passAll_o(reader_old, "p_passAll");
   TTreeReaderValue<vector<float>> p_eLoss_o(reader_old, "p_eLoss");
+  TTreeReaderValue<vector<float>> p_ptcone40_o(reader_old, "p_ptcone40");
   TTreeReaderValue<vector<int>> p_muonType_o(reader_old, "p_muonType");
   TTreeReaderValue<vector<int>> p_quality_o(reader_old, "p_quality");
   TTreeReaderValue<vector<int>> p_primaryAuthor_o(reader_old, "p_primaryAuthor");
@@ -1597,6 +1608,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   TTreeReaderValue<vector<bool>> n_passIDcuts_o(reader_old, "n_passIDcuts");
   TTreeReaderValue<vector<bool>> n_passAll_o(reader_old, "n_passAll");
   TTreeReaderValue<vector<float>> n_eLoss_o(reader_old, "n_eLoss");
+  TTreeReaderValue<vector<float>> n_ptcone40_o(reader_old, "n_ptcone40");
   TTreeReaderValue<vector<int>> n_muonType_o(reader_old, "n_muonType");
   TTreeReaderValue<vector<int>> n_quality_o(reader_old, "n_quality");
   TTreeReaderValue<vector<int>> n_primaryAuthor_o(reader_old, "n_primaryAuthor");
@@ -1732,16 +1744,28 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     double pt_p, pt_n;
     int q_lead = -1;
     if (p_isCB_o->at(0)) pt_p = cosh(p_eta_CB_o->at(0)) / p_qOverP_CB_o->at(0);
-    else pt_p = p_pt_ME_o->at(0);
+    else pt_p = cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0);
     if (n_isCB_o->at(0)) pt_n = -cosh(n_eta_CB_o->at(0)) / n_qOverP_CB_o->at(0);
-    else pt_n = n_pt_ME_o->at(0);
+    else pt_n = -cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0);
     
     if (pt_p > pt_n) {
       nLeadingPlus_o++;
       q_lead = 1;
     }
   
-    if (p_pt_MSO_o->at(0) > 0 and p_pt_MSO_o->at(0) < 10000){
+    // skip events where selected muons fail pt and isolation requirements
+    if (q_lead == 1) {
+      if (pt_p < 25) continue;
+      if (pt_n < 20) continue;
+    }
+    else {
+      if (pt_n < 25) continue;
+      if (pt_p < 20) continue;
+    }
+    if (pt_p / p_ptcone40_o->at(0) < .3) continue;
+    if (pt_n / n_ptcone40_o->at(0) < .3) continue;
+    
+    if (1./p_qOverP_MSO_o->at(0) > 0 and 1./p_qOverP_MSO_o->at(0) < 10000){
       nEvents_noBadMS_o++;
       if (q_lead == 1) 
         nLeadingPlus_noBadMS_o++;
@@ -1788,43 +1812,43 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     // fill leading/subleading variable histograms
     if (q_lead == 1) {
       if (p_isCB_o->at(0)) {
-        h_pt1_CB_o->Fill(p_pt_CB_o->at(0)); 
+        h_pt1_CB_o->Fill(cosh(p_eta_CB_o->at(0)) / p_qOverP_CB_o->at(0)); 
         h_eta1_CB_o->Fill(p_eta_CB_o->at(0));
       }
       if (n_isCB_o->at(0)) {
-        h_pt2_CB_o->Fill(n_pt_CB_o->at(0)); 
+        h_pt2_CB_o->Fill(-cosh(n_eta_CB_o->at(0)) / n_qOverP_CB_o->at(0)); 
         h_eta2_CB_o->Fill(n_eta_CB_o->at(0));
       }
     
       if (p_isME_o->at(0)) {
-        h_pt1_ME_o->Fill(p_pt_ME_o->at(0)); 
+        h_pt1_ME_o->Fill(cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0)); 
         h_eta1_ME_o->Fill(p_eta_ME_o->at(0));
       }
       if (n_isME_o->at(0)) {
-        h_pt2_ME_o->Fill(n_pt_ME_o->at(0)); 
+        h_pt2_ME_o->Fill(-cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0)); 
         h_eta2_ME_o->Fill(n_eta_ME_o->at(0));
       }
     
       if (p_isMSO_o->at(0)) {
-        h_pt1_MSO_o->Fill(p_pt_MSO_o->at(0)); 
+        h_pt1_MSO_o->Fill(cosh(p_eta_MSO_o->at(0)) / p_qOverP_MSO_o->at(0)); 
         h_eta1_MSO_o->Fill(p_eta_MSO_o->at(0));
       }
       if (n_isMSO_o->at(0)) {
-        h_pt2_MSO_o->Fill(n_pt_MSO_o->at(0)); 
+        h_pt2_MSO_o->Fill(-cosh(n_eta_MSO_o->at(0)) / n_qOverP_MSO_o->at(0)); 
         h_eta2_MSO_o->Fill(n_eta_MSO_o->at(0));
       }
     
       if (p_isMSOE_o->at(0)) {
-        h_pt1_MSOE_o->Fill(p_pt_MSOE_o->at(0)); 
+        h_pt1_MSOE_o->Fill(cosh(p_eta_MSOE_o->at(0)) / p_qOverP_MSOE_o->at(0)); 
         h_eta1_MSOE_o->Fill(p_eta_MSOE_o->at(0));
       }
       if (n_isMSOE_o->at(0)) {
-        h_pt2_MSOE_o->Fill(n_pt_MSOE_o->at(0)); 
+        h_pt2_MSOE_o->Fill(-cosh(n_eta_MSOE_o->at(0)) / n_qOverP_MSOE_o->at(0)); 
         h_eta2_MSOE_o->Fill(n_eta_MSOE_o->at(0));
       }
     
       if (p_isID_o->at(0)) {
-        h_pt1_ID_o->Fill(p_pt_ID_o->at(0)); 
+        h_pt1_ID_o->Fill(cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0)); 
         h_eta1_ID_o->Fill(p_eta_ID_o->at(0));
         if (p_isME_o->at(0)) {
           double ptID = cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0);
@@ -1841,7 +1865,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
           h_dR1_MSOE_o->Fill(sqrt( pow(p_eta_ID_o->at(0)-p_eta_MSOE_o->at(0),2) + pow(p_phi_ID_o->at(0)-p_phi_MSOE_o->at(0),2)));
       }
       if (n_isID_o->at(0)) {
-        h_pt2_ID_o->Fill(n_pt_ID_o->at(0)); 
+        h_pt2_ID_o->Fill(-cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0)); 
         h_eta2_ID_o->Fill(n_eta_ID_o->at(0));
         if (n_isME_o->at(0)) {
           double ptID = cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0);
@@ -1861,43 +1885,43 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     // if negative muon is primary
     else {
       if (p_isCB_o->at(0)) {
-        h_pt2_CB_o->Fill(p_pt_CB_o->at(0)); 
+        h_pt2_CB_o->Fill(cosh(p_eta_CB_o->at(0)) / p_qOverP_CB_o->at(0)); 
         h_eta2_CB_o->Fill(p_eta_CB_o->at(0));
       }
       if (n_isCB_o->at(0)) {
-        h_pt1_CB_o->Fill(n_pt_CB_o->at(0)); 
+        h_pt1_CB_o->Fill(-cosh(n_eta_CB_o->at(0)) / n_qOverP_CB_o->at(0)); 
         h_eta1_CB_o->Fill(n_eta_CB_o->at(0));
       }
     
       if (p_isME_o->at(0)) {
-        h_pt2_ME_o->Fill(p_pt_ME_o->at(0)); 
+        h_pt2_ME_o->Fill(cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0)); 
         h_eta2_ME_o->Fill(p_eta_ME_o->at(0));
       }
       if (n_isME_o->at(0)) {
-        h_pt1_ME_o->Fill(n_pt_ME_o->at(0)); 
+        h_pt1_ME_o->Fill(-cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0)); 
         h_eta1_ME_o->Fill(n_eta_ME_o->at(0));
       }
     
       if (p_isMSO_o->at(0)) {
-        h_pt2_MSO_o->Fill(p_pt_MSO_o->at(0)); 
+        h_pt2_MSO_o->Fill(cosh(p_eta_MSO_o->at(0)) / p_qOverP_MSO_o->at(0)); 
         h_eta2_MSO_o->Fill(p_eta_MSO_o->at(0));
       }
       if (n_isMSO_o->at(0)) {
-        h_pt1_MSO_o->Fill(n_pt_MSO_o->at(0)); 
+        h_pt1_MSO_o->Fill(-cosh(n_eta_MSO_o->at(0)) / n_qOverP_MSO_o->at(0)); 
         h_eta1_MSO_o->Fill(n_eta_MSO_o->at(0));
       }
     
       if (p_isMSOE_o->at(0)) {
-        h_pt2_MSOE_o->Fill(p_pt_MSOE_o->at(0)); 
+        h_pt2_MSOE_o->Fill(cosh(p_eta_MSOE_o->at(0)) / p_qOverP_MSOE_o->at(0)); 
         h_eta2_MSOE_o->Fill(p_eta_MSOE_o->at(0));
       }
       if (n_isMSOE_o->at(0)) {
-        h_pt1_MSOE_o->Fill(n_pt_MSOE_o->at(0)); 
+        h_pt1_MSOE_o->Fill(-cosh(n_eta_MSOE_o->at(0)) / n_qOverP_MSOE_o->at(0)); 
         h_eta1_MSOE_o->Fill(n_eta_MSOE_o->at(0));
       }
     
       if (p_isID_o->at(0)) {
-        h_pt2_ID_o->Fill(p_pt_ID_o->at(0)); 
+        h_pt2_ID_o->Fill(cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0)); 
         h_eta2_ID_o->Fill(p_eta_ID_o->at(0));
         if (p_isME_o->at(0)) {
           double ptID = cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0);
@@ -1914,7 +1938,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
           h_dR2_MSOE_o->Fill(sqrt( pow(p_eta_ID_o->at(0)-p_eta_MSOE_o->at(0),2) + pow(p_phi_ID_o->at(0)-p_phi_MSOE_o->at(0),2)));
       }
       if (n_isID_o->at(0)) {
-        h_pt1_ID_o->Fill(n_pt_ID_o->at(0)); 
+        h_pt1_ID_o->Fill(-cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0)); 
         h_eta1_ID_o->Fill(n_eta_ID_o->at(0));
         if (n_isME_o->at(0)) {
           double ptID = cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0);
@@ -1932,13 +1956,21 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
       }
     }
   }
-  delete f_recoOld;
+  //delete f_recoOld;
 
 
   // load new file and set up reader
-  TFile* f_recoNew = new TFile(Form("ntuples_muonSelection/%s", newFileName.c_str()));
-  if (!f_recoNew) cout << "Warning: could not open file " << newFileName << endl;
-  string newMapName = "2016";
+  //TFile* f_recoNew = new TFile(Form("ntuples_muonSelection/%s", newFileName.c_str()));
+  //if (!f_recoNew) cout << "Warning: could not open file " << newFileName << endl;
+  
+  TChain chainNew("RecoMuons");
+  std::ifstream recoNewFileNames("RunIfiles_test.txt");
+  string fileNameNew;
+  while (recoNewFileNames >> fileNameNew) 
+    chainNew.Add(fileNameNew.c_str());
+  
+  //string newMapName = "2016";
+  string newMapName = "Run I";
 
   long int nEvents_n = 0;
   long int nLeadingPlus_n = 0;
@@ -1946,7 +1978,8 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   long int nLeadingPlus_noBadMS_n = 0;
 
   // event level  
-  TTreeReader reader_new("RecoMuons", f_recoNew);
+  //TTreeReader reader_new("RecoMuons", f_recoNew);
+  TTreeReader reader_new(&chainNew);
   TTreeReaderValue<bool> passGRL_n(reader_new, "passGRL");
   TTreeReaderValue<unsigned long long> eventNumber_n(reader_new, "eventNumber");
   TTreeReaderValue<unsigned int> nPositiveMuons_n(reader_new, "nPositiveMuons");
@@ -1956,6 +1989,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   TTreeReaderValue<vector<bool>> p_passIDcuts_n(reader_new, "p_passIDcuts");
   TTreeReaderValue<vector<bool>> p_passAll_n(reader_new, "p_passAll");
   TTreeReaderValue<vector<float>> p_eLoss_n(reader_new, "p_eLoss");
+  TTreeReaderValue<vector<float>> p_ptcone40_n(reader_new, "p_ptcone40");
   TTreeReaderValue<vector<int>> p_muonType_n(reader_new, "p_muonType");
   TTreeReaderValue<vector<int>> p_quality_n(reader_new, "p_quality");
   TTreeReaderValue<vector<int>> p_primaryAuthor_n(reader_new, "p_primaryAuthor");
@@ -1983,6 +2017,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   TTreeReaderValue<vector<bool>> n_passIDcuts_n(reader_new, "n_passIDcuts");
   TTreeReaderValue<vector<bool>> n_passAll_n(reader_new, "n_passAll");
   TTreeReaderValue<vector<float>> n_eLoss_n(reader_new, "n_eLoss");
+  TTreeReaderValue<vector<float>> n_ptcone40_n(reader_new, "n_ptcone40");
   TTreeReaderValue<vector<int>> n_muonType_n(reader_new, "n_muonType");
   TTreeReaderValue<vector<int>> n_quality_n(reader_new, "n_quality");
   TTreeReaderValue<vector<int>> n_primaryAuthor_n(reader_new, "n_primaryAuthor");
@@ -2118,21 +2153,33 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     double pt_p, pt_n;
     int q_lead = -1;
     if (p_isCB_n->at(0)) pt_p = cosh(p_eta_CB_n->at(0)) / p_qOverP_CB_n->at(0);
-    else pt_p = p_pt_ME_n->at(0);
+    else pt_p = cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0);
     if (n_isCB_n->at(0)) pt_n = -cosh(n_eta_CB_n->at(0)) / n_qOverP_CB_n->at(0);
-    else pt_n = n_pt_ME_n->at(0);
+    else pt_n = -cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0);
     
     if (pt_p > pt_n) {
       nLeadingPlus_n++;
       q_lead = 1;
     }
-  
-    if (p_pt_MSO_n->at(0) > 0 and p_pt_MSO_n->at(0) < 10000){
+
+    // skip events where selected muons fail pt and isolation requirements
+    if (q_lead == 1) {
+      if (pt_p < 25) continue;
+      if (pt_n < 20) continue;
+    }
+    else {
+      if (pt_n < 25) continue;
+      if (pt_p < 20) continue;
+    }
+    if (pt_p / p_ptcone40_n->at(0) < .3) continue;
+    if (pt_n / n_ptcone40_n->at(0) < .3) continue;
+    
+    if (1./p_qOverP_MSO_n->at(0) > 0 and 1./p_qOverP_MSO_n->at(0) < 10000){
       nEvents_noBadMS_n++;
       if (q_lead == 1) 
         nLeadingPlus_noBadMS_n++;
     }
- 
+    
     // fill primary author
     if (q_lead == 1) {
       h_author1_n->Fill(p_primaryAuthor_n->at(0)); 
@@ -2174,43 +2221,43 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     // fill leading/subleading variable histograms
     if (q_lead == 1) {
       if (p_isCB_n->at(0)) {
-        h_pt1_CB_n->Fill(p_pt_CB_n->at(0)); 
+        h_pt1_CB_n->Fill(cosh(p_eta_CB_n->at(0)) / p_qOverP_CB_n->at(0)); 
         h_eta1_CB_n->Fill(p_eta_CB_n->at(0));
       }
       if (n_isCB_n->at(0)) {
-        h_pt2_CB_n->Fill(n_pt_CB_n->at(0)); 
+        h_pt2_CB_n->Fill(-cosh(n_eta_CB_n->at(0)) / n_qOverP_CB_n->at(0)); 
         h_eta2_CB_n->Fill(n_eta_CB_n->at(0));
       }
     
       if (p_isME_n->at(0)) {
-        h_pt1_ME_n->Fill(p_pt_ME_n->at(0)); 
+        h_pt1_ME_n->Fill(cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0)); 
         h_eta1_ME_n->Fill(p_eta_ME_n->at(0));
       }
       if (n_isME_n->at(0)) {
-        h_pt2_ME_n->Fill(n_pt_ME_n->at(0)); 
+        h_pt2_ME_n->Fill(-cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0)); 
         h_eta2_ME_n->Fill(n_eta_ME_n->at(0));
       }
     
       if (p_isMSO_n->at(0)) {
-        h_pt1_MSO_n->Fill(p_pt_MSO_n->at(0)); 
+        h_pt1_MSO_n->Fill(cosh(p_eta_MSO_n->at(0)) / p_qOverP_MSO_n->at(0)); 
         h_eta1_MSO_n->Fill(p_eta_MSO_n->at(0));
       }
       if (n_isMSO_n->at(0)) {
-        h_pt2_MSO_n->Fill(n_pt_MSO_n->at(0)); 
+        h_pt2_MSO_n->Fill(-cosh(n_eta_MSO_n->at(0)) / n_qOverP_MSO_n->at(0)); 
         h_eta2_MSO_n->Fill(n_eta_MSO_n->at(0));
       }
     
       if (p_isMSOE_n->at(0)) {
-        h_pt1_MSOE_n->Fill(p_pt_MSOE_n->at(0)); 
+        h_pt1_MSOE_n->Fill(cosh(p_eta_MSOE_n->at(0)) / p_qOverP_MSOE_n->at(0)); 
         h_eta1_MSOE_n->Fill(p_eta_MSOE_n->at(0));
       }
       if (n_isMSOE_n->at(0)) {
-        h_pt2_MSOE_n->Fill(n_pt_MSOE_n->at(0)); 
+        h_pt2_MSOE_n->Fill(-cosh(n_eta_MSOE_n->at(0)) / n_qOverP_MSOE_n->at(0)); 
         h_eta2_MSOE_n->Fill(n_eta_MSOE_n->at(0));
       }
     
       if (p_isID_n->at(0)) {
-        h_pt1_ID_n->Fill(p_pt_ID_n->at(0)); 
+        h_pt1_ID_n->Fill(cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0)); 
         h_eta1_ID_n->Fill(p_eta_ID_n->at(0));
         if (p_isME_n->at(0)) {
           double ptID = cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0);
@@ -2227,7 +2274,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
           h_dR1_MSOE_n->Fill(sqrt( pow(p_eta_ID_n->at(0)-p_eta_MSOE_n->at(0),2) + pow(p_phi_ID_n->at(0)-p_phi_MSOE_n->at(0),2)));
       }
       if (n_isID_n->at(0)) {
-        h_pt2_ID_n->Fill(n_pt_ID_n->at(0)); 
+        h_pt2_ID_n->Fill(-cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0)); 
         h_eta2_ID_n->Fill(n_eta_ID_n->at(0));
         if (n_isME_n->at(0)) {
           double ptID = cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0);
@@ -2247,43 +2294,43 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     // if negative muon is primary
     else {
       if (p_isCB_n->at(0)) {
-        h_pt2_CB_n->Fill(p_pt_CB_n->at(0)); 
+        h_pt2_CB_n->Fill(cosh(p_eta_CB_n->at(0)) / p_qOverP_CB_n->at(0)); 
         h_eta2_CB_n->Fill(p_eta_CB_n->at(0));
       }
       if (n_isCB_n->at(0)) {
-        h_pt1_CB_n->Fill(n_pt_CB_n->at(0)); 
+        h_pt1_CB_n->Fill(-cosh(n_eta_CB_n->at(0)) / n_qOverP_CB_n->at(0)); 
         h_eta1_CB_n->Fill(n_eta_CB_n->at(0));
       }
     
       if (p_isME_n->at(0)) {
-        h_pt2_ME_n->Fill(p_pt_ME_n->at(0)); 
+        h_pt2_ME_n->Fill(cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0)); 
         h_eta2_ME_n->Fill(p_eta_ME_n->at(0));
       }
       if (n_isME_n->at(0)) {
-        h_pt1_ME_n->Fill(n_pt_ME_n->at(0)); 
+        h_pt1_ME_n->Fill(-cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0)); 
         h_eta1_ME_n->Fill(n_eta_ME_n->at(0));
       }
     
       if (p_isMSO_n->at(0)) {
-        h_pt2_MSO_n->Fill(p_pt_MSO_n->at(0)); 
+        h_pt2_MSO_n->Fill(cosh(p_eta_MSO_n->at(0)) / p_qOverP_MSO_n->at(0)); 
         h_eta2_MSO_n->Fill(p_eta_MSO_n->at(0));
       }
       if (n_isMSO_n->at(0)) {
-        h_pt1_MSO_n->Fill(n_pt_MSO_n->at(0)); 
+        h_pt1_MSO_n->Fill(-cosh(n_eta_MSO_n->at(0)) / n_qOverP_MSO_n->at(0)); 
         h_eta1_MSO_n->Fill(n_eta_MSO_n->at(0));
       }
     
       if (p_isMSOE_n->at(0)) {
-        h_pt2_MSOE_n->Fill(p_pt_MSOE_n->at(0)); 
+        h_pt2_MSOE_n->Fill(cosh(p_eta_MSOE_n->at(0)) / p_qOverP_MSOE_n->at(0)); 
         h_eta2_MSOE_n->Fill(p_eta_MSOE_n->at(0));
       }
       if (n_isMSOE_n->at(0)) {
-        h_pt1_MSOE_n->Fill(n_pt_MSOE_n->at(0)); 
+        h_pt1_MSOE_n->Fill(-cosh(n_eta_MSOE_n->at(0)) / n_qOverP_MSOE_n->at(0)); 
         h_eta1_MSOE_n->Fill(n_eta_MSOE_n->at(0));
       }
     
       if (p_isID_n->at(0)) {
-        h_pt2_ID_n->Fill(p_pt_ID_n->at(0)); 
+        h_pt2_ID_n->Fill(cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0)); 
         h_eta2_ID_n->Fill(p_eta_ID_n->at(0));
         if (p_isME_n->at(0)) {
           double ptID = cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0);
@@ -2300,7 +2347,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
           h_dR2_MSOE_n->Fill(sqrt( pow(p_eta_ID_n->at(0)-p_eta_MSOE_n->at(0),2) + pow(p_phi_ID_n->at(0)-p_phi_MSOE_n->at(0),2)));
       }
       if (n_isID_n->at(0)) {
-        h_pt1_ID_n->Fill(n_pt_ID_n->at(0)); 
+        h_pt1_ID_n->Fill(-cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0)); 
         h_eta1_ID_n->Fill(n_eta_ID_n->at(0));
         if (n_isME_n->at(0)) {
           double ptID = cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0);
@@ -2318,7 +2365,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
       }
     }
   }
-  delete f_recoNew;
+  //delete f_recoNew;
   
 
   // plotting for invariant mass
@@ -2541,9 +2588,8 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   ratioCan->cd();
   ratioCan->Clear();
   for (int i = 0; i < vh_o->size(); i++) {
-    if (!skip[i]) 
-      MakeRatioPlot(ratioCan, vh_o->at(i), vh_n->at(i), vl->at(i), vt->at(i), 
-                    oldMapName, newMapName, file_prefix);
+    MakeRatioPlot(ratioCan, vh_o->at(i), vh_n->at(i), vl->at(i), vt->at(i), 
+                  oldMapName, newMapName, file_prefix);
   }
   ratioCan->Close();
 
@@ -2570,15 +2616,18 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   delete l_tl;
   delete t_tl_CB; 
   delete t_tl_ME; 
-  delete t_tl_MS; 
+  delete t_tl_MSO; 
+  delete t_tl_MSOE; 
   delete t_tl_ID;
   delete t_tr_CB; 
   delete t_tr_ME; 
-  delete t_tr_MS; 
+  delete t_tr_MSO; 
+  delete t_tr_MSOE; 
   delete t_tr_ID;
   delete t_tc_CB; 
   delete t_tc_ME; 
-  delete t_tc_MS; 
+  delete t_tc_MSO; 
+  delete t_tc_MSOE; 
   delete t_tc_ID;
   delete vt;
   delete vl;
@@ -2722,7 +2771,7 @@ void MakeChargePlots(string file_prefix, string fileName) {
 void GeneratePlots() {
   // declare and print file prefix
   //string file_prefix = "TEST_";
-  string file_prefix = "bbullard.00340072";
+  string file_prefix = "group.perf-muons.AODvRunI";
   string oldFileName = "test.root";
   string newFileName = "bbullard.00340072.2016.root";
 

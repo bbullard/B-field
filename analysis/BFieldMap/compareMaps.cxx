@@ -23,8 +23,9 @@ xyscan( TVirtualPad* pad, double maxr, double z = 0, int n = 1000 )
 {
     TH2D* h_B1 = new TH2D("h_B1",Form("|B_{1}| @ z = %.2f m;x (mm);y (mm)", z/1000),n,-maxr,maxr,n,-maxr,maxr);
     TH2D* h_B2 = new TH2D("h_B2","|B_{2}|;x (mm);y (mm)",n,-maxr,maxr,n,-maxr,maxr);
-    TH2D* h_dB = new TH2D("h_dB","|B_{1} - B_{2}|/|B_{1}| (%);x (mm);y (mm)",n,-maxr,maxr,n,-maxr,maxr);
-    h_B1->SetStats(0); h_B2->SetStats(0); h_dB->SetStats(0);
+    TH2D* h_dB = new TH2D("h_dB","|B_{1} - B_{2}|;x (mm);y (mm)",n,-maxr,maxr,n,-maxr,maxr);
+    TH2D* h_dBpc = new TH2D("h_dBpc","|B_{1} - B_{2}|/|B_{1}| (%);x (mm);y (mm)",n,-maxr,maxr,n,-maxr,maxr);
+    h_B1->SetStats(0); h_B2->SetStats(0); h_dB->SetStats(0); h_dBpc->SetStats(0);
     for ( int i = 0; i < n; i++ ) for ( int j = 0; j < n; j++ ) {
         double x = (2.*(i+0.5)/n-1.)*maxr;
         double y = (2.*(j+0.5)/n-1.)*maxr;
@@ -40,21 +41,25 @@ xyscan( TVirtualPad* pad, double maxr, double z = 0, int n = 1000 )
         h_B1->Fill(x,y,B[0].Mag());
         h_B2->Fill(x,y,B[1].Mag());
         TVector3 deltaB = B[0] - B[1];
-        h_dB->Fill(x,y,deltaB.Mag()/B[0].Mag()*100);
+        h_dB->Fill(x,y,deltaB.Mag());
+        h_dBpc->Fill(x,y,deltaB.Mag()/B[0].Mag()*100);
     }
-    pad->Divide(1,3);
+    pad->Divide(1,4);
     pad->cd(1);
     h_B1->DrawCopy("colz");
     pad->cd(2);
     h_B2->DrawCopy("colz");
     pad->cd(3);
-    h_dB->SetMaximum(10);
-    h_dB->SetMinimum(0);
     h_dB->DrawCopy("colz");
+    pad->cd(4);
+    h_dBpc->SetMaximum(1);
+    h_dBpc->SetMinimum(0);
+    h_dBpc->DrawCopy("colz");
     pad->Update();
     delete h_B1;
     delete h_B2;
     delete h_dB;
+    delete h_dBpc;
 }
 
 void
@@ -62,8 +67,9 @@ zrscan( TVirtualPad* pad, double maxz, double maxr, double phi = 0, int n = 1000
 {
     TH2D* h_B1 = new TH2D("h_B1",Form("|B_{1}| @ #phi = %.2f#pi;z (mm);r (mm)",phi/PI),n,-maxz,maxz,n,-maxr,maxr);
     TH2D* h_B2 = new TH2D("h_B2","|B_{2}|;z (mm);r (mm)",n,-maxz,maxz,n,-maxr,maxr);
-    TH2D* h_dB = new TH2D("h_dB","|B_{1} - B_{2}|/|B_{1}| (%);z (mm);r (mm)",n,-maxz,maxz,n,-maxr,maxr);
-    h_B1->SetStats(0); h_B2->SetStats(0); h_dB->SetStats(0);
+    TH2D* h_dB = new TH2D("h_dB","|B_{1} - B_{2}|;z (mm);r (mm)",n,-maxz,maxz,n,-maxr,maxr);
+    TH2D* h_dBpc = new TH2D("h_dBpc","|B_{1} - B_{2}|/|B_{1}| (%);z (mm);r (mm)",n,-maxz,maxz,n,-maxr,maxr);
+    h_B1->SetStats(0); h_B2->SetStats(0); h_dB->SetStats(0); h_dBpc->SetStats(0);
     for ( int i = 0; i < n; i++ ) for ( int j = 0; j < n; j++ ) {
         double z = (2.*(i+0.5)/n-1.)*maxz;
         double r = (2.*(j+0.5)/n-1.)*maxr;
@@ -79,21 +85,25 @@ zrscan( TVirtualPad* pad, double maxz, double maxr, double phi = 0, int n = 1000
         h_B1->Fill(z,r,B[0].Mag());
         h_B2->Fill(z,r,B[1].Mag());
         TVector3 deltaB = B[0] - B[1];
-        h_dB->Fill(z,r,deltaB.Mag()/B[0].Mag()*100);
+        h_dB->Fill(z,r,deltaB.Mag());
+        h_dBpc->Fill(z,r,deltaB.Mag()/B[0].Mag()*100);
     }
-    pad->Divide(1,3);
+    pad->Divide(1,4);
     pad->cd(1);
     h_B1->DrawCopy("colz");
     pad->cd(2);
     h_B2->DrawCopy("colz");
     pad->cd(3);
-    h_dB->SetMaximum(10);
-    h_dB->SetMinimum(0);
     h_dB->DrawCopy("colz");
+    pad->cd(4);
+    h_dBpc->SetMaximum(1);
+    h_dBpc->SetMinimum(0);
+    h_dBpc->DrawCopy("colz");
     pad->Update();
     delete h_B1;
     delete h_B2;
     delete h_dB;
+    delete h_dBpc;
 }
 
 void
@@ -101,8 +111,9 @@ zphiscan( TVirtualPad* pad, double maxz, double r = 4000, int n = 1000 )
 {
     TH2D* h_B1 = new TH2D("h_B1","|B_{1}|;z (mm);#phi (rad)",n,-maxz,maxz,n,0,2.*M_PI);
     TH2D* h_B2 = new TH2D("h_B2","|B_{2}|;z (mm);#phi (rad)",n,-maxz,maxz,n,0,2.*M_PI);
-    TH2D* h_dB = new TH2D("h_dB","|B_{1} - B_{2}|/|B_{1}| (%);z (mm);#phi (rad)",n,-maxz,maxz,n,0,2.*M_PI);
-    h_B1->SetStats(0); h_B2->SetStats(0); h_dB->SetStats(0);
+    TH2D* h_dB = new TH2D("h_dB","|B_{1} - B_{2}|;z (mm);#phi (rad)",n,-maxz,maxz,n,0,2.*M_PI);
+    TH2D* h_dBpc = new TH2D("h_dBpc","|B_{1} - B_{2}|/|B_{1}| (%);z (mm);#phi (rad)",n,-maxz,maxz,n,0,2.*M_PI);
+    h_B1->SetStats(0); h_B2->SetStats(0); h_dB->SetStats(0); h_dBpc->SetStats(0);
     for ( int i = 0; i < n; i++ ) for ( int j = 0; j < n; j++ ) {
         double z = (2.*(i+0.5)/n-1.)*maxz;
         double phi = 2.*(j+0.5)/n*M_PI;
@@ -118,21 +129,25 @@ zphiscan( TVirtualPad* pad, double maxz, double r = 4000, int n = 1000 )
         h_B1->Fill(z,phi,B[0].Mag());
         h_B2->Fill(z,phi,B[1].Mag());
         TVector3 deltaB = B[0] - B[1];
-        h_dB->Fill(z,phi,deltaB.Mag()/B[0].Mag()*100);
+        h_dB->Fill(z,phi,deltaB.Mag());
+        h_dBpc->Fill(z,phi,deltaB.Mag()/B[0].Mag()*100);
     }
-    pad->Divide(1,3);
+    pad->Divide(1,4);
     pad->cd(1);
     h_B1->DrawCopy("colz");
     pad->cd(2);
     h_B2->DrawCopy("colz");
     pad->cd(3);
-    h_dB->SetMaximum(10);
-    h_dB->SetMinimum(0);
     h_dB->DrawCopy("colz");
+    pad->cd(4);
+    h_dBpc->SetMaximum(1);
+    h_dBpc->SetMinimum(0);
+    h_dBpc->DrawCopy("colz");
     pad->Update();
     delete h_B1;
     delete h_B2;
     delete h_dB;
+    delete h_dBpc;
 }
 
 int
@@ -164,8 +179,8 @@ main( int argc, const char* argv[] )
     xyscan(c->GetPad(1),14000,0,500);
     xyscan(c->GetPad(2),14000,10000,500);
     /* z-r scan @ fixed phi */
-    zrscan(c->GetPad(3),15000,14000,0.375*M_PI,500); // sector 4-12
-    zrscan(c->GetPad(4),15000,14000,0.5*M_PI,500); // sector 5-13
+    zrscan(c->GetPad(3),15000,14000,0.21*M_PI,500); // sector 4-12
+    zrscan(c->GetPad(4),15000,14000,0.25*M_PI,500); // sector 5-13
     //zrscan(c->GetPad(3),3000,2000,0.375*M_PI,500); // sector 4-12
     //zrscan(c->GetPad(4),3000,2000,0.5*M_PI,500); // sector 5-13
     /* z-phi scan @ fixed r */

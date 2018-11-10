@@ -47,6 +47,7 @@ private:
   // Positive Muon Variables
   std::vector<bool> *p_passIDcuts = nullptr;
   std::vector<bool> *p_passAll = nullptr;
+  std::vector<float> *p_ptcone40 = nullptr;
   std::vector<float> *p_eLoss = nullptr;
   std::vector<int> *p_muonType = nullptr;
   std::vector<int> *p_quality = nullptr;
@@ -78,6 +79,7 @@ private:
   // Negative Muon Variables
   std::vector<bool> *n_passIDcuts = nullptr;
   std::vector<bool> *n_passAll = nullptr;
+  std::vector<float> *n_ptcone40 = nullptr;
   std::vector<float> *n_eLoss = nullptr;
   std::vector<int> *n_muonType = nullptr;
   std::vector<int> *n_quality = nullptr;

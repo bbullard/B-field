@@ -26,6 +26,7 @@ MuonSelection :: ~MuonSelection () {
   // Delete positive muon variables
   if (p_passIDcuts) delete p_passIDcuts;
   if (p_passAll) delete p_passAll;
+  if (p_ptcone40) delete p_ptcone40;
   if (p_eLoss) delete p_eLoss;
   if (p_muonType) delete p_muonType;
   if (p_quality) delete p_quality;
@@ -57,6 +58,7 @@ MuonSelection :: ~MuonSelection () {
   // Delete negative muon variables
   if (n_passIDcuts) delete n_passIDcuts;
   if (n_passAll) delete n_passAll;
+  if (n_ptcone40) delete n_ptcone40;
   if (n_eLoss) delete n_eLoss;
   if (n_muonType) delete n_muonType;
   if (n_quality) delete n_quality;
@@ -207,6 +209,8 @@ StatusCode MuonSelection :: initialize ()
   zmumutree->Branch("p_passIDcuts", &p_passIDcuts);
   p_passAll = new std::vector<bool>();
   zmumutree->Branch("p_passAll", &p_passAll);  
+  p_ptcone40 = new std::vector<float>();
+  zmumutree->Branch("p_ptcone40",&p_ptcone40);
   p_eLoss = new std::vector<float>();
   zmumutree->Branch("p_eLoss",&p_eLoss);
   p_muonType = new std::vector<int>();
@@ -268,6 +272,8 @@ StatusCode MuonSelection :: initialize ()
   zmumutree->Branch("n_passIDcuts", &n_passIDcuts);
   n_passAll = new std::vector<bool>();
   zmumutree->Branch("n_passAll", &n_passAll);  
+  n_ptcone40 = new std::vector<float>();
+  zmumutree->Branch("n_ptcone40",&n_ptcone40);
   n_eLoss = new std::vector<float>();
   zmumutree->Branch("n_eLoss",&n_eLoss);
   n_muonType = new std::vector<int>();
@@ -567,6 +573,7 @@ StatusCode MuonSelection :: execute ()
   // positive muon variables
   p_passIDcuts->clear();
   p_passAll->clear();
+  p_ptcone40->clear();
   p_eLoss->clear();
   p_muonType->clear();
   p_quality->clear();
@@ -598,6 +605,7 @@ StatusCode MuonSelection :: execute ()
   // negative muon variables
   n_passIDcuts->clear();
   n_passAll->clear();
+  n_ptcone40->clear();
   n_eLoss->clear();
   n_muonType->clear();
   n_quality->clear();
@@ -736,7 +744,7 @@ StatusCode MuonSelection :: execute ()
     p_muonType->push_back(muon->muonType());
     p_primaryAuthor->push_back(muon->author());
     p_quality->push_back(m_muonSelection->getQuality(*muon));
-  
+
     const int unknown = 1<<0;
     const int MuidCo = 1<<1;
     const int STACO = 1<<2;
@@ -761,6 +769,11 @@ StatusCode MuonSelection :: execute ()
     if (muon->isAuthor(xAOD::Muon_v1::Author::CaloLikelihood)) authors = authors | CaloLikelihood;
     if (muon->isAuthor(xAOD::Muon_v1::Author::ExtrapolateMuonToIP)) authors = authors | ExtrapolateMuonToIP;
     p_authors->push_back(authors);
+
+    float isopt = -1;
+    if (!muon->isolation(isopt, xAOD::Iso::ptcone40))
+      ANA_MSG_DEBUG ("Muon isolation not available");
+    p_ptcone40->push_back(isopt * 0.001); // GeV
     
     float eLoss = 0.;
     if (!muon->parameter(eLoss, xAOD::Muon::EnergyLoss) )
@@ -796,8 +809,15 @@ StatusCode MuonSelection :: execute ()
       CB = *muon->combinedTrackParticleLink(); 
       p_eta_CB->push_back(CB->eta());
       p_phi_CB->push_back(CB->phi());
-      p_d0sig_CB->push_back(xAOD::TrackingHelpers::d0significance(CB,
+      if (CB->definingParametersCovMatrixVec().at(0) > 0) {
+        p_d0sig_CB->push_back(xAOD::TrackingHelpers::d0significance(CB,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      }
+      else {
+        ANA_MSG_INFO ("Positive CB track particle has d0-uncertainty" << CB->definingParametersCovMatrixVec().at(0));
+        p_d0sig_CB->push_back(-1e5);    
+      }
+
       if (correctVertex) 
         p_z0_CB->push_back(CB->z0() + CB->vz() - pvtx_z);
       else 
@@ -824,8 +844,15 @@ StatusCode MuonSelection :: execute ()
       ME = *muon->extrapolatedMuonSpectrometerTrackParticleLink(); 
       p_eta_ME->push_back(ME->eta());
       p_phi_ME->push_back(ME->phi());
-      p_d0sig_ME->push_back(xAOD::TrackingHelpers::d0significance(ME,
+      if (ME->definingParametersCovMatrixVec().at(0) > 0) {
+        p_d0sig_ME->push_back(xAOD::TrackingHelpers::d0significance(ME,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      }
+      else {
+        ANA_MSG_INFO ("Positive ME track particle has d0-uncertainty" << ME->definingParametersCovMatrixVec().at(0));
+        p_d0sig_ME->push_back(-1e5);    
+      }
+
       if (correctVertex) 
         p_z0_ME->push_back(ME->z0() + ME->vz() - pvtx_z);
       else 
@@ -852,8 +879,15 @@ StatusCode MuonSelection :: execute ()
       MSO = *muon->muonSpectrometerTrackParticleLink(); 
       p_eta_MSO->push_back(MSO->eta());
       p_phi_MSO->push_back(MSO->phi());
-      p_d0sig_MSO->push_back(xAOD::TrackingHelpers::d0significance(MSO,
+      if (MSO->definingParametersCovMatrixVec().at(0) > 0) {
+        p_d0sig_MSO->push_back(xAOD::TrackingHelpers::d0significance(MSO,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      }
+      else {
+        ANA_MSG_INFO ("Positive MSO track particle has d0-uncertainty" << MSO->definingParametersCovMatrixVec().at(0));
+        p_d0sig_MSO->push_back(-1e5);    
+      }
+
       if (correctVertex) 
         p_z0_MSO->push_back(MSO->z0() + MSO->vz() - pvtx_z);
       else 
@@ -880,8 +914,15 @@ StatusCode MuonSelection :: execute ()
       MSOE = *muon->msOnlyExtrapolatedMuonSpectrometerTrackParticleLink(); 
       p_eta_MSOE->push_back(MSOE->eta());
       p_phi_MSOE->push_back(MSOE->phi());
-      p_d0sig_MSOE->push_back(xAOD::TrackingHelpers::d0significance(MSOE,
+      if (MSOE->definingParametersCovMatrixVec().at(0) > 0) {
+        p_d0sig_MSOE->push_back(xAOD::TrackingHelpers::d0significance(MSOE,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      }
+      else {
+        ANA_MSG_INFO ("Positive MSOE track particle has d0-uncertainty" << MSOE->definingParametersCovMatrixVec().at(0));
+        p_d0sig_MSOE->push_back(-1e5);    
+      }
+
       if (correctVertex) 
         p_z0_MSOE->push_back(MSOE->z0() + MSOE->vz() - pvtx_z);
       else 
@@ -908,8 +949,15 @@ StatusCode MuonSelection :: execute ()
       ID = *muon->inDetTrackParticleLink(); 
       p_eta_ID->push_back(ID->eta());
       p_phi_ID->push_back(ID->phi());
-      p_d0sig_ID->push_back(xAOD::TrackingHelpers::d0significance(ID,
+      if (ID->definingParametersCovMatrixVec().at(0) > 0) {
+        p_d0sig_ID->push_back(xAOD::TrackingHelpers::d0significance(ID,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      }
+      else {
+        ANA_MSG_INFO ("Positive ID track particle has d0-uncertainty" << ID->definingParametersCovMatrixVec().at(0));
+        p_d0sig_ID->push_back(-1e5);    
+      }
+
       if (correctVertex) 
         p_z0_ID->push_back(ID->z0() + ID->vz() - pvtx_z);
       else 
@@ -964,6 +1012,11 @@ StatusCode MuonSelection :: execute ()
     if (muon->isAuthor(xAOD::Muon_v1::Author::ExtrapolateMuonToIP)) authors = authors | ExtrapolateMuonToIP;
     n_authors->push_back(authors);
 
+    float isopt = -1;
+    if (!muon->isolation(isopt, xAOD::Iso::ptcone40))
+      ANA_MSG_DEBUG ("Muon isolation not available");
+    n_ptcone40->push_back(isopt * 0.001); // GeV
+    
     float eLoss = 0.;
     if (!muon->parameter(eLoss, xAOD::Muon::EnergyLoss) )
       ANA_MSG_DEBUG ("Muon energy loss not available");
@@ -998,8 +1051,15 @@ StatusCode MuonSelection :: execute ()
       CB = *muon->combinedTrackParticleLink(); 
       n_eta_CB->push_back(CB->eta());
       n_phi_CB->push_back(CB->phi());
-      n_d0sig_CB->push_back(xAOD::TrackingHelpers::d0significance(CB,
+      if (CB->definingParametersCovMatrixVec().at(0) > 0) {
+        n_d0sig_CB->push_back(xAOD::TrackingHelpers::d0significance(CB,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      }
+      else {
+        ANA_MSG_INFO ("Negative CB track particle has d0-uncertainty" << CB->definingParametersCovMatrixVec().at(0));
+        n_d0sig_CB->push_back(-1e5);    
+      }
+
       if (correctVertex) 
         n_z0_CB->push_back(CB->z0() + CB->vz() - pvtx_z);
       else 
@@ -1026,8 +1086,15 @@ StatusCode MuonSelection :: execute ()
       ME = *muon->extrapolatedMuonSpectrometerTrackParticleLink(); 
       n_eta_ME->push_back(ME->eta());
       n_phi_ME->push_back(ME->phi());
-      n_d0sig_ME->push_back(xAOD::TrackingHelpers::d0significance(ME,
+      if (ME->definingParametersCovMatrixVec().at(0) > 0) {
+        n_d0sig_ME->push_back(xAOD::TrackingHelpers::d0significance(ME,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      }
+      else {
+        ANA_MSG_INFO ("Negative ME track particle has d0-uncertainty" << ME->definingParametersCovMatrixVec().at(0));
+        n_d0sig_ME->push_back(-1e5);    
+      }
+
       if (correctVertex) 
         n_z0_ME->push_back(ME->z0() + ME->vz() - pvtx_z);
       else 
@@ -1054,8 +1121,15 @@ StatusCode MuonSelection :: execute ()
       MSO = *muon->muonSpectrometerTrackParticleLink(); 
       n_eta_MSO->push_back(MSO->eta());
       n_phi_MSO->push_back(MSO->phi());
-      n_d0sig_MSO->push_back(xAOD::TrackingHelpers::d0significance(MSO,
+      if (MSO->definingParametersCovMatrixVec().at(0) > 0) {
+        n_d0sig_MSO->push_back(xAOD::TrackingHelpers::d0significance(MSO,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      }
+      else {
+        ANA_MSG_INFO ("Negative MSO track particle has d0-uncertainty" << MSO->definingParametersCovMatrixVec().at(0));
+        n_d0sig_MSO->push_back(-1e5);    
+      }
+  
       if (correctVertex) 
         n_z0_MSO->push_back(MSO->z0() + MSO->vz() - pvtx_z);
       else 
@@ -1082,8 +1156,15 @@ StatusCode MuonSelection :: execute ()
       MSOE = *muon->msOnlyExtrapolatedMuonSpectrometerTrackParticleLink(); 
       n_eta_MSOE->push_back(MSOE->eta());
       n_phi_MSOE->push_back(MSOE->phi());
-      n_d0sig_MSOE->push_back(xAOD::TrackingHelpers::d0significance(MSOE,
+      if (MSOE->definingParametersCovMatrixVec().at(0) > 0) {
+        n_d0sig_MSOE->push_back(xAOD::TrackingHelpers::d0significance(MSOE,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      }
+      else {
+        ANA_MSG_INFO ("Negative MSOE track particle has d0-uncertainty" << MSOE->definingParametersCovMatrixVec().at(0));
+        n_d0sig_MSOE->push_back(-1e5);    
+      }
+  
       if (correctVertex) 
         n_z0_MSOE->push_back(MSOE->z0() + MSOE->vz() - pvtx_z);
       else 
@@ -1110,8 +1191,15 @@ StatusCode MuonSelection :: execute ()
       ID = *muon->inDetTrackParticleLink(); 
       n_eta_ID->push_back(ID->eta());
       n_phi_ID->push_back(ID->phi());
-      n_d0sig_ID->push_back(xAOD::TrackingHelpers::d0significance(ID,
+      if (ID->definingParametersCovMatrixVec().at(0) > 0) {
+        n_d0sig_ID->push_back(xAOD::TrackingHelpers::d0significance(ID,
                             ei->beamPosSigmaX(), ei->beamPosSigmaY(), ei->beamPosSigmaXY()));
+      }
+      else {
+        ANA_MSG_INFO ("Negative ID track particle has d0-uncertainty" << ID->definingParametersCovMatrixVec().at(0));
+        n_d0sig_ID->push_back(-1e5);
+      }
+
       if (correctVertex) 
         n_z0_ID->push_back(ID->z0() + ID->vz() - pvtx_z);
       else 
