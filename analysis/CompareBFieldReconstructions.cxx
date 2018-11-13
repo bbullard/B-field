@@ -1716,9 +1716,77 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   TTreeReaderValue<vector<float>> n_rchi2_MSOE_o(reader_old, "n_rchi2_MSOE");
   TTreeReaderValue<vector<float>> n_rchi2_ID_o(reader_old, "n_rchi2_ID");
   
+  int num = 0, numPass1 = 0, numPass2 = 0;
   // loop through TTreeReader
   while (reader_old.Next()) {
-    nEvents_o++;
+
+    num++;
+    // check if event contains potential Z decay 
+    vector<TLorentzVector> iso_muons;
+    TLorentzVector mu_4vec;
+    double pt = 0, eta = 0, phi = 0;
+    for (int i = 0; i < *nPositiveMuons_o; i++) {
+      //if (p_quality_o->at(i) > 2) continue;
+      //if (!p_passIDcuts_o->at(i)) continue; 
+      if (p_isCB_o->at(i)) {
+        pt = 1 / cosh(p_eta_CB_o->at(i)) / abs(p_qOverP_CB_o->at(i));
+        eta = p_eta_CB_o->at(i);
+        phi = p_phi_CB_o->at(i);
+      }
+      else if (p_isME_o->at(i)) {
+        pt = 1 / cosh(p_eta_ME_o->at(i)) / abs(p_qOverP_ME_o->at(i));
+        eta = p_eta_ME_o->at(i);
+        phi = p_phi_ME_o->at(i);
+      }
+      else {
+        if (!p_isID_o->at(i)) cout << "WARNING: muon is not ID" << endl;
+        pt = 1 / cosh(p_eta_ID_o->at(i)) / abs(p_qOverP_ID_o->at(i));
+        eta = p_eta_ID_o->at(i);
+        phi = p_phi_ID_o->at(i);
+      }
+      if (pt < 20) continue; 
+      if (p_ptcone40_o->at(i)/pt >= 0.3) continue; 
+      mu_4vec.SetPtEtaPhiM(pt, eta, phi, .10566);
+      iso_muons.push_back(mu_4vec);  
+    }
+
+    for (int i = 0; i < *nNegativeMuons_o; i++) {
+      //if (n_quality_o->at(i) > 2) continue;
+      //if (!n_passIDcuts_o->at(i)) continue; 
+      if (n_isCB_o->at(i)) {
+        pt = 1 / cosh(n_eta_CB_o->at(i)) / abs(n_qOverP_CB_o->at(i));
+        eta = n_eta_CB_o->at(i);
+        phi = n_phi_CB_o->at(i);
+      }
+      else if (n_isME_o->at(i)) {
+        pt = 1 / cosh(n_eta_ME_o->at(i)) / abs(n_qOverP_ME_o->at(i));
+        eta = n_eta_ME_o->at(i);
+        phi = n_phi_ME_o->at(i);
+      }
+      else {
+        if (!n_isID_o->at(i)) cout << "WARNING: muon is not ID" << endl;
+        pt = 1 / cosh(n_eta_ID_o->at(i)) / abs(n_qOverP_ID_o->at(i));
+        eta = n_eta_ID_o->at(i);
+        phi = n_phi_ID_o->at(i);
+      }
+      if (pt < 20) continue; 
+      if (n_ptcone40_o->at(i)/pt >= 0.3) continue; 
+      mu_4vec.SetPtEtaPhiM(pt, eta, phi, .10566);
+      iso_muons.push_back(mu_4vec);  
+    }
+    
+    bool pass = false;
+    for (int i = 0; i < iso_muons.size(); i++) {
+      if (pass) break;
+      for (int j = 0; j < i; j++) {
+        if (iso_muons.at(i).Pt() < 25. && iso_muons.at(j).Pt() < 25.) continue;
+        double m  = (iso_muons.at(i) + iso_muons.at(j)).M();
+        if (70 < m && m < 110) {pass = true; break;}
+      }
+    }
+    if (!pass) continue;    
+    
+    //nEvents_o++;
     for (int i = 0; i < *nPositiveMuons_o; i++) {
       if (i == 0) h_quality_o->Fill(p_quality_o->at(i));
       h_allQuality_o->Fill(p_quality_o->at(i));
@@ -1728,6 +1796,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
       h_allQuality_o->Fill(n_quality_o->at(i));
     }
 
+    numPass1++;
     // skip event if event not on GRL
     if (!*passGRL_o) continue;
  
@@ -1740,32 +1809,25 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     // skip event if muons fail ID cuts
     if (!p_passIDcuts_o->at(0) || !n_passIDcuts_o->at(0))  continue;
 
+    nEvents_o++;
+
+    // determine charge of leading muon
     // find charge of leading muon
     double pt_p, pt_n;
+    if (p_isCB_o->at(0)) pt_p = 1 / cosh(p_eta_CB_o->at(0)) / abs(p_qOverP_CB_o->at(0));
+    else pt_p = 1 / cosh(p_eta_ME_o->at(0)) / abs(p_qOverP_ME_o->at(0));
+    if (n_isCB_o->at(0)) pt_n = 1 / cosh(n_eta_CB_o->at(0)) / abs(n_qOverP_CB_o->at(0));
+    else pt_n = 1 / cosh(n_eta_ME_o->at(0)) / abs(n_qOverP_ME_o->at(0));
     int q_lead = -1;
-    if (p_isCB_o->at(0)) pt_p = cosh(p_eta_CB_o->at(0)) / p_qOverP_CB_o->at(0);
-    else pt_p = cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0);
-    if (n_isCB_o->at(0)) pt_n = -cosh(n_eta_CB_o->at(0)) / n_qOverP_CB_o->at(0);
-    else pt_n = -cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0);
-    
     if (pt_p > pt_n) {
       nLeadingPlus_o++;
       q_lead = 1;
     }
-  
-    // skip events where selected muons fail pt and isolation requirements
-    if (q_lead == 1) {
-      if (pt_p < 25) continue;
-      if (pt_n < 20) continue;
-    }
-    else {
-      if (pt_n < 25) continue;
-      if (pt_p < 20) continue;
-    }
-    if (pt_p / p_ptcone40_o->at(0) < .3) continue;
-    if (pt_n / n_ptcone40_o->at(0) < .3) continue;
-    
-    if (1./p_qOverP_MSO_o->at(0) > 0 and 1./p_qOverP_MSO_o->at(0) < 10000){
+
+    numPass2++;
+
+    // check if there's a bad MS only muon  
+    if (1./abs(p_qOverP_MSO_o->at(0)) > 0 and 1./abs(p_qOverP_MSO_o->at(0)) < 10000){
       nEvents_noBadMS_o++;
       if (q_lead == 1) 
         nLeadingPlus_noBadMS_o++;
@@ -1784,98 +1846,98 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     // fill invariant mass
     TLorentzVector v1, v2;
     if (p_isCB_o->at(0) and n_isCB_o->at(0)) {
-      v1.SetPtEtaPhiM(cosh(p_eta_CB_o->at(0)) / p_qOverP_CB_o->at(0), p_eta_CB_o->at(0), p_phi_CB_o->at(0), .106);
-      v2.SetPtEtaPhiM(-cosh(n_eta_CB_o->at(0)) / n_qOverP_CB_o->at(0), n_eta_CB_o->at(0), n_phi_CB_o->at(0), .106); 
+      v1.SetPtEtaPhiM(1 / cosh(p_eta_CB_o->at(0)) / abs(p_qOverP_CB_o->at(0)), p_eta_CB_o->at(0), p_phi_CB_o->at(0), .10566);
+      v2.SetPtEtaPhiM(1 / cosh(n_eta_CB_o->at(0)) / abs(n_qOverP_CB_o->at(0)), n_eta_CB_o->at(0), n_phi_CB_o->at(0), .10566); 
       h_m_CB_o->Fill((v1+v2).M());
     }
     if (p_isME_o->at(0) and n_isME_o->at(0)) {
-      v1.SetPtEtaPhiM(cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0), p_eta_ME_o->at(0), p_phi_ME_o->at(0), .106);
-      v2.SetPtEtaPhiM(-cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0), n_eta_ME_o->at(0), n_phi_ME_o->at(0), .106); 
+      v1.SetPtEtaPhiM(1 / cosh(p_eta_ME_o->at(0)) / abs(p_qOverP_ME_o->at(0)), p_eta_ME_o->at(0), p_phi_ME_o->at(0), .10566);
+      v2.SetPtEtaPhiM(1 / cosh(n_eta_ME_o->at(0)) / abs(n_qOverP_ME_o->at(0)), n_eta_ME_o->at(0), n_phi_ME_o->at(0), .10566); 
       h_m_ME_o->Fill((v1+v2).M());
     }
     if (p_isMSO_o->at(0) and n_isMSO_o->at(0)) {
-      v1.SetPtEtaPhiM(cosh(p_eta_MSO_o->at(0)) / p_qOverP_MSO_o->at(0), p_eta_MSO_o->at(0), p_phi_MSO_o->at(0), .106);
-      v2.SetPtEtaPhiM(-cosh(n_eta_MSO_o->at(0)) / n_qOverP_MSO_o->at(0), n_eta_MSO_o->at(0), n_phi_MSO_o->at(0), .106); 
+      v1.SetPtEtaPhiM(1 / cosh(p_eta_MSO_o->at(0)) / abs(p_qOverP_MSO_o->at(0)), p_eta_MSO_o->at(0), p_phi_MSO_o->at(0), .10566);
+      v2.SetPtEtaPhiM(1 / cosh(n_eta_MSO_o->at(0)) / abs(n_qOverP_MSO_o->at(0)), n_eta_MSO_o->at(0), n_phi_MSO_o->at(0), .10566); 
       h_m_MSO_o->Fill((v1+v2).M());
     }
     if (p_isMSOE_o->at(0) and n_isMSOE_o->at(0)) {
-      v1.SetPtEtaPhiM(cosh(p_eta_MSOE_o->at(0)) / p_qOverP_MSOE_o->at(0), p_eta_MSOE_o->at(0), p_phi_MSOE_o->at(0), .106);
-      v2.SetPtEtaPhiM(-cosh(n_eta_MSOE_o->at(0)) / n_qOverP_MSOE_o->at(0), n_eta_MSOE_o->at(0), n_phi_MSOE_o->at(0), .106); 
+      v1.SetPtEtaPhiM(1 / cosh(p_eta_MSOE_o->at(0)) / abs(p_qOverP_MSOE_o->at(0)), p_eta_MSOE_o->at(0), p_phi_MSOE_o->at(0), .10566);
+      v2.SetPtEtaPhiM(1 / cosh(n_eta_MSOE_o->at(0)) / abs(n_qOverP_MSOE_o->at(0)), n_eta_MSOE_o->at(0), n_phi_MSOE_o->at(0), .10566); 
       h_m_MSOE_o->Fill((v1+v2).M());
     }
     if (p_isID_o->at(0) and n_isID_o->at(0)) {
-      v1.SetPtEtaPhiM(cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0), p_eta_ID_o->at(0), p_phi_ID_o->at(0), .106);
-      v2.SetPtEtaPhiM(-cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0), n_eta_ID_o->at(0), n_phi_ID_o->at(0), .106); 
+      v1.SetPtEtaPhiM(1 / cosh(p_eta_ID_o->at(0)) / abs(p_qOverP_ID_o->at(0)), p_eta_ID_o->at(0), p_phi_ID_o->at(0), .10566);
+      v2.SetPtEtaPhiM(1 / cosh(n_eta_ID_o->at(0)) / abs(n_qOverP_ID_o->at(0)), n_eta_ID_o->at(0), n_phi_ID_o->at(0), .10566); 
       h_m_ID_o->Fill((v1+v2).M());
     }
  
     // fill leading/subleading variable histograms
     if (q_lead == 1) {
       if (p_isCB_o->at(0)) {
-        h_pt1_CB_o->Fill(cosh(p_eta_CB_o->at(0)) / p_qOverP_CB_o->at(0)); 
+        h_pt1_CB_o->Fill(1 / cosh(p_eta_CB_o->at(0)) / abs(p_qOverP_CB_o->at(0))); 
         h_eta1_CB_o->Fill(p_eta_CB_o->at(0));
       }
       if (n_isCB_o->at(0)) {
-        h_pt2_CB_o->Fill(-cosh(n_eta_CB_o->at(0)) / n_qOverP_CB_o->at(0)); 
+        h_pt2_CB_o->Fill(1 / cosh(n_eta_CB_o->at(0)) / abs(n_qOverP_CB_o->at(0))); 
         h_eta2_CB_o->Fill(n_eta_CB_o->at(0));
       }
     
       if (p_isME_o->at(0)) {
-        h_pt1_ME_o->Fill(cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0)); 
+        h_pt1_ME_o->Fill(1 / cosh(p_eta_ME_o->at(0)) / abs(p_qOverP_ME_o->at(0))); 
         h_eta1_ME_o->Fill(p_eta_ME_o->at(0));
       }
       if (n_isME_o->at(0)) {
-        h_pt2_ME_o->Fill(-cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0)); 
+        h_pt2_ME_o->Fill(1 / cosh(n_eta_ME_o->at(0)) / abs(n_qOverP_ME_o->at(0))); 
         h_eta2_ME_o->Fill(n_eta_ME_o->at(0));
       }
     
       if (p_isMSO_o->at(0)) {
-        h_pt1_MSO_o->Fill(cosh(p_eta_MSO_o->at(0)) / p_qOverP_MSO_o->at(0)); 
+        h_pt1_MSO_o->Fill(1 / cosh(p_eta_MSO_o->at(0)) / abs(p_qOverP_MSO_o->at(0))); 
         h_eta1_MSO_o->Fill(p_eta_MSO_o->at(0));
       }
       if (n_isMSO_o->at(0)) {
-        h_pt2_MSO_o->Fill(-cosh(n_eta_MSO_o->at(0)) / n_qOverP_MSO_o->at(0)); 
+        h_pt2_MSO_o->Fill(1 / cosh(n_eta_MSO_o->at(0)) / abs(n_qOverP_MSO_o->at(0))); 
         h_eta2_MSO_o->Fill(n_eta_MSO_o->at(0));
       }
     
       if (p_isMSOE_o->at(0)) {
-        h_pt1_MSOE_o->Fill(cosh(p_eta_MSOE_o->at(0)) / p_qOverP_MSOE_o->at(0)); 
+        h_pt1_MSOE_o->Fill(1 / cosh(p_eta_MSOE_o->at(0)) / abs(p_qOverP_MSOE_o->at(0))); 
         h_eta1_MSOE_o->Fill(p_eta_MSOE_o->at(0));
       }
       if (n_isMSOE_o->at(0)) {
-        h_pt2_MSOE_o->Fill(-cosh(n_eta_MSOE_o->at(0)) / n_qOverP_MSOE_o->at(0)); 
+        h_pt2_MSOE_o->Fill(1 / cosh(n_eta_MSOE_o->at(0)) / abs(n_qOverP_MSOE_o->at(0))); 
         h_eta2_MSOE_o->Fill(n_eta_MSOE_o->at(0));
       }
     
       if (p_isID_o->at(0)) {
-        h_pt1_ID_o->Fill(cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0)); 
+        h_pt1_ID_o->Fill(1 / cosh(p_eta_ID_o->at(0)) / abs(p_qOverP_ID_o->at(0))); 
         h_eta1_ID_o->Fill(p_eta_ID_o->at(0));
         if (p_isME_o->at(0)) {
-          double ptID = cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0);
-          double ptME = cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0);
+          double ptID = 1 / cosh(p_eta_ID_o->at(0)) / abs(p_qOverP_ID_o->at(0));
+          double ptME = 1 / cosh(p_eta_ME_o->at(0)) / abs(p_qOverP_ME_o->at(0));
           h_rho1_ME_o->Fill((ptME-ptID)/ptID);
           h_dR1_ME_o->Fill(sqrt( pow(p_eta_ID_o->at(0)-p_eta_ME_o->at(0),2) + pow(p_phi_ID_o->at(0)-p_phi_ME_o->at(0),2)));
         }
         if (p_isMSO_o->at(0)) {
-          double ptID = cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0);
-          double ptMSO = cosh(p_eta_MSO_o->at(0)) / p_qOverP_MSO_o->at(0);
+          double ptID = 1 / cosh(p_eta_ID_o->at(0)) / abs(p_qOverP_ID_o->at(0));
+          double ptMSO = 1 / cosh(p_eta_MSO_o->at(0)) / abs(p_qOverP_MSO_o->at(0));
           h_rho1_MSO_o->Fill((ptMSO-ptID)/ptID);
         }
         if (p_isMSOE_o->at(0))
           h_dR1_MSOE_o->Fill(sqrt( pow(p_eta_ID_o->at(0)-p_eta_MSOE_o->at(0),2) + pow(p_phi_ID_o->at(0)-p_phi_MSOE_o->at(0),2)));
       }
       if (n_isID_o->at(0)) {
-        h_pt2_ID_o->Fill(-cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0)); 
+        h_pt2_ID_o->Fill(1 / cosh(n_eta_ID_o->at(0)) / abs(n_qOverP_ID_o->at(0))); 
         h_eta2_ID_o->Fill(n_eta_ID_o->at(0));
         if (n_isME_o->at(0)) {
-          double ptID = cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0);
-          double ptME = cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0);
+          double ptID = 1 / cosh(n_eta_ID_o->at(0)) / abs(n_qOverP_ID_o->at(0));
+          double ptME = 1 / cosh(n_eta_ME_o->at(0)) / abs(n_qOverP_ME_o->at(0));
           h_rho2_ME_o->Fill((ptME-ptID)/ptID);
           h_dR2_ME_o->Fill(sqrt( pow(n_eta_ID_o->at(0)-n_eta_ME_o->at(0),2) + pow(n_phi_ID_o->at(0)-n_phi_ME_o->at(0),2)));
         }
         if (n_isMSO_o->at(0)) {
-          double ptID = cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0);
-          double ptMSO = cosh(n_eta_MSO_o->at(0)) / n_qOverP_MSO_o->at(0);
+          double ptID = 1 / cosh(n_eta_ID_o->at(0)) / abs(n_qOverP_ID_o->at(0));
+          double ptMSO = 1 / cosh(n_eta_MSO_o->at(0)) / abs(n_qOverP_MSO_o->at(0));
           h_rho2_MSO_o->Fill((ptMSO-ptID)/ptID);
         }
         if (n_isMSOE_o->at(0))
@@ -1885,70 +1947,70 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     // if negative muon is primary
     else {
       if (p_isCB_o->at(0)) {
-        h_pt2_CB_o->Fill(cosh(p_eta_CB_o->at(0)) / p_qOverP_CB_o->at(0)); 
+        h_pt2_CB_o->Fill(1 / cosh(p_eta_CB_o->at(0)) / abs(p_qOverP_CB_o->at(0))); 
         h_eta2_CB_o->Fill(p_eta_CB_o->at(0));
       }
       if (n_isCB_o->at(0)) {
-        h_pt1_CB_o->Fill(-cosh(n_eta_CB_o->at(0)) / n_qOverP_CB_o->at(0)); 
+        h_pt1_CB_o->Fill(1 / cosh(n_eta_CB_o->at(0)) / abs(n_qOverP_CB_o->at(0))); 
         h_eta1_CB_o->Fill(n_eta_CB_o->at(0));
       }
     
       if (p_isME_o->at(0)) {
-        h_pt2_ME_o->Fill(cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0)); 
+        h_pt2_ME_o->Fill(1 / cosh(p_eta_ME_o->at(0)) / abs(p_qOverP_ME_o->at(0))); 
         h_eta2_ME_o->Fill(p_eta_ME_o->at(0));
       }
       if (n_isME_o->at(0)) {
-        h_pt1_ME_o->Fill(-cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0)); 
+        h_pt1_ME_o->Fill(1 / cosh(n_eta_ME_o->at(0)) / abs(n_qOverP_ME_o->at(0))); 
         h_eta1_ME_o->Fill(n_eta_ME_o->at(0));
       }
     
       if (p_isMSO_o->at(0)) {
-        h_pt2_MSO_o->Fill(cosh(p_eta_MSO_o->at(0)) / p_qOverP_MSO_o->at(0)); 
+        h_pt2_MSO_o->Fill(1 / cosh(p_eta_MSO_o->at(0)) / abs(p_qOverP_MSO_o->at(0))); 
         h_eta2_MSO_o->Fill(p_eta_MSO_o->at(0));
       }
       if (n_isMSO_o->at(0)) {
-        h_pt1_MSO_o->Fill(-cosh(n_eta_MSO_o->at(0)) / n_qOverP_MSO_o->at(0)); 
+        h_pt1_MSO_o->Fill(1 / cosh(n_eta_MSO_o->at(0)) / abs(n_qOverP_MSO_o->at(0))); 
         h_eta1_MSO_o->Fill(n_eta_MSO_o->at(0));
       }
     
       if (p_isMSOE_o->at(0)) {
-        h_pt2_MSOE_o->Fill(cosh(p_eta_MSOE_o->at(0)) / p_qOverP_MSOE_o->at(0)); 
+        h_pt2_MSOE_o->Fill(1 / cosh(p_eta_MSOE_o->at(0)) / abs(p_qOverP_MSOE_o->at(0))); 
         h_eta2_MSOE_o->Fill(p_eta_MSOE_o->at(0));
       }
       if (n_isMSOE_o->at(0)) {
-        h_pt1_MSOE_o->Fill(-cosh(n_eta_MSOE_o->at(0)) / n_qOverP_MSOE_o->at(0)); 
+        h_pt1_MSOE_o->Fill(1 / cosh(n_eta_MSOE_o->at(0)) / abs(n_qOverP_MSOE_o->at(0))); 
         h_eta1_MSOE_o->Fill(n_eta_MSOE_o->at(0));
       }
     
       if (p_isID_o->at(0)) {
-        h_pt2_ID_o->Fill(cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0)); 
+        h_pt2_ID_o->Fill(1 / cosh(p_eta_ID_o->at(0)) / abs(p_qOverP_ID_o->at(0))); 
         h_eta2_ID_o->Fill(p_eta_ID_o->at(0));
         if (p_isME_o->at(0)) {
-          double ptID = cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0);
-          double ptME = cosh(p_eta_ME_o->at(0)) / p_qOverP_ME_o->at(0);
+          double ptID = 1 / cosh(p_eta_ID_o->at(0)) / abs(p_qOverP_ID_o->at(0));
+          double ptME = 1 / cosh(p_eta_ME_o->at(0)) / abs(p_qOverP_ME_o->at(0));
           h_rho2_ME_o->Fill((ptME-ptID)/ptID);
           h_dR2_ME_o->Fill(sqrt( pow(p_eta_ID_o->at(0)-p_eta_ME_o->at(0),2) + pow(p_phi_ID_o->at(0)-p_phi_ME_o->at(0),2)));
         }
         if (p_isMSO_o->at(0)) {
-          double ptID = cosh(p_eta_ID_o->at(0)) / p_qOverP_ID_o->at(0);
-          double ptMSO = cosh(p_eta_MSO_o->at(0)) / p_qOverP_MSO_o->at(0);
+          double ptID = 1 / cosh(p_eta_ID_o->at(0)) / abs(p_qOverP_ID_o->at(0));
+          double ptMSO = 1 / cosh(p_eta_MSO_o->at(0)) / abs(p_qOverP_MSO_o->at(0));
           h_rho2_MSO_o->Fill((ptMSO-ptID)/ptID);
         }
         if (p_isMSOE_o->at(0))
           h_dR2_MSOE_o->Fill(sqrt( pow(p_eta_ID_o->at(0)-p_eta_MSOE_o->at(0),2) + pow(p_phi_ID_o->at(0)-p_phi_MSOE_o->at(0),2)));
       }
       if (n_isID_o->at(0)) {
-        h_pt1_ID_o->Fill(-cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0)); 
+        h_pt1_ID_o->Fill(1 / cosh(n_eta_ID_o->at(0)) / abs(n_qOverP_ID_o->at(0))); 
         h_eta1_ID_o->Fill(n_eta_ID_o->at(0));
         if (n_isME_o->at(0)) {
-          double ptID = cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0);
-          double ptME = cosh(n_eta_ME_o->at(0)) / n_qOverP_ME_o->at(0);
+          double ptID = 1 / cosh(n_eta_ID_o->at(0)) / abs(n_qOverP_ID_o->at(0));
+          double ptME = 1 / cosh(n_eta_ME_o->at(0)) / abs(n_qOverP_ME_o->at(0));
           h_rho1_ME_o->Fill((ptME-ptID)/ptID);
           h_dR1_ME_o->Fill(sqrt( pow(n_eta_ID_o->at(0)-n_eta_ME_o->at(0),2) + pow(n_phi_ID_o->at(0)-n_phi_ME_o->at(0),2)));
         }
         if (n_isMSO_o->at(0)) {
-          double ptID = cosh(n_eta_ID_o->at(0)) / n_qOverP_ID_o->at(0);
-          double ptMSO = cosh(n_eta_MSO_o->at(0)) / n_qOverP_MSO_o->at(0);
+          double ptID = 1 / cosh(n_eta_ID_o->at(0)) / abs(n_qOverP_ID_o->at(0));
+          double ptMSO = 1 / cosh(n_eta_MSO_o->at(0)) / abs(n_qOverP_MSO_o->at(0));
           h_rho1_MSO_o->Fill((ptMSO-ptID)/ptID);
         }
         if (n_isMSOE_o->at(0))
@@ -1957,7 +2019,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     }
   }
   //delete f_recoOld;
-
+  cout << num << " " << numPass1 << " " << numPass2 << endl;
 
   // load new file and set up reader
   //TFile* f_recoNew = new TFile(Form("ntuples_muonSelection/%s", newFileName.c_str()));
@@ -2127,7 +2189,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   
   // loop through TTreeReader
   while (reader_new.Next()) {
-    nEvents_n++;
+    //nEvents_n++;
     for (int i = 0; i < *nPositiveMuons_n; i++) {
       if (i == 0) h_quality_n->Fill(p_quality_n->at(i));
       h_allQuality_n->Fill(p_quality_n->at(i));
@@ -2149,32 +2211,22 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     // skip event if muons fail ID cuts
     if (!p_passIDcuts_n->at(0) || !n_passIDcuts_n->at(0))  continue;
 
+    nEvents_n++;
+
     // find charge of leading muon
     double pt_p, pt_n;
     int q_lead = -1;
-    if (p_isCB_n->at(0)) pt_p = cosh(p_eta_CB_n->at(0)) / p_qOverP_CB_n->at(0);
-    else pt_p = cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0);
-    if (n_isCB_n->at(0)) pt_n = -cosh(n_eta_CB_n->at(0)) / n_qOverP_CB_n->at(0);
-    else pt_n = -cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0);
+    if (p_isCB_n->at(0)) pt_p = 1 / cosh(p_eta_CB_n->at(0)) / abs(p_qOverP_CB_n->at(0));
+    else pt_p = 1 / cosh(p_eta_ME_n->at(0)) / abs(p_qOverP_ME_n->at(0));
+    if (n_isCB_n->at(0)) pt_n = 1 / cosh(n_eta_CB_n->at(0)) / abs(n_qOverP_CB_n->at(0));
+    else pt_n = 1 / cosh(n_eta_ME_n->at(0)) / abs(n_qOverP_ME_n->at(0));
     
     if (pt_p > pt_n) {
       nLeadingPlus_n++;
       q_lead = 1;
     }
 
-    // skip events where selected muons fail pt and isolation requirements
-    if (q_lead == 1) {
-      if (pt_p < 25) continue;
-      if (pt_n < 20) continue;
-    }
-    else {
-      if (pt_n < 25) continue;
-      if (pt_p < 20) continue;
-    }
-    if (pt_p / p_ptcone40_n->at(0) < .3) continue;
-    if (pt_n / n_ptcone40_n->at(0) < .3) continue;
-    
-    if (1./p_qOverP_MSO_n->at(0) > 0 and 1./p_qOverP_MSO_n->at(0) < 10000){
+    if (1./abs(p_qOverP_MSO_n->at(0)) > 0 and 1./abs(p_qOverP_MSO_n->at(0)) < 10000){
       nEvents_noBadMS_n++;
       if (q_lead == 1) 
         nLeadingPlus_noBadMS_n++;
@@ -2193,98 +2245,98 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     // fill invariant mass
     TLorentzVector v1, v2;
     if (p_isCB_n->at(0) and n_isCB_n->at(0)) {
-      v1.SetPtEtaPhiM(cosh(p_eta_CB_n->at(0)) / p_qOverP_CB_n->at(0), p_eta_CB_n->at(0), p_phi_CB_n->at(0), .106);
-      v2.SetPtEtaPhiM(-cosh(n_eta_CB_n->at(0)) / n_qOverP_CB_n->at(0), n_eta_CB_n->at(0), n_phi_CB_n->at(0), .106); 
+      v1.SetPtEtaPhiM(1 / cosh(p_eta_CB_n->at(0)) / abs(p_qOverP_CB_n->at(0)), p_eta_CB_n->at(0), p_phi_CB_n->at(0), .10566);
+      v2.SetPtEtaPhiM(1 / cosh(n_eta_CB_n->at(0)) / abs(n_qOverP_CB_n->at(0)), n_eta_CB_n->at(0), n_phi_CB_n->at(0), .10566); 
       h_m_CB_n->Fill((v1+v2).M());
     }
     if (p_isME_n->at(0) and n_isME_n->at(0)) {
-      v1.SetPtEtaPhiM(cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0), p_eta_ME_n->at(0), p_phi_ME_n->at(0), .106);
-      v2.SetPtEtaPhiM(-cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0), n_eta_ME_n->at(0), n_phi_ME_n->at(0), .106); 
+      v1.SetPtEtaPhiM(1 / cosh(p_eta_ME_n->at(0)) / abs(p_qOverP_ME_n->at(0)), p_eta_ME_n->at(0), p_phi_ME_n->at(0), .10566);
+      v2.SetPtEtaPhiM(1 / cosh(n_eta_ME_n->at(0)) / abs(n_qOverP_ME_n->at(0)), n_eta_ME_n->at(0), n_phi_ME_n->at(0), .10566); 
       h_m_ME_n->Fill((v1+v2).M());
     }
     if (p_isMSO_n->at(0) and n_isMSO_n->at(0)) {
-      v1.SetPtEtaPhiM(cosh(p_eta_MSO_n->at(0)) / p_qOverP_MSO_n->at(0), p_eta_MSO_n->at(0), p_phi_MSO_n->at(0), .106);
-      v2.SetPtEtaPhiM(-cosh(n_eta_MSO_n->at(0)) / n_qOverP_MSO_n->at(0), n_eta_MSO_n->at(0), n_phi_MSO_n->at(0), .106); 
+      v1.SetPtEtaPhiM(1 / cosh(p_eta_MSO_n->at(0)) / abs(p_qOverP_MSO_n->at(0)), p_eta_MSO_n->at(0), p_phi_MSO_n->at(0), .10566);
+      v2.SetPtEtaPhiM(1 / cosh(n_eta_MSO_n->at(0)) / abs(n_qOverP_MSO_n->at(0)), n_eta_MSO_n->at(0), n_phi_MSO_n->at(0), .10566); 
       h_m_MSO_n->Fill((v1+v2).M());
     }
     if (p_isMSOE_n->at(0) and n_isMSOE_n->at(0)) {
-      v1.SetPtEtaPhiM(cosh(p_eta_MSOE_n->at(0)) / p_qOverP_MSOE_n->at(0), p_eta_MSOE_n->at(0), p_phi_MSOE_n->at(0), .106);
-      v2.SetPtEtaPhiM(-cosh(n_eta_MSOE_n->at(0)) / n_qOverP_MSOE_n->at(0), n_eta_MSOE_n->at(0), n_phi_MSOE_n->at(0), .106); 
+      v1.SetPtEtaPhiM(1 / cosh(p_eta_MSOE_n->at(0)) / abs(p_qOverP_MSOE_n->at(0)), p_eta_MSOE_n->at(0), p_phi_MSOE_n->at(0), .10566);
+      v2.SetPtEtaPhiM(1 / cosh(n_eta_MSOE_n->at(0)) / abs(n_qOverP_MSOE_n->at(0)), n_eta_MSOE_n->at(0), n_phi_MSOE_n->at(0), .10566); 
       h_m_MSOE_n->Fill((v1+v2).M());
     }
     if (p_isID_n->at(0) and n_isID_n->at(0)) {
-      v1.SetPtEtaPhiM(cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0), p_eta_ID_n->at(0), p_phi_ID_n->at(0), .106);
-      v2.SetPtEtaPhiM(-cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0), n_eta_ID_n->at(0), n_phi_ID_n->at(0), .106); 
+      v1.SetPtEtaPhiM(1 / cosh(p_eta_ID_n->at(0)) / abs(p_qOverP_ID_n->at(0)), p_eta_ID_n->at(0), p_phi_ID_n->at(0), .10566);
+      v2.SetPtEtaPhiM(1 / cosh(n_eta_ID_n->at(0)) / abs(n_qOverP_ID_n->at(0)), n_eta_ID_n->at(0), n_phi_ID_n->at(0), .10566); 
       h_m_ID_n->Fill((v1+v2).M());
     }
  
     // fill leading/subleading variable histograms
     if (q_lead == 1) {
       if (p_isCB_n->at(0)) {
-        h_pt1_CB_n->Fill(cosh(p_eta_CB_n->at(0)) / p_qOverP_CB_n->at(0)); 
+        h_pt1_CB_n->Fill(1 / cosh(p_eta_CB_n->at(0)) / abs(p_qOverP_CB_n->at(0))); 
         h_eta1_CB_n->Fill(p_eta_CB_n->at(0));
       }
       if (n_isCB_n->at(0)) {
-        h_pt2_CB_n->Fill(-cosh(n_eta_CB_n->at(0)) / n_qOverP_CB_n->at(0)); 
+        h_pt2_CB_n->Fill(1 / cosh(n_eta_CB_n->at(0)) / abs(n_qOverP_CB_n->at(0))); 
         h_eta2_CB_n->Fill(n_eta_CB_n->at(0));
       }
     
       if (p_isME_n->at(0)) {
-        h_pt1_ME_n->Fill(cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0)); 
+        h_pt1_ME_n->Fill(1 / cosh(p_eta_ME_n->at(0)) / abs(p_qOverP_ME_n->at(0))); 
         h_eta1_ME_n->Fill(p_eta_ME_n->at(0));
       }
       if (n_isME_n->at(0)) {
-        h_pt2_ME_n->Fill(-cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0)); 
+        h_pt2_ME_n->Fill(1 / cosh(n_eta_ME_n->at(0)) / abs(n_qOverP_ME_n->at(0))); 
         h_eta2_ME_n->Fill(n_eta_ME_n->at(0));
       }
     
       if (p_isMSO_n->at(0)) {
-        h_pt1_MSO_n->Fill(cosh(p_eta_MSO_n->at(0)) / p_qOverP_MSO_n->at(0)); 
+        h_pt1_MSO_n->Fill(1 / cosh(p_eta_MSO_n->at(0)) / abs(p_qOverP_MSO_n->at(0))); 
         h_eta1_MSO_n->Fill(p_eta_MSO_n->at(0));
       }
       if (n_isMSO_n->at(0)) {
-        h_pt2_MSO_n->Fill(-cosh(n_eta_MSO_n->at(0)) / n_qOverP_MSO_n->at(0)); 
+        h_pt2_MSO_n->Fill(1 / cosh(n_eta_MSO_n->at(0)) / abs(n_qOverP_MSO_n->at(0))); 
         h_eta2_MSO_n->Fill(n_eta_MSO_n->at(0));
       }
     
       if (p_isMSOE_n->at(0)) {
-        h_pt1_MSOE_n->Fill(cosh(p_eta_MSOE_n->at(0)) / p_qOverP_MSOE_n->at(0)); 
+        h_pt1_MSOE_n->Fill(1 / cosh(p_eta_MSOE_n->at(0)) / abs(p_qOverP_MSOE_n->at(0))); 
         h_eta1_MSOE_n->Fill(p_eta_MSOE_n->at(0));
       }
       if (n_isMSOE_n->at(0)) {
-        h_pt2_MSOE_n->Fill(-cosh(n_eta_MSOE_n->at(0)) / n_qOverP_MSOE_n->at(0)); 
+        h_pt2_MSOE_n->Fill(1 / cosh(n_eta_MSOE_n->at(0)) / abs(n_qOverP_MSOE_n->at(0))); 
         h_eta2_MSOE_n->Fill(n_eta_MSOE_n->at(0));
       }
     
       if (p_isID_n->at(0)) {
-        h_pt1_ID_n->Fill(cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0)); 
+        h_pt1_ID_n->Fill(1 / cosh(p_eta_ID_n->at(0)) / abs(p_qOverP_ID_n->at(0))); 
         h_eta1_ID_n->Fill(p_eta_ID_n->at(0));
         if (p_isME_n->at(0)) {
-          double ptID = cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0);
-          double ptME = cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0);
+          double ptID = 1 / cosh(p_eta_ID_n->at(0)) / abs(p_qOverP_ID_n->at(0));
+          double ptME = 1 / cosh(p_eta_ME_n->at(0)) / abs(p_qOverP_ME_n->at(0));
           h_rho1_ME_n->Fill((ptME-ptID)/ptID);
           h_dR1_ME_n->Fill(sqrt( pow(p_eta_ID_n->at(0)-p_eta_ME_n->at(0),2) + pow(p_phi_ID_n->at(0)-p_phi_ME_n->at(0),2)));
         }
         if (p_isMSO_n->at(0)) {
-          double ptID = cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0);
-          double ptMSO = cosh(p_eta_MSO_n->at(0)) / p_qOverP_MSO_n->at(0);
+          double ptID = 1 / cosh(p_eta_ID_n->at(0)) / abs(p_qOverP_ID_n->at(0));
+          double ptMSO = 1 / cosh(p_eta_MSO_n->at(0)) / abs(p_qOverP_MSO_n->at(0));
           h_rho1_MSO_n->Fill((ptMSO-ptID)/ptID);
         }
         if (p_isMSOE_n->at(0))
           h_dR1_MSOE_n->Fill(sqrt( pow(p_eta_ID_n->at(0)-p_eta_MSOE_n->at(0),2) + pow(p_phi_ID_n->at(0)-p_phi_MSOE_n->at(0),2)));
       }
       if (n_isID_n->at(0)) {
-        h_pt2_ID_n->Fill(-cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0)); 
+        h_pt2_ID_n->Fill(1 / cosh(n_eta_ID_n->at(0)) / abs(n_qOverP_ID_n->at(0))); 
         h_eta2_ID_n->Fill(n_eta_ID_n->at(0));
         if (n_isME_n->at(0)) {
-          double ptID = cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0);
-          double ptME = cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0);
+          double ptID = 1 / cosh(n_eta_ID_n->at(0)) / abs(n_qOverP_ID_n->at(0));
+          double ptME = 1 / cosh(n_eta_ME_n->at(0)) / abs(n_qOverP_ME_n->at(0));
           h_rho2_ME_n->Fill((ptME-ptID)/ptID);
           h_dR2_ME_n->Fill(sqrt( pow(n_eta_ID_n->at(0)-n_eta_ME_n->at(0),2) + pow(n_phi_ID_n->at(0)-n_phi_ME_n->at(0),2)));
         }
         if (n_isMSO_n->at(0)) {
-          double ptID = cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0);
-          double ptMSO = cosh(n_eta_MSO_n->at(0)) / n_qOverP_MSO_n->at(0);
+          double ptID = 1 / cosh(n_eta_ID_n->at(0)) / abs(n_qOverP_ID_n->at(0));
+          double ptMSO = 1 / cosh(n_eta_MSO_n->at(0)) / abs(n_qOverP_MSO_n->at(0));
           h_rho2_MSO_n->Fill((ptMSO-ptID)/ptID);
         }
         if (n_isMSOE_n->at(0))
@@ -2294,70 +2346,70 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     // if negative muon is primary
     else {
       if (p_isCB_n->at(0)) {
-        h_pt2_CB_n->Fill(cosh(p_eta_CB_n->at(0)) / p_qOverP_CB_n->at(0)); 
+        h_pt2_CB_n->Fill(1 / cosh(p_eta_CB_n->at(0)) / abs(p_qOverP_CB_n->at(0))); 
         h_eta2_CB_n->Fill(p_eta_CB_n->at(0));
       }
       if (n_isCB_n->at(0)) {
-        h_pt1_CB_n->Fill(-cosh(n_eta_CB_n->at(0)) / n_qOverP_CB_n->at(0)); 
+        h_pt1_CB_n->Fill(1 / cosh(n_eta_CB_n->at(0)) / abs(n_qOverP_CB_n->at(0))); 
         h_eta1_CB_n->Fill(n_eta_CB_n->at(0));
       }
     
       if (p_isME_n->at(0)) {
-        h_pt2_ME_n->Fill(cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0)); 
+        h_pt2_ME_n->Fill(1 / cosh(p_eta_ME_n->at(0)) / abs(p_qOverP_ME_n->at(0))); 
         h_eta2_ME_n->Fill(p_eta_ME_n->at(0));
       }
       if (n_isME_n->at(0)) {
-        h_pt1_ME_n->Fill(-cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0)); 
+        h_pt1_ME_n->Fill(1 / cosh(n_eta_ME_n->at(0)) / abs(n_qOverP_ME_n->at(0))); 
         h_eta1_ME_n->Fill(n_eta_ME_n->at(0));
       }
     
       if (p_isMSO_n->at(0)) {
-        h_pt2_MSO_n->Fill(cosh(p_eta_MSO_n->at(0)) / p_qOverP_MSO_n->at(0)); 
+        h_pt2_MSO_n->Fill(1 / cosh(p_eta_MSO_n->at(0)) / abs(p_qOverP_MSO_n->at(0))); 
         h_eta2_MSO_n->Fill(p_eta_MSO_n->at(0));
       }
       if (n_isMSO_n->at(0)) {
-        h_pt1_MSO_n->Fill(-cosh(n_eta_MSO_n->at(0)) / n_qOverP_MSO_n->at(0)); 
+        h_pt1_MSO_n->Fill(1 / cosh(n_eta_MSO_n->at(0)) / abs(n_qOverP_MSO_n->at(0))); 
         h_eta1_MSO_n->Fill(n_eta_MSO_n->at(0));
       }
     
       if (p_isMSOE_n->at(0)) {
-        h_pt2_MSOE_n->Fill(cosh(p_eta_MSOE_n->at(0)) / p_qOverP_MSOE_n->at(0)); 
+        h_pt2_MSOE_n->Fill(1 / cosh(p_eta_MSOE_n->at(0)) / abs(p_qOverP_MSOE_n->at(0))); 
         h_eta2_MSOE_n->Fill(p_eta_MSOE_n->at(0));
       }
       if (n_isMSOE_n->at(0)) {
-        h_pt1_MSOE_n->Fill(-cosh(n_eta_MSOE_n->at(0)) / n_qOverP_MSOE_n->at(0)); 
+        h_pt1_MSOE_n->Fill(1 / cosh(n_eta_MSOE_n->at(0)) / abs(n_qOverP_MSOE_n->at(0))); 
         h_eta1_MSOE_n->Fill(n_eta_MSOE_n->at(0));
       }
     
       if (p_isID_n->at(0)) {
-        h_pt2_ID_n->Fill(cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0)); 
+        h_pt2_ID_n->Fill(1 / cosh(p_eta_ID_n->at(0)) / abs(p_qOverP_ID_n->at(0))); 
         h_eta2_ID_n->Fill(p_eta_ID_n->at(0));
         if (p_isME_n->at(0)) {
-          double ptID = cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0);
-          double ptME = cosh(p_eta_ME_n->at(0)) / p_qOverP_ME_n->at(0);
+          double ptID = 1 / cosh(p_eta_ID_n->at(0)) / abs(p_qOverP_ID_n->at(0));
+          double ptME = 1 / cosh(p_eta_ME_n->at(0)) / abs(p_qOverP_ME_n->at(0));
           h_rho2_ME_n->Fill((ptME-ptID)/ptID);
           h_dR2_ME_n->Fill(sqrt( pow(p_eta_ID_n->at(0)-p_eta_ME_n->at(0),2) + pow(p_phi_ID_n->at(0)-p_phi_ME_n->at(0),2)));
         }
         if (p_isMSO_n->at(0)) {
-          double ptID = cosh(p_eta_ID_n->at(0)) / p_qOverP_ID_n->at(0);
-          double ptMSO = cosh(p_eta_MSO_n->at(0)) / p_qOverP_MSO_n->at(0);
+          double ptID = 1 / cosh(p_eta_ID_n->at(0)) / abs(p_qOverP_ID_n->at(0));
+          double ptMSO = 1 / cosh(p_eta_MSO_n->at(0)) / abs(p_qOverP_MSO_n->at(0));
           h_rho2_MSO_n->Fill((ptMSO-ptID)/ptID);
         }
         if (p_isMSOE_n->at(0))
           h_dR2_MSOE_n->Fill(sqrt( pow(p_eta_ID_n->at(0)-p_eta_MSOE_n->at(0),2) + pow(p_phi_ID_n->at(0)-p_phi_MSOE_n->at(0),2)));
       }
       if (n_isID_n->at(0)) {
-        h_pt1_ID_n->Fill(-cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0)); 
+        h_pt1_ID_n->Fill(1 / cosh(n_eta_ID_n->at(0)) / abs(n_qOverP_ID_n->at(0))); 
         h_eta1_ID_n->Fill(n_eta_ID_n->at(0));
         if (n_isME_n->at(0)) {
-          double ptID = cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0);
-          double ptME = cosh(n_eta_ME_n->at(0)) / n_qOverP_ME_n->at(0);
+          double ptID = 1 / cosh(n_eta_ID_n->at(0)) / abs(n_qOverP_ID_n->at(0));
+          double ptME = 1 / cosh(n_eta_ME_n->at(0)) / abs(n_qOverP_ME_n->at(0));
           h_rho1_ME_n->Fill((ptME-ptID)/ptID);
           h_dR1_ME_n->Fill(sqrt( pow(n_eta_ID_n->at(0)-n_eta_ME_n->at(0),2) + pow(n_phi_ID_n->at(0)-n_phi_ME_n->at(0),2)));
         }
         if (n_isMSO_n->at(0)) {
-          double ptID = cosh(n_eta_ID_n->at(0)) / n_qOverP_ID_n->at(0);
-          double ptMSO = cosh(n_eta_MSO_n->at(0)) / n_qOverP_MSO_n->at(0);
+          double ptID = 1 / cosh(n_eta_ID_n->at(0)) / abs(n_qOverP_ID_n->at(0));
+          double ptMSO = 1 / cosh(n_eta_MSO_n->at(0)) / abs(n_qOverP_MSO_n->at(0));
           h_rho1_MSO_n->Fill((ptMSO-ptID)/ptID);
         }
         if (n_isMSOE_n->at(0))
@@ -2567,11 +2619,14 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   vt->push_back(nullptr); vt->push_back(nullptr);
 
   // set histogram max values
-  double max = 0, n_min = min(nEvents_o, nEvents_n);
+  //double max = 0, n_min = min(nEvents_o, nEvents_n);
+  int n_m_MSO_o = h_m_MSO_o->GetEntries();
+  int n_m_MSO_n = h_m_MSO_n->GetEntries();
+  double max = 0, n_min = min(n_m_MSO_o, n_m_MSO_n);
   for (int i = 0; i < vh_o->size(); i++) {
-    if (nEvents_o > 0 and nEvents_n > 0) {
-      vh_o->at(i)->Scale(n_min/nEvents_o);
-      vh_n->at(i)->Scale(n_min/nEvents_n);
+    if (n_m_MSO_o > 0 and n_m_MSO_n > 0) {
+      vh_o->at(i)->Scale(n_min/n_m_MSO_o);
+      vh_n->at(i)->Scale(n_min/n_m_MSO_n);
     }
 
     max = 0;
@@ -2598,13 +2653,15 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
        << "Fraction of positive leading muons: " << (double)nLeadingPlus_o/(double)nEvents_o*100. << " +/- " << .5/sqrt((double)nEvents_o)*100. << " %" << endl
        << "Total number of events: " << nEvents_o << endl
        << "Fraction of positive leading muons (no bad MS muons): " << (double)nLeadingPlus_noBadMS_o/(double)nEvents_noBadMS_o*100. << " +/- " << .5/sqrt((double)nEvents_noBadMS_o)*100. << " %" << endl
-       << "Total number of events (no bad MS muons): " << nEvents_noBadMS_o << endl << endl
+       << "Total number of events (no bad MS muons): " << nEvents_noBadMS_o << endl 
+       << "Number of MSO invariant mass measurements: " << n_m_MSO_o << endl << endl
        << newMapName << endl
        << "-------------------------------------------------" << endl
        << "Fraction of positive leading muons: " << (double)nLeadingPlus_n/(double)nEvents_n*100. << " +/- " << .5/sqrt((double)nEvents_n)*100. << " %" << endl
        << "Total number of events: " << nEvents_n << endl
        << "Fraction of positive leading muons (no bad MS muons): " << (double)nLeadingPlus_noBadMS_n/(double)nEvents_noBadMS_n*100. << " +/- " << .5/sqrt((double)nEvents_noBadMS_n)*100. << " %" << endl
-       << "Total number of events (no bad MS muons): " << nEvents_noBadMS_n << endl;
+       << "Total number of events (no bad MS muons): " << nEvents_noBadMS_n << endl
+       << "Number of MSO invariant mass measurements: " << n_m_MSO_n << endl << endl;
  
   for (int i = 0; i < vh_o->size(); i++) {
     delete vh_o->at(i);
@@ -2771,7 +2828,7 @@ void MakeChargePlots(string file_prefix, string fileName) {
 void GeneratePlots() {
   // declare and print file prefix
   //string file_prefix = "TEST_";
-  string file_prefix = "group.perf-muons.AODvRunI";
+  string file_prefix = "group.perf-muons.AODvRunI.TEST";
   string oldFileName = "test.root";
   string newFileName = "bbullard.00340072.2016.root";
 

@@ -2,7 +2,7 @@
 #from glob import glob
 #import AthenaPoolCnvSvc.ReadAthenaPool
 
-runGrid = False
+runGrid = True
 
 if runGrid:
   import AthenaRootComps.ReadAthenaxAOD
