@@ -1555,7 +1555,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   //if (!f_recoOld) cout << "Warning: could not open file " << oldFileName << endl;
   
   TChain chainOld("RecoMuons");
-  std::ifstream recoOldFileNames("AODfiles_test.txt");
+  std::ifstream recoOldFileNames("AODfiles.txt");
   string fileNameOld;
   while (recoOldFileNames >> fileNameOld) 
     chainOld.Add(fileNameOld.c_str());
@@ -1567,6 +1567,10 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   long int nLeadingPlus_o = 0;
   long int nEvents_noBadMS_o = 0;
   long int nLeadingPlus_noBadMS_o = 0;
+
+  long int OldSize = chainOld.GetEntries();
+  long int OldCounter = 0;
+  cout << "Total number of old events: " << OldSize << endl;
 
   // event level  
   TTreeReader reader_old(&chainOld);
@@ -1719,7 +1723,9 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   int num = 0, numPass1 = 0, numPass2 = 0;
   // loop through TTreeReader
   while (reader_old.Next()) {
-
+    OldCounter++;
+    if (OldCounter % (int)((double)OldSize/20.) == 0) 
+      cout << "Old file reading done: " << (double)OldCounter/(double)OldSize*100. << " percent" << endl;
     num++;
     // check if event contains potential Z decay 
     vector<TLorentzVector> iso_muons;
@@ -1745,7 +1751,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
         phi = p_phi_ID_o->at(i);
       }
       if (pt < 20) continue; 
-      if (p_ptcone40_o->at(i)/pt >= 0.3) continue; 
+      //if (p_ptcone40_o->at(i)/pt >= 0.3) continue; 
       mu_4vec.SetPtEtaPhiM(pt, eta, phi, .10566);
       iso_muons.push_back(mu_4vec);  
     }
@@ -1770,7 +1776,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
         phi = n_phi_ID_o->at(i);
       }
       if (pt < 20) continue; 
-      if (n_ptcone40_o->at(i)/pt >= 0.3) continue; 
+      //if (n_ptcone40_o->at(i)/pt >= 0.3) continue; 
       mu_4vec.SetPtEtaPhiM(pt, eta, phi, .10566);
       iso_muons.push_back(mu_4vec);  
     }
@@ -1826,6 +1832,10 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
 
     numPass2++;
 
+    // skip events with pt(lead)<30, pt(sublead)<20
+    if (max(pt_p, pt_n) < 30) continue;
+    if (min(pt_p, pt_n) < 20) continue;
+    
     // check if there's a bad MS only muon  
     if (1./abs(p_qOverP_MSO_o->at(0)) > 0 and 1./abs(p_qOverP_MSO_o->at(0)) < 10000){
       nEvents_noBadMS_o++;
@@ -2026,7 +2036,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   //if (!f_recoNew) cout << "Warning: could not open file " << newFileName << endl;
   
   TChain chainNew("RecoMuons");
-  std::ifstream recoNewFileNames("RunIfiles_test.txt");
+  std::ifstream recoNewFileNames("RunIfiles.txt");
   string fileNameNew;
   while (recoNewFileNames >> fileNameNew) 
     chainNew.Add(fileNameNew.c_str());
@@ -2039,6 +2049,10 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   long int nEvents_noBadMS_n = 0;
   long int nLeadingPlus_noBadMS_n = 0;
 
+  long int NewSize = chainNew.GetEntries();
+  long int NewCounter = 0;
+  cout << "Total number of new events: " << NewSize << endl;
+  
   // event level  
   //TTreeReader reader_new("RecoMuons", f_recoNew);
   TTreeReader reader_new(&chainNew);
@@ -2189,6 +2203,10 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   
   // loop through TTreeReader
   while (reader_new.Next()) {
+    NewCounter++;
+    if (NewCounter % (int)((double)NewSize/20.) == 0) 
+      cout << "Old file reading done: " << (double)NewCounter/(double)NewSize*100. << " percent" << endl;
+
     //nEvents_n++;
     for (int i = 0; i < *nPositiveMuons_n; i++) {
       if (i == 0) h_quality_n->Fill(p_quality_n->at(i));
@@ -2225,6 +2243,10 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
       nLeadingPlus_n++;
       q_lead = 1;
     }
+
+    // skip events with pt(lead)<30, pt(sublead)<20
+    if (max(pt_p, pt_n) < 30) continue;
+    if (min(pt_p, pt_n) < 20) continue;
 
     if (1./abs(p_qOverP_MSO_n->at(0)) > 0 and 1./abs(p_qOverP_MSO_n->at(0)) < 10000){
       nEvents_noBadMS_n++;
@@ -2828,7 +2850,7 @@ void MakeChargePlots(string file_prefix, string fileName) {
 void GeneratePlots() {
   // declare and print file prefix
   //string file_prefix = "TEST_";
-  string file_prefix = "group.perf-muons.AODvRunI.TEST";
+  string file_prefix = "group.perf-muons.AODvRunI.pt1g30-pt2g20-noIso";
   string oldFileName = "test.root";
   string newFileName = "bbullard.00340072.2016.root";
 
