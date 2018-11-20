@@ -56,8 +56,8 @@ void MakeRatioPlot(TCanvas *c, TH1F* h_o, TH1F* h_n, TLegend *l, TPaveText *p,
   ratio->Divide(h_o);
   ratio->GetYaxis()->SetTitle(Form("%s/%s", newMapName.c_str(), oldMapName.c_str()));
   ratio->SetLineColor(kBlack);
-  ratio->SetMinimum(0.89);
-  ratio->SetMaximum(1.12);
+  ratio->SetMinimum(0.94);
+  ratio->SetMaximum(1.06);
   ratio->SetMarkerStyle(20);
   ratio->SetMarkerColor(kBlack);
   ratio->GetXaxis()->SetTitleSize(0.15);//.2
@@ -1555,13 +1555,13 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   //if (!f_recoOld) cout << "Warning: could not open file " << oldFileName << endl;
   
   TChain chainOld("RecoMuons");
-  std::ifstream recoOldFileNames("AODfiles.txt");
+  std::ifstream recoOldFileNames("RunIfiles.txt");
   string fileNameOld;
   while (recoOldFileNames >> fileNameOld) 
     chainOld.Add(fileNameOld.c_str());
   
-  string oldMapName = "Official AOD";
-  //string oldMapName = "Run I";
+  //string oldMapName = "Official AOD";
+  string oldMapName = "Run I";
 
   long int nEvents_o = 0;
   long int nLeadingPlus_o = 0;
@@ -1727,7 +1727,9 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
     if (OldCounter % (int)((double)OldSize/20.) == 0) 
       cout << "Old file reading done: " << (double)OldCounter/(double)OldSize*100. << " percent" << endl;
     num++;
+    
     // check if event contains potential Z decay 
+    /*
     vector<TLorentzVector> iso_muons;
     TLorentzVector mu_4vec;
     double pt = 0, eta = 0, phi = 0;
@@ -1791,7 +1793,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
       }
     }
     if (!pass) continue;    
-    
+    */
     //nEvents_o++;
     for (int i = 0; i < *nPositiveMuons_o; i++) {
       if (i == 0) h_quality_o->Fill(p_quality_o->at(i));
@@ -2036,13 +2038,13 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   //if (!f_recoNew) cout << "Warning: could not open file " << newFileName << endl;
   
   TChain chainNew("RecoMuons");
-  std::ifstream recoNewFileNames("RunIfiles.txt");
+  std::ifstream recoNewFileNames("2016files.txt");
   string fileNameNew;
   while (recoNewFileNames >> fileNameNew) 
     chainNew.Add(fileNameNew.c_str());
   
-  //string newMapName = "2016";
-  string newMapName = "Run I";
+  string newMapName = "2016";
+  //string newMapName = "Run I";
 
   long int nEvents_n = 0;
   long int nLeadingPlus_n = 0;
@@ -2205,7 +2207,7 @@ void MakeRatioPlots(string file_prefix, string oldFileName, string newFileName) 
   while (reader_new.Next()) {
     NewCounter++;
     if (NewCounter % (int)((double)NewSize/20.) == 0) 
-      cout << "Old file reading done: " << (double)NewCounter/(double)NewSize*100. << " percent" << endl;
+      cout << "New file reading done: " << (double)NewCounter/(double)NewSize*100. << " percent" << endl;
 
     //nEvents_n++;
     for (int i = 0; i < *nPositiveMuons_n; i++) {
@@ -2850,7 +2852,7 @@ void MakeChargePlots(string file_prefix, string fileName) {
 void GeneratePlots() {
   // declare and print file prefix
   //string file_prefix = "TEST_";
-  string file_prefix = "group.perf-muons.AODvRunI.pt1g30-pt2g20-noIso";
+  string file_prefix = "group.perf-muons.RunIvs2016.pt1g30-pt2g20";
   string oldFileName = "test.root";
   string newFileName = "bbullard.00340072.2016.root";
 
