@@ -32,7 +32,8 @@ private:
   mutable const xAOD::TrackParticle_v1* MSO;
   mutable const xAOD::TrackParticle_v1* MSOE;
   mutable const xAOD::TrackParticle_v1* ID;
-  
+  mutable const xAOD::TruthParticle_v1* muon_truth;
+
   // Vector of positive and negative muons
   std::vector<const xAOD::Muon*>* positiveMuons;
   std::vector<const xAOD::Muon*>* negativeMuons;
@@ -45,6 +46,12 @@ private:
   unsigned int nNegativeMuons = 0;
 
   // Positive Muon Variables
+
+	std::vector<int> *p_pdgID_truth = nullptr;
+	std::vector<double> *p_pt_truth = nullptr;
+	std::vector<double> *p_eta_truth = nullptr;
+	std::vector<double> *p_phi_truth = nullptr;
+	std::vector<double> *p_m_truth = nullptr;
   std::vector<bool> *p_passIDcuts = nullptr;
   std::vector<bool> *p_passAll = nullptr;
   std::vector<float> *p_ptcone40 = nullptr;
@@ -77,6 +84,11 @@ private:
   std::vector<int> *p_extendedLargeHoles = nullptr; 
  
   // Negative Muon Variables
+	std::vector<int> *n_pdgID_truth = nullptr;
+	std::vector<double> *n_pt_truth = nullptr;
+	std::vector<double> *n_eta_truth = nullptr;
+	std::vector<double> *n_phi_truth = nullptr;
+	std::vector<double> *n_m_truth = nullptr;
   std::vector<bool> *n_passIDcuts = nullptr;
   std::vector<bool> *n_passAll = nullptr;
   std::vector<float> *n_ptcone40 = nullptr;

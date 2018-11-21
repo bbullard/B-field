@@ -2,6 +2,7 @@
 #include <MuonAnalysis/MuonSelection.h>
 #include <xAODEventInfo/EventInfo.h>
 #include <xAODMuon/MuonContainer.h>
+#include <xAODTruth/TruthParticleContainer.h>
 #include <xAODTracking/TrackParticlexAODHelpers.h>
 #include <xAODTracking/VertexContainer.h>
 #include <TSystem.h>
@@ -24,6 +25,11 @@ MuonSelection :: MuonSelection (const std::string& name,
 
 MuonSelection :: ~MuonSelection () {
   // Delete positive muon variables
+	if (p_pdgID_truth) delete p_pdgID_truth;
+	if (p_pt_truth) delete p_pt_truth;
+	if (p_eta_truth) delete p_eta_truth;
+	if (p_phi_truth) delete p_phi_truth;
+	if (p_m_truth) delete p_m_truth;
   if (p_passIDcuts) delete p_passIDcuts;
   if (p_passAll) delete p_passAll;
   if (p_ptcone40) delete p_ptcone40;
@@ -56,6 +62,11 @@ MuonSelection :: ~MuonSelection () {
   if (p_extendedLargeHoles) delete p_extendedLargeHoles;
 
   // Delete negative muon variables
+	if (n_pdgID_truth) delete n_pdgID_truth;
+	if (n_pt_truth) delete n_pt_truth;
+	if (n_eta_truth) delete n_eta_truth;
+	if (n_phi_truth) delete n_phi_truth;
+	if (n_m_truth) delete n_m_truth;
   if (n_passIDcuts) delete n_passIDcuts;
   if (n_passAll) delete n_passAll;
   if (n_ptcone40) delete n_ptcone40;
@@ -191,7 +202,7 @@ StatusCode MuonSelection :: initialize ()
   ANA_CHECK (m_muonSelection.setProperty("MuQuality", 1));
   ANA_CHECK (m_muonSelection.initialize());
 
-  // book trees
+	// book trees
   ANA_CHECK(book (TTree ("RecoMuons", "Reconstructed muons")));
   TTree* zmumutree = tree ("RecoMuons");
 
@@ -205,7 +216,17 @@ StatusCode MuonSelection :: initialize ()
   zmumutree->Branch("nNegativeMuons", &nNegativeMuons);
 
   // positive muon variables
-  p_passIDcuts = new std::vector<bool>();
+	p_pdgID_truth = new std::vector<int>();
+	zmumutree->Branch("p_pdgID_truth", &p_pdgID_truth);
+	p_pt_truth = new std::vector<double>();
+	zmumutree->Branch("p_pt_truth", &p_pt_truth);
+	p_eta_truth = new std::vector<double>();
+	zmumutree->Branch("p_eta_truth", &p_eta_truth);
+	p_phi_truth = new std::vector<double>();
+	zmumutree->Branch("p_phi_truth", &p_phi_truth);
+	p_m_truth = new std::vector<double>();
+	zmumutree->Branch("p_m_truth", &p_m_truth);
+	p_passIDcuts = new std::vector<bool>();
   zmumutree->Branch("p_passIDcuts", &p_passIDcuts);
   p_passAll = new std::vector<bool>();
   zmumutree->Branch("p_passAll", &p_passAll);  
@@ -268,6 +289,16 @@ StatusCode MuonSelection :: initialize ()
   zmumutree->Branch("p_extendedLargeHoles", &p_extendedLargeHoles); 
   
   // negative muon variables
+	n_pdgID_truth = new std::vector<int>();
+	zmumutree->Branch("n_pdgID_truth", &n_pdgID_truth);
+	n_pt_truth = new std::vector<double>();
+	zmumutree->Branch("n_pt_truth", &n_pt_truth);
+	n_eta_truth = new std::vector<double>();
+	zmumutree->Branch("n_eta_truth", &n_eta_truth);
+	n_phi_truth = new std::vector<double>();
+	zmumutree->Branch("n_phi_truth", &n_phi_truth);
+	n_m_truth = new std::vector<double>();
+	zmumutree->Branch("n_m_truth", &n_m_truth);
   n_passIDcuts = new std::vector<bool>();
   zmumutree->Branch("n_passIDcuts", &n_passIDcuts);
   n_passAll = new std::vector<bool>();
@@ -547,8 +578,8 @@ StatusCode MuonSelection :: execute ()
 
   float pvtx_z = -1e6;
   bool correctVertex = false;
-  /*
-  // get vertex container
+
+  /*// get vertex container
   const xAOD::VertexContainer *vtcs = 0;
   ANA_CHECK (evtStore()->retrieve (vtcs, "PrimaryVertices"));
  
@@ -558,8 +589,8 @@ StatusCode MuonSelection :: execute ()
       if (vtx->vertexType() == xAOD::VxType::PriVtx)
         pvtx_z = vtx->z();
     }
-  }
-  */
+  }*/
+
   // skip event if no primary vertex found 
   if ( pvtx_z == -1e6 && correctVertex) {
     ANA_MSG_DEBUG("No primary vertex found! Skipping event.");
@@ -571,6 +602,11 @@ StatusCode MuonSelection :: execute ()
   nNegativeMuons = 0;
 
   // positive muon variables
+	p_pdgID_truth->clear();
+	p_pt_truth->clear();
+	p_eta_truth->clear();
+	p_phi_truth->clear();
+	p_m_truth->clear();
   p_passIDcuts->clear();
   p_passAll->clear();
   p_ptcone40->clear();
@@ -603,6 +639,11 @@ StatusCode MuonSelection :: execute ()
   p_extendedLargeHoles->clear();
 
   // negative muon variables
+	n_pdgID_truth->clear();
+	n_pt_truth->clear();
+	n_eta_truth->clear();
+	n_phi_truth->clear();
+	n_m_truth->clear();
   n_passIDcuts->clear();
   n_passAll->clear();
   n_ptcone40->clear();
@@ -802,7 +843,29 @@ StatusCode MuonSelection :: execute ()
     p_outerLargeHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::outerLargeHoles));
     p_extendedSmallHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedSmallHoles));
     p_extendedLargeHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedLargeHoles));
-    
+  
+		// Truth information
+		muon_truth = nullptr;
+		if(muon->isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+		  ElementLink<xAOD::TruthParticleContainer> link = muon->auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+			  if(link.isValid())
+				     muon_truth = *link;
+		}
+		if (muon_truth) {
+			p_pdgCode_truth->push_back(muon_truth->pdgId());
+			p_pt_truth->push_back(muon_truth->pt());
+			p_eta_truth->push_back(muon_truth->eta());
+			p_phi_truth->push_back(muon_truth->phi());
+			p_m_truth->push_back(muon_truth->m());
+		}
+		else {
+			p_pdgCode_truth->push_back(-1e6);
+			p_pt_truth->push_back(-1e6);
+			p_eta_truth->push_back(-1e6);
+			p_phi_truth->push_back(-1e6);
+			p_m_truth->push_back(-1e6);
+		}
+
     // CB tracks
     if ((muon->combinedTrackParticleLink())) {
       p_isCB->push_back(true);
@@ -1045,6 +1108,28 @@ StatusCode MuonSelection :: execute ()
     n_extendedSmallHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedSmallHoles));
     n_extendedLargeHoles->push_back(muon->uint8MuonSummaryValue(xAOD::MuonSummaryType::extendedLargeHoles));
     
+		// Truth information
+		muon_truth = nullptr;
+		if(muon->isAvailable<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink")) {
+		  ElementLink<xAOD::TruthParticleContainer> link = muon->auxdata<ElementLink<xAOD::TruthParticleContainer> >("truthParticleLink");
+			  if(link.isValid())
+				     muon_truth = *link;
+		}
+		if (muon_truth) {
+			n_pdgCode_truth->push_back(muon_truth->pdgId());
+			n_pt_truth->push_back(muon_truth->pt());
+			n_eta_truth->push_back(muon_truth->eta());
+			n_phi_truth->push_back(muon_truth->phi());
+			n_m_truth->push_back(muon_truth->m());
+		}
+		else {
+			n_pdgCode_truth->push_back(-1e6);
+			n_pt_truth->push_back(-1e6);
+			n_eta_truth->push_back(-1e6);
+			n_phi_truth->push_back(-1e6);
+			n_m_truth->push_back(-1e6);
+		}
+
     // CB tracks
     if ((muon->combinedTrackParticleLink())) {
       n_isCB->push_back(true);
