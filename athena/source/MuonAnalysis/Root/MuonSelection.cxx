@@ -17,7 +17,8 @@ MuonSelection :: MuonSelection (const std::string& name,
       ME (), 
       MSO (),
       MSOE (),
-      ID ()
+      ID (),
+			muon_truth ()
 {
   positiveMuons = new std::vector<const xAOD::Muon*>();
   negativeMuons = new std::vector<const xAOD::Muon*>();
@@ -852,14 +853,14 @@ StatusCode MuonSelection :: execute ()
 				     muon_truth = *link;
 		}
 		if (muon_truth) {
-			p_pdgCode_truth->push_back(muon_truth->pdgId());
+			p_pdgID_truth->push_back(muon_truth->pdgId());
 			p_pt_truth->push_back(muon_truth->pt());
 			p_eta_truth->push_back(muon_truth->eta());
 			p_phi_truth->push_back(muon_truth->phi());
 			p_m_truth->push_back(muon_truth->m());
 		}
 		else {
-			p_pdgCode_truth->push_back(-1e6);
+			p_pdgID_truth->push_back(-1e6);
 			p_pt_truth->push_back(-1e6);
 			p_eta_truth->push_back(-1e6);
 			p_phi_truth->push_back(-1e6);
@@ -1116,14 +1117,14 @@ StatusCode MuonSelection :: execute ()
 				     muon_truth = *link;
 		}
 		if (muon_truth) {
-			n_pdgCode_truth->push_back(muon_truth->pdgId());
+			n_pdgID_truth->push_back(muon_truth->pdgId());
 			n_pt_truth->push_back(muon_truth->pt());
 			n_eta_truth->push_back(muon_truth->eta());
 			n_phi_truth->push_back(muon_truth->phi());
 			n_m_truth->push_back(muon_truth->m());
 		}
 		else {
-			n_pdgCode_truth->push_back(-1e6);
+			n_pdgID_truth->push_back(-1e6);
 			n_pt_truth->push_back(-1e6);
 			n_eta_truth->push_back(-1e6);
 			n_phi_truth->push_back(-1e6);

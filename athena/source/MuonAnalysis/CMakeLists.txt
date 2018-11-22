@@ -6,7 +6,8 @@ atlas_add_library (MuonAnalysisLib
   MuonAnalysis/*.h Root/*.cxx
   PUBLIC_HEADERS MuonAnalysis
   LINK_LIBRARIES AnaAlgorithmLib xAODEventInfo 
-                 xAODMuon MuonAnalysisInterfacesLib
+                 xAODMuon xAODTruth xAODTracking 
+								 MuonAnalysisInterfacesLib
                  AsgAnalysisInterfaces)
 
 # Add the dictionary:
