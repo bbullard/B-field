@@ -1,4 +1,5 @@
 #include <TTree.h>
+#include <TChain.h>
 #include <TTreeReader.h>
 #include <TTreeReaderValue.h>
 #include <TFile.h>
@@ -11,8 +12,10 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
   TChain chainedNtuples("RecoMuons");
   std::ifstream ntupleFileStream(ntuplesFile.c_str());
   string fileName;
-  while (ntupleFileStream >> fileName) 
+  while (ntupleFileStream >> fileName) {
+    cout << "Adding file to chain: " << fileName << endl;
     chainedNtuples.Add(fileName.c_str());
+  }
 
 	// make readers for chain
   TTreeReader reader(&chainedNtuples);
@@ -23,6 +26,11 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
   TTreeReaderValue<unsigned int> nNegativeMuons_o(reader, "nNegativeMuons");
   
   // positive muon variables
+	TTreeReaderValue<vector<int>> p_pdgID_truth_o(reader, "p_pdgID_truth");
+	TTreeReaderValue<vector<double>> p_pt_truth_o(reader, "p_pt_truth");
+	TTreeReaderValue<vector<double>> p_eta_truth_o(reader, "p_eta_truth");
+	TTreeReaderValue<vector<double>> p_phi_truth_o(reader, "p_phi_truth");
+	TTreeReaderValue<vector<double>> p_m_truth_o(reader, "p_m_truth");
   TTreeReaderValue<vector<bool>> p_passIDcuts_o(reader, "p_passIDcuts");
   TTreeReaderValue<vector<bool>> p_passAll_o(reader, "p_passAll");
   TTreeReaderValue<vector<float>> p_eLoss_o(reader, "p_eLoss");
@@ -51,6 +59,11 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
   //TTreeReaderValue<vector<int>> p_extendedLargeHoles_o(reader, "p_extendedLargeHoles");
 
   // negative muon variables
+	TTreeReaderValue<vector<int>> n_pdgID_truth_o(reader, "n_pdgID_truth");
+	TTreeReaderValue<vector<double>> n_pt_truth_o(reader, "n_pt_truth");
+	TTreeReaderValue<vector<double>> n_eta_truth_o(reader, "n_eta_truth");
+	TTreeReaderValue<vector<double>> n_phi_truth_o(reader, "n_phi_truth");
+	TTreeReaderValue<vector<double>> n_m_truth_o(reader, "n_m_truth");
   TTreeReaderValue<vector<bool>> n_passIDcuts_o(reader, "n_passIDcuts");
   TTreeReaderValue<vector<bool>> n_passAll_o(reader, "n_passAll");
   TTreeReaderValue<vector<float>> n_eLoss_o(reader, "n_eLoss");
@@ -151,10 +164,10 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
   TTreeReaderValue<vector<float>> n_qOverP_MSO_o(reader, "n_qOverP_MSO");
   TTreeReaderValue<vector<float>> n_qOverP_MSOE_o(reader, "n_qOverP_MSOE");
   TTreeReaderValue<vector<float>> n_qOverP_ID_o(reader, "n_qOverP_ID");
-  TTreeReaderValue<vector<float>> n_dqOverP_CB_o(reader "n_dqOverP_CB");
-  TTreeReaderValue<vector<float>> n_dqOverP_ME_o(reader "n_dqOverP_ME");
-  TTreeReaderValue<vector<float>> n_dqOverP_MSO_o(reader "n_dqOverP_MSO");
-  TTreeReaderValue<vector<float>> n_dqOverP_MSOE_o(reader "n_dqOverP_MSOE");
+  TTreeReaderValue<vector<float>> n_dqOverP_CB_o(reader, "n_dqOverP_CB");
+  TTreeReaderValue<vector<float>> n_dqOverP_ME_o(reader, "n_dqOverP_ME");
+  TTreeReaderValue<vector<float>> n_dqOverP_MSO_o(reader, "n_dqOverP_MSO");
+  TTreeReaderValue<vector<float>> n_dqOverP_MSOE_o(reader, "n_dqOverP_MSOE");
   TTreeReaderValue<vector<float>> n_dqOverP_ID_o(reader, "n_dqOverP_ID");
   TTreeReaderValue<vector<float>> n_rchi2_CB_o(reader, "n_rchi2_CB");
   TTreeReaderValue<vector<float>> n_rchi2_ME_o(reader, "n_rchi2_ME");
@@ -463,11 +476,11 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
 		}
    
     // skip events without opposite sign pair
-    if (*nPositiveMuons < 1 or *nNegativeMuons < 1) continue;
+    if (*nPositiveMuons_o < 1 or *nNegativeMuons_o < 1) continue;
 
     // event level
 	  passGRL = *passGRL_o;
-	  eventNumber = *eventNumber_o*;
+	  eventNumber = *eventNumber_o;
 	
   	// positive muon variables
   	p_pdgID_truth           = p_pdgID_truth_o->at(0);
@@ -582,16 +595,16 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
     n_rchi2_MSO       = n_rchi2_MSO_o->at(0);
     n_rchi2_MSOE      = n_rchi2_MSOE_o->at(0);
     n_rchi2_ID        = n_rchi2_ID_o->at(0);
-		
+    
     outTree->Fill();
 	}
 	outTree->Write("RecoMuons");
-	outFile.Close();
 	delete outTree;
+	outFile.Close();
 }
 
 void DoSkimming() {
-  string RunIntuples = "RunIntuples.txt";
+  string RunIntuples = "AODtestfiles.txt";
   string RunIoutputNtuple = "RunI_skimmedNtuple.root";
   cout << "Skimming ntuples in text file " << RunIntuples 
        << " and saving output to " << RunIoutputNtuple<< endl;

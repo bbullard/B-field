@@ -5,6 +5,9 @@
 #include <MuonAnalysisInterfaces/IMuonSelectionTool.h>
 #include <AsgAnalysisInterfaces/IGoodRunsListSelectionTool.h>
 #include <AsgTools/AnaToolHandle.h>
+#include "xAODTruth/xAODTruthHelpers.h"
+#include "xAODTruth/TruthParticle.h"
+#include "xAODTruth/TruthParticleContainer.h"
 #include <TTree.h>
 #include <TH1.h>
 #include <vector>

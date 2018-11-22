@@ -1,5 +1,6 @@
 # The name of the package:
-atlas_subdir (MuonAnalysis)
+atlas_subdir (MuonAnalysis
+              PRIVATE Event/xAOD/xAODTruth)
 
 # Add the shared library:
 atlas_add_library (MuonAnalysisLib
@@ -20,7 +21,10 @@ if (NOT XAOD_STANDALONE)
   # Add a component library for AthAnalysis only:
   atlas_add_component (MuonAnalysis
     src/components/*.cxx
-    LINK_LIBRARIES MuonAnalysisLib)
+    LINK_LIBRARIES MuonAnalysisLib xAODEventInfo 
+                   xAODMuon xAODTruth xAODTracking 
+								   MuonAnalysisInterfacesLib
+                   AsgAnalysisInterfaces)
 endif ()
 
 # Install files from the package:

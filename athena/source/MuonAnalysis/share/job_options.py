@@ -2,7 +2,7 @@
 #from glob import glob
 #import AthenaPoolCnvSvc.ReadAthenaPool
 
-runGrid = True
+runGrid = False
 
 if runGrid:
   import AthenaRootComps.ReadAthenaxAOD
@@ -10,18 +10,18 @@ if runGrid:
 
 if not runGrid:
   #inputFile = 'stefano_bfield_RunI_files.txt'
-  inputFile = 'test2018.txt'
+  inputFile = 'AOD.txt'
   crimefile = open(inputFile, 'r')
   inputFiles = [f[0:len(f)-1] for f in crimefile]
   #print(inputFiles[0])
   #override next line on command line with: --filesInput=XXX
-  jps.AthenaCommonFlags.FilesInput = inputFiles 
+  jps.AthenaCommonFlags.FilesInput = inputFiles[1:2] 
   #Specify AccessMode (read mode) ... ClassAccess is good default for xAOD
   jps.AthenaCommonFlags.AccessMode = "ClassAccess" 
 
 #jps.AthenaCommonFlags.HistOutputs = ["ANALYSIS:bfield_map_2016.outputs.root"]
 #jps.AthenaCommonFlags.HistOutputs = ["ANALYSIS:bfieldmap_RunI.outputs.root"]
-jps.AthenaCommonFlags.HistOutputs = ["ANALYSIS:test2018.root"]
+jps.AthenaCommonFlags.HistOutputs = ["ANALYSIS:AODtest2.root"]
 svcMgr.THistSvc.MaxFileSize=-1 # speeds up jobs that output lots of histograms?
 
 # create our algorithm with the given name

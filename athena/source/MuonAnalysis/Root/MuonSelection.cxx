@@ -1,10 +1,12 @@
 #include <AsgTools/MessageCheck.h>
 #include <MuonAnalysis/MuonSelection.h>
-#include <xAODEventInfo/EventInfo.h>
-#include <xAODMuon/MuonContainer.h>
-#include <xAODTruth/TruthParticleContainer.h>
-#include <xAODTracking/TrackParticlexAODHelpers.h>
-#include <xAODTracking/VertexContainer.h>
+#include "xAODEventInfo/EventInfo.h"
+#include "xAODMuon/MuonContainer.h"
+#include "xAODTruth/xAODTruthHelpers.h"
+#include "xAODTruth/TruthParticle.h"
+#include "xAODTruth/TruthParticleContainer.h"
+#include "xAODTracking/TrackParticlexAODHelpers.h"
+#include "xAODTracking/VertexContainer.h"
 #include <TSystem.h>
 #include <math.h>
 
@@ -18,7 +20,7 @@ MuonSelection :: MuonSelection (const std::string& name,
       MSO (),
       MSOE (),
       ID (),
-			muon_truth ()
+      muon_truth ()
 {
   positiveMuons = new std::vector<const xAOD::Muon*>();
   negativeMuons = new std::vector<const xAOD::Muon*>();
@@ -26,11 +28,11 @@ MuonSelection :: MuonSelection (const std::string& name,
 
 MuonSelection :: ~MuonSelection () {
   // Delete positive muon variables
-	if (p_pdgID_truth) delete p_pdgID_truth;
-	if (p_pt_truth) delete p_pt_truth;
-	if (p_eta_truth) delete p_eta_truth;
-	if (p_phi_truth) delete p_phi_truth;
-	if (p_m_truth) delete p_m_truth;
+  if (p_pdgID_truth) delete p_pdgID_truth;
+  if (p_pt_truth) delete p_pt_truth;
+  if (p_eta_truth) delete p_eta_truth;
+  if (p_phi_truth) delete p_phi_truth;
+  if (p_m_truth) delete p_m_truth;
   if (p_passIDcuts) delete p_passIDcuts;
   if (p_passAll) delete p_passAll;
   if (p_ptcone40) delete p_ptcone40;
@@ -217,17 +219,17 @@ StatusCode MuonSelection :: initialize ()
   zmumutree->Branch("nNegativeMuons", &nNegativeMuons);
 
   // positive muon variables
-	p_pdgID_truth = new std::vector<int>();
-	zmumutree->Branch("p_pdgID_truth", &p_pdgID_truth);
-	p_pt_truth = new std::vector<double>();
-	zmumutree->Branch("p_pt_truth", &p_pt_truth);
-	p_eta_truth = new std::vector<double>();
-	zmumutree->Branch("p_eta_truth", &p_eta_truth);
-	p_phi_truth = new std::vector<double>();
-	zmumutree->Branch("p_phi_truth", &p_phi_truth);
-	p_m_truth = new std::vector<double>();
-	zmumutree->Branch("p_m_truth", &p_m_truth);
-	p_passIDcuts = new std::vector<bool>();
+  p_pdgID_truth = new std::vector<int>();
+  zmumutree->Branch("p_pdgID_truth", &p_pdgID_truth);
+  p_pt_truth = new std::vector<double>();
+  zmumutree->Branch("p_pt_truth", &p_pt_truth);
+  p_eta_truth = new std::vector<double>();
+  zmumutree->Branch("p_eta_truth", &p_eta_truth);
+  p_phi_truth = new std::vector<double>();
+  zmumutree->Branch("p_phi_truth", &p_phi_truth);
+  p_m_truth = new std::vector<double>();
+  zmumutree->Branch("p_m_truth", &p_m_truth);
+  p_passIDcuts = new std::vector<bool>();
   zmumutree->Branch("p_passIDcuts", &p_passIDcuts);
   p_passAll = new std::vector<bool>();
   zmumutree->Branch("p_passAll", &p_passAll);  
