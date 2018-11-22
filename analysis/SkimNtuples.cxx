@@ -605,8 +605,8 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
 
 void DoSkimming() {
   string RunIntuples = "AODtestfiles.txt";
-  string RunIoutputNtuple = "RunI_skimmedNtuple.root";
+  string RunIoutputNtuple = "RunI_skimmedNtuple_preselection.root";
   cout << "Skimming ntuples in text file " << RunIntuples 
        << " and saving output to " << RunIoutputNtuple<< endl;
-  SkimNtuples(RunIntuples, RunIoutputNtuple);
+  SkimNtuples(RunIntuples, RunIoutputNtuple, true);
 }
