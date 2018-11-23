@@ -106,14 +106,26 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
   TH1F* h_author2_o = new TH1F("h_author2_o","",6,0,6);
   h_author2_o->SetTitle(";Subleading Muon Author;Events");
 
-  TH1F* h_author1_n = (TH1F*)h_author1_o->Clone("h_author1_o");
-  TH1F* h_author2_n = (TH1F*)h_author2_o->Clone("h_author2_o");
+  TH1F* h_author1_n = (TH1F*)h_author1_o->Clone("h_author1_n");
+  TH1F* h_author2_n = (TH1F*)h_author2_o->Clone("h_author2_n");
 
   // quality
   TH1F* h_quality_o = new TH1F("h_quality_o","",4,0,4);
-  h_quality_o->SetTitle(";Highest P_{T} Muons Quality;Events");
+  h_quality_o->SetTitle(";Quality;Events");
   
-  TH1F* h_quality_n = (TH1F*)h_quality_o->Clone("h_quality_o");
+  TH1F* h_quality_n = (TH1F*)h_quality_o->Clone("h_quality_n");
+  
+  // number of precision layers
+  TH1F* h_nPrecLay_o = new TH1F("h_nPrecLay_o","",8,0,8);
+  h_nPrecLay_o->SetTitle(";Number of Precision Layers;Events");
+  
+  TH1F* h_nPrecLay_n = (TH1F*)h_nPrecLay_o->Clone("h_nPrecLay_n");
+  
+  // number of precision hole layers
+  TH1F* h_nPrecHoleLay_o = new TH1F("h_nPrecHoleLay_o","",8,0,8);
+  h_nPrecHoleLay_o->SetTitle(";Number of Precision Hole Layers;Events");
+  
+  TH1F* h_nPrecHoleLay_n = (TH1F*)h_nPrecHoleLay_o->Clone("h_nPrecHoleLay_n");
   
   // rho leading 
   TH1F* h_rho1_ME_o = new TH1F("h_rho1_ME_o","",nBins,-.4,.4);
@@ -185,24 +197,24 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
   
   // rho
   TH1F* h_rhoXeta_ME_o = new TH1F("h_rhoXeta_ME_o","",nBins,-2.5,2.5);
-  h_rhoXeta_ME_o->SetTitle(";#eta;#rho (ME-ID)");
+  h_rhoXeta_ME_o->SetTitle(";#eta_{ID};#rho (ME-ID)");
   TH1F* h_rhoXeta_MSO_o = (TH1F*)h_rhoXeta_ME_o->Clone("h_rhoXeta_MSO_o");
-  h_rhoXeta_MSO_o->SetTitle(";#eta;#rho (MS-ID)");
+  h_rhoXeta_MSO_o->SetTitle(";#eta_{ID};#rho (MS-ID)");
 
   TH1F* h_rhoXeta_ME_n = new TH1F("h_rhoXeta_ME_n","",nBins,-2.5,2.5);
-  h_rhoXeta_ME_n->SetTitle(";#eta;#rho (ME-ID)");
+  h_rhoXeta_ME_n->SetTitle(";#eta_{ID};#rho (ME-ID)");
   TH1F* h_rhoXeta_MSO_n = (TH1F*)h_rhoXeta_ME_n->Clone("h_rhoXeta_MSO_n");
-  h_rhoXeta_MSO_n->SetTitle(";#eta;#rho (MS-ID)");
+  h_rhoXeta_MSO_n->SetTitle(";#eta_{ID};#rho (MS-ID)");
   
   TH1F* h_dXeta_ME_o = new TH1F("h_drhoXeta_ME_o","",nBins,-2.5,2.5);
-  h_drhoXeta_ME_o->SetTitle(";#eta;#sigma(#rho) (ME-ID)");
+  h_drhoXeta_ME_o->SetTitle(";#eta_{ID};#sigma(#rho) (ME-ID)");
   TH1F* h_drhoXeta_MSO_o = (TH1F*)h_drhoXeta_ME_o->Clone("h_drhoXeta_MSO_o");
-  h_drhoXeta_MSO_o->SetTitle(";#eta;#sigma(#rho) (MS-ID)");
+  h_drhoXeta_MSO_o->SetTitle(";#eta_{ID};#sigma(#rho) (MS-ID)");
 
   TH1F* h_drhoXeta_ME_n = new TH1F("h_drhoXeta_ME_n","",nBins,-2.5,2.5);
-  h_drhoXeta_ME_n->SetTitle(";#eta;#sigma(#rho) (ME-ID)");
+  h_drhoXeta_ME_n->SetTitle(";#eta_{ID};#sigma(#rho) (ME-ID)");
   TH1F* h_drhoXeta_MSO_n = (TH1F*)h_drhoXeta_ME_n->Clone("h_drhoXeta_MSO_n");
-  h_drhoXeta_MSO_n->SetTitle(";#eta;#sigma(#rho) (MS-ID)");
+  h_drhoXeta_MSO_n->SetTitle(";#eta_{ID};#sigma(#rho) (MS-ID)");
  
   TProfile* p_rho_ME_o = new TProfile("p_rho_ME_o","",nBins,-2.5,2.5,"s");
   p_rho_ME_o->SetMinimum(-.5); 
@@ -214,24 +226,24 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
   
   // dR
   TH1F* h_dRXeta_ME_o = new TH1F("h_dRXeta_ME_o","",nBins,-2.5,2.5);
-  h_dRXeta_ME_o->SetTitle(";#eta;#Delta R (ME-ID)");
+  h_dRXeta_ME_o->SetTitle(";#eta_{ID};#Delta R (ME-ID)");
   TH1F* h_dRXeta_MSOE_o = (TH1F*)h_dRXeta_ME_o->Clone("h_dRXeta_MSOE_o");
-  h_dRXeta_MSOE_o->SetTitle(";#eta;#Delta R (MSOE-ID)");
+  h_dRXeta_MSOE_o->SetTitle(";#eta_{ID};#Delta R (MSOE-ID)");
 
   TH1F* h_dRXeta_ME_n = new TH1F("h_dRXeta_ME_n","",nBins,-2.5,2.5);
-  h_dRXeta_ME_n->SetTitle(";#eta;#Delta R (ME-ID)");
+  h_dRXeta_ME_n->SetTitle(";#eta_{ID};#Delta R (ME-ID)");
   TH1F* h_dRXeta_MSOE_n = (TH1F*)h_dRXeta_ME_n->Clone("h_dRXeta_MSOE_n");
-  h_dRXeta_MSOE_n->SetTitle(";#eta;#Delta R (MSOE-ID)");
+  h_dRXeta_MSOE_n->SetTitle(";#eta_{ID};#Delta R (MSOE-ID)");
   
   TH1F* h_ddRXeta_ME_o = new TH1F("h_ddRXeta_ME_o","",nBins,-2.5,2.5);
-  h_ddRXeta_ME_o->SetTitle(";#eta;#sigma(#Delta R) (ME-ID)");
+  h_ddRXeta_ME_o->SetTitle(";#eta_{ID};#sigma(#Delta R) (ME-ID)");
   TH1F* h_ddRXeta_MSOE_o = (TH1F*)h_ddRXeta_ME_o->Clone("h_ddRXeta_MSOE_o");
-  h_ddRXeta_MSOE_o->SetTitle(";#eta;#sigma(#Delta R) (MSOE-ID)");
+  h_ddRXeta_MSOE_o->SetTitle(";#eta_{ID};#sigma(#Delta R) (MSOE-ID)");
 
   TH1F* h_ddRXeta_ME_n = new TH1F("h_ddRXeta_ME_n","",nBins,-2.5,2.5);
-  h_ddRXeta_ME_n->SetTitle(";#eta;#sigma(#Delta R) (ME-ID)");
+  h_ddRXeta_ME_n->SetTitle(";#eta_{ID};#sigma(#Delta R) (ME-ID)");
   TH1F* h_ddRXeta_MSOE_n = (TH1F*)h_ddRXeta_ME_n->Clone("h_ddRXeta_MSOE_n");
-  h_ddRXeta_MSOE_n->SetTitle(";#eta;#sigma(#Delta R) (MSOE-ID)");
+  h_ddRXeta_MSOE_n->SetTitle(";#eta_{ID};#sigma(#Delta R) (MSOE-ID)");
  
   TProfile* p_dR_ME_o = new TProfile("p_dR_ME_o","",nBins,-2.5,2.5,"s");
   p_dR_ME_o->SetMinimum(0); 
@@ -247,57 +259,59 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
   std::vector<double> *maxFactor = new std::vector<double>();
 
   // push back vector of histograms and plot range scalings            
-  vh_o->push_back(h_m_CB_o);        vh_n->push_back(h_m_CB_n);        maxFactor->push_back(1.05);
-  vh_o->push_back(h_m_ME_o);        vh_n->push_back(h_m_ME_n);        maxFactor->push_back(1.05);
-  vh_o->push_back(h_m_MSO_o);       vh_n->push_back(h_m_MSO_n);       maxFactor->push_back(1.05);
-  vh_o->push_back(h_m_MSOE_o);      vh_n->push_back(h_m_MSOE_n);      maxFactor->push_back(1.05);
-  vh_o->push_back(h_m_ID_o);        vh_n->push_back(h_m_ID_n);        maxFactor->push_back(1.05);
-  vh_o->push_back(h_pt1_CB_o);      vh_n->push_back(h_pt1_CB_n);      maxFactor->push_back(1.05);
-  vh_o->push_back(h_pt1_ME_o);      vh_n->push_back(h_pt1_ME_n);      maxFactor->push_back(1.05);
-  vh_o->push_back(h_pt1_MSO_o);     vh_n->push_back(h_pt1_MSO_n);     maxFactor->push_back(1.05);
-  vh_o->push_back(h_pt1_MSOE_o);    vh_n->push_back(h_pt1_MSOE_n);    maxFactor->push_back(1.05);
-  vh_o->push_back(h_pt1_ID_o);      vh_n->push_back(h_pt1_ID_n);      maxFactor->push_back(1.05);
-  vh_o->push_back(h_pt2_CB_o);      vh_n->push_back(h_pt2_CB_n);      maxFactor->push_back(1.05);
-  vh_o->push_back(h_pt2_ME_o);      vh_n->push_back(h_pt2_ME_n);      maxFactor->push_back(1.05);
-  vh_o->push_back(h_pt2_MSO_o);     vh_n->push_back(h_pt2_MSO_n);     maxFactor->push_back(1.05);
-  vh_o->push_back(h_pt2_MSOE_o);    vh_n->push_back(h_pt2_MSOE_n);    maxFactor->push_back(1.05);
-  vh_o->push_back(h_pt2_ID_o);      vh_n->push_back(h_pt2_ID_n);      maxFactor->push_back(1.05);
-  vh_o->push_back(h_eta1_CB_o);     vh_n->push_back(h_eta1_CB_n);     maxFactor->push_back(1.3);
-  vh_o->push_back(h_eta1_ME_o);     vh_n->push_back(h_eta1_ME_n);     maxFactor->push_back(1.3);
-  vh_o->push_back(h_eta1_MSO_o);    vh_n->push_back(h_eta1_MSO_n);    maxFactor->push_back(1.3);
-  vh_o->push_back(h_eta1_MSOE_o);   vh_n->push_back(h_eta1_MSOE_n);   maxFactor->push_back(1.3);
-  vh_o->push_back(h_eta1_ID_o);     vh_n->push_back(h_eta1_ID_n);     maxFactor->push_back(1.3);
-  vh_o->push_back(h_eta2_CB_o);     vh_n->push_back(h_eta2_CB_n);     maxFactor->push_back(1.3);
-  vh_o->push_back(h_eta2_ME_o);     vh_n->push_back(h_eta2_ME_n);     maxFactor->push_back(1.3);
-  vh_o->push_back(h_eta2_MSO_o);    vh_n->push_back(h_eta2_MSO_n);    maxFactor->push_back(1.3);
-  vh_o->push_back(h_eta2_MSOE_o);   vh_n->push_back(h_eta2_MSOE_n);   maxFactor->push_back(1.3);
-  vh_o->push_back(h_eta2_ID_o);     vh_n->push_back(h_eta2_ID_n);     maxFactor->push_back(1.3);
-  vh_o->push_back(h_author1_o);     vh_n->push_back(h_author1_n);     maxFactor->push_back(1.05);
-  vh_o->push_back(h_author2_o);     vh_n->push_back(h_author2_n);     maxFactor->push_back(1.05);
-  vh_o->push_back(h_quality_o);     vh_n->push_back(h_quality_n);     maxFactor->push_back(1.05);
-  vh_o->push_back(h_rho1_ME_o);     vh_n->push_back(h_rho1_ME_n);     maxFactor->push_back(1.05);
-  vh_o->push_back(h_rho1_MSO_o);    vh_n->push_back(h_rho1_MSO_n);    maxFactor->push_back(1.05);
-  vh_o->push_back(h_rho2_ME_o);     vh_n->push_back(h_rho2_ME_n);     maxFactor->push_back(1.05);
-  vh_o->push_back(h_rho2_MSO_o);    vh_n->push_back(h_rho2_MSO_n);    maxFactor->push_back(1.05);
-  vh_o->push_back(h_dR1_ME_o);      vh_n->push_back(h_dR1_ME_n);      maxFactor->push_back(1.05);
-  vh_o->push_back(h_dR1_MSOE_o);    vh_n->push_back(h_dR1_MSOE_n);    maxFactor->push_back(1.05);
-  vh_o->push_back(h_dR2_ME_o);      vh_n->push_back(h_dR2_ME_n);      maxFactor->push_back(1.05);
-  vh_o->push_back(h_dR2_MSOE_o);    vh_n->push_back(h_dR2_MSOE_n);    maxFactor->push_back(1.05);
+  vh_o->push_back(h_m_CB_o);            vh_n->push_back(h_m_CB_n);          maxFactor->push_back(1.05);
+  vh_o->push_back(h_m_ME_o);            vh_n->push_back(h_m_ME_n);          maxFactor->push_back(1.05);
+  vh_o->push_back(h_m_MSO_o);           vh_n->push_back(h_m_MSO_n);         maxFactor->push_back(1.05);
+  vh_o->push_back(h_m_MSOE_o);          vh_n->push_back(h_m_MSOE_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_m_ID_o);            vh_n->push_back(h_m_ID_n);          maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt1_CB_o);          vh_n->push_back(h_pt1_CB_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt1_ME_o);          vh_n->push_back(h_pt1_ME_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt1_MSO_o);         vh_n->push_back(h_pt1_MSO_n);       maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt1_MSOE_o);        vh_n->push_back(h_pt1_MSOE_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt1_ID_o);          vh_n->push_back(h_pt1_ID_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt2_CB_o);          vh_n->push_back(h_pt2_CB_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt2_ME_o);          vh_n->push_back(h_pt2_ME_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt2_MSO_o);         vh_n->push_back(h_pt2_MSO_n);       maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt2_MSOE_o);        vh_n->push_back(h_pt2_MSOE_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_pt2_ID_o);          vh_n->push_back(h_pt2_ID_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_eta1_CB_o);         vh_n->push_back(h_eta1_CB_n);       maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta1_ME_o);         vh_n->push_back(h_eta1_ME_n);       maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta1_MSO_o);        vh_n->push_back(h_eta1_MSO_n);      maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta1_MSOE_o);       vh_n->push_back(h_eta1_MSOE_n);     maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta1_ID_o);         vh_n->push_back(h_eta1_ID_n);       maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta2_CB_o);         vh_n->push_back(h_eta2_CB_n);       maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta2_ME_o);         vh_n->push_back(h_eta2_ME_n);       maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta2_MSO_o);        vh_n->push_back(h_eta2_MSO_n);      maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta2_MSOE_o);       vh_n->push_back(h_eta2_MSOE_n);     maxFactor->push_back(1.3);
+  vh_o->push_back(h_eta2_ID_o);         vh_n->push_back(h_eta2_ID_n);       maxFactor->push_back(1.3);
+  vh_o->push_back(h_author1_o);         vh_n->push_back(h_author1_n);       maxFactor->push_back(1.05);
+  vh_o->push_back(h_author2_o);         vh_n->push_back(h_author2_n);       maxFactor->push_back(1.05);
+  vh_o->push_back(h_quality_o);         vh_n->push_back(h_quality_n);       maxFactor->push_back(1.05);
+  vh_o->push_back(h_nPrecLay_o);        vh_n->push_back(h_nPrecLay_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_nPrecHoleLay_o);    vh_n->push_back(h_nPrecHoleLay_n);  maxFactor->push_back(1.05);
+  vh_o->push_back(h_rho1_ME_o);         vh_n->push_back(h_rho1_ME_n);       maxFactor->push_back(1.05);
+  vh_o->push_back(h_rho1_MSO_o);        vh_n->push_back(h_rho1_MSO_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_rho2_ME_o);         vh_n->push_back(h_rho2_ME_n);       maxFactor->push_back(1.05);
+  vh_o->push_back(h_rho2_MSO_o);        vh_n->push_back(h_rho2_MSO_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_dR1_ME_o);          vh_n->push_back(h_dR1_ME_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_dR1_MSOE_o);        vh_n->push_back(h_dR1_MSOE_n);      maxFactor->push_back(1.05);
+  vh_o->push_back(h_dR2_ME_o);          vh_n->push_back(h_dR2_ME_n);        maxFactor->push_back(1.05);
+  vh_o->push_back(h_dR2_MSOE_o);        vh_n->push_back(h_dR2_MSOE_n);      maxFactor->push_back(1.05);
   
-  vh_o->push_back(h_ptXeta_ME_o);   vh_n->push_back(h_ptXeta_ME_n);   maxFactor->push_back(1.3);
-  vh_o->push_back(h_ptXeta_MSO_o);  vh_n->push_back(h_ptXeta_MSO_n);  maxFactor->push_back(1.3);
-  vh_o->push_back(h_ptXeta_ID_o);   vh_n->push_back(h_ptXeta_ID_n);   maxFactor->push_back(1.3);
-  vh_o->push_back(h_dptXeta_ME_o);  vh_n->push_back(h_dptXeta_ME_n);  maxFactor->push_back(1.3);
-  vh_o->push_back(h_dptXeta_MSO_o); vh_n->push_back(h_dptXeta_MSO_n); maxFactor->push_back(1.3);
-  vh_o->push_back(h_dptXeta_ID_o);  vh_n->push_back(h_dptXeta_ID_n);  maxFactor->push_back(1.3);
-  vh_o->push_back(h_rhoXeta_ME_o);   vh_n->push_back(h_rhoXeta_ME_n);   maxFactor->push_back(1.3);
-  vh_o->push_back(h_rhoXeta_MSO_o);  vh_n->push_back(h_rhoXeta_MSO_n);  maxFactor->push_back(1.3);
-  vh_o->push_back(h_drhoXeta_ME_o);  vh_n->push_back(h_drhoXeta_ME_n);  maxFactor->push_back(1.3);
-  vh_o->push_back(h_drhoXeta_MSO_o); vh_n->push_back(h_drhoXeta_MSO_n); maxFactor->push_back(1.3);
-  vh_o->push_back(h_dRXeta_ME_o);    vh_n->push_back(h_dRXeta_ME_n);    maxFactor->push_back(1.3);
-  vh_o->push_back(h_dRXeta_MSOE_o);  vh_n->push_back(h_dRXeta_MSOE_n);  maxFactor->push_back(1.3);
-  vh_o->push_back(h_ddRXeta_ME_o);   vh_n->push_back(h_ddRXeta_ME_n);   maxFactor->push_back(1.3);
-  vh_o->push_back(h_ddRXeta_MSOE_o); vh_n->push_back(h_ddRXeta_MSOE_n); maxFactor->push_back(1.3);
+  vh_o->push_back(h_ptXeta_ME_o);       vh_n->push_back(h_ptXeta_ME_n);     maxFactor->push_back(1.3);
+  vh_o->push_back(h_ptXeta_MSO_o);      vh_n->push_back(h_ptXeta_MSO_n);    maxFactor->push_back(1.3);
+  vh_o->push_back(h_ptXeta_ID_o);       vh_n->push_back(h_ptXeta_ID_n);     maxFactor->push_back(1.3);
+  vh_o->push_back(h_dptXeta_ME_o);      vh_n->push_back(h_dptXeta_ME_n);    maxFactor->push_back(1.3);
+  vh_o->push_back(h_dptXeta_MSO_o);     vh_n->push_back(h_dptXeta_MSO_n);   maxFactor->push_back(1.3);
+  vh_o->push_back(h_dptXeta_ID_o);      vh_n->push_back(h_dptXeta_ID_n);    maxFactor->push_back(1.3);
+  vh_o->push_back(h_rhoXeta_ME_o);      vh_n->push_back(h_rhoXeta_ME_n);    maxFactor->push_back(1.3);
+  vh_o->push_back(h_rhoXeta_MSO_o);     vh_n->push_back(h_rhoXeta_MSO_n);   maxFactor->push_back(1.3);
+  vh_o->push_back(h_drhoXeta_ME_o);     vh_n->push_back(h_drhoXeta_ME_n);   maxFactor->push_back(1.3);
+  vh_o->push_back(h_drhoXeta_MSO_o);    vh_n->push_back(h_drhoXeta_MSO_n);  maxFactor->push_back(1.3);
+  vh_o->push_back(h_dRXeta_ME_o);       vh_n->push_back(h_dRXeta_ME_n);     maxFactor->push_back(1.3);
+  vh_o->push_back(h_dRXeta_MSOE_o);     vh_n->push_back(h_dRXeta_MSOE_n);   maxFactor->push_back(1.3);
+  vh_o->push_back(h_ddRXeta_ME_o);      vh_n->push_back(h_ddRXeta_ME_n);    maxFactor->push_back(1.3);
+  vh_o->push_back(h_ddRXeta_MSOE_o);    vh_n->push_back(h_ddRXeta_MSOE_n);  maxFactor->push_back(1.3);
   
   // check that the vectors have the same size
   if ( vh_o->size() != vh_n->size() || vh_o->size() != maxFactor->size()) 
@@ -454,7 +468,11 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
     nEvents_o++;
     h_quality_o->Fill(*p_quality_o);
     h_quality_o->Fill(*n_quality_o);
-
+    h_nPrecLay_o->Fill(*p_nPrecLay_o);
+    h_nPrecLay_o->Fill(*n_nPrecLay_o);
+    h_nPrecHoleLay_o->Fill(*p_nPrecHoleLay_o);
+    h_nPrecHoleLay_o->Fill(*n_nPrecHoleLay_o);
+    
     // skip event if event not on GRL
     if (!*passGRL_o) continue;
     nPassGRL_o++;
@@ -479,8 +497,8 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
       q_lead = 1;
 
     // skip events with pt(lead)<30, pt(sublead)<20
-    if (max(pt_p, pt_n) < 30) continue;
-    if (min(pt_p, pt_n) < 20) continue;
+    //if (max(pt_p, pt_n) < 30) continue;
+    //if (min(pt_p, pt_n) < 20) continue;
     
     // fill primary author
     if (q_lead == 1) {
@@ -519,7 +537,21 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
       v2.SetPtEtaPhiM(1 / cosh(*n_eta_ID_o) / abs(*n_qOverP_ID_o), *n_eta_ID_o, *n_phi_ID_o, .10566); 
       h_m_ID_o->Fill((v1+v2).M());
     }
- 
+
+    // fill pt profiles
+    if (*p_isID_o) 
+      p_pt_ID_o->Fill(*p_eta_ID_o, 1 / cosh(*p_eta_ID_o) / abs(*p_qOverP_ID_o));
+    if (*n_isID_o) 
+      p_pt_ID_o->Fill(*n_eta_ID_o, 1 / cosh(*n_eta_ID_o) / abs(*n_qOverP_ID_o));
+    if (*p_isME_o) 
+      p_pt_ME_o->Fill(*p_eta_ME_o, 1 / cosh(*p_eta_ME_o) / abs(*p_qOverP_ME_o));
+    if (*n_isME_o) 
+      p_pt_ME_o->Fill(*n_eta_ME_o, 1 / cosh(*n_eta_ME_o) / abs(*n_qOverP_ME_o));
+    if (*p_isMSO_o) 
+      p_pt_MSO_o->Fill(*p_eta_MSO_o, 1 / cosh(*p_eta_MSO_o) / abs(*p_qOverP_MSO_o));
+    if (*n_isMSO_o) 
+      p_pt_MSO_o->Fill(*n_eta_MSO_o, 1 / cosh(*n_eta_MSO_o) / abs(*n_qOverP_MSO_o));
+
     // fill leading/subleading variable histograms
     if (q_lead == 1) {
       if (*p_isCB_o) {
@@ -565,15 +597,23 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
           double ptID = 1 / cosh(*p_eta_ID_o) / abs(*p_qOverP_ID_o);
           double ptME = 1 / cosh(*p_eta_ME_o) / abs(*p_qOverP_ME_o);
           h_rho1_ME_o->Fill((ptME-ptID)/ptID);
-          h_dR1_ME_o->Fill(sqrt( pow(*p_eta_ID_o-*p_eta_ME_o,2) + pow(*p_phi_ID_o-*p_phi_ME_o,2)));
+          p_rho_ME_o->Fill(*p_eta_ID_o, (ptME-ptID)/ptID);
+          double deta2 = pow(*p_eta_ID_o - *p_eta_ME_o, 2);
+          double dphi2 = pow(*p_phi_ID_o - *p_phi_ME_o, 2);
+          h_dR1_ME_o->Fill(sqrt(deta2 + dphi2));
+          p_dR_ME_o->Fill(*p_eta_ID_o, sqrt(deta2 + dphi2));
         }
         if (*p_isMSO_o) {
           double ptID = 1 / cosh(*p_eta_ID_o) / abs(*p_qOverP_ID_o);
           double ptMSO = 1 / cosh(*p_eta_MSO_o) / abs(*p_qOverP_MSO_o);
           h_rho1_MSO_o->Fill((ptMSO-ptID)/ptID);
+          p_rho_MSO_o->Fill(*p_eta_ID_o, (ptMSO-ptID)/ptID);
         }
         if (*p_isMSOE_o)
-          h_dR1_MSOE_o->Fill(sqrt( pow(*p_eta_ID_o-*p_eta_MSOE_o,2) + pow(*p_phi_ID_o-*p_phi_MSOE_o,2)));
+          double deta2 = pow(*p_eta_ID_o - *p_eta_MSOE_o, 2);
+          double dphi2 = pow(*p_phi_ID_o - *p_phi_MSOE_o, 2);
+          h_dR1_MSOE_o->Fill(sqrt(deta2 + dphi2));
+          p_dR_MSOE_o->Fill(*p_eta_ID_o, sqrt(deta2 + dphi2));
       }
       if (*n_isID_o) {
         h_pt2_ID_o->Fill(1 / cosh(*n_eta_ID_o) / abs(*n_qOverP_ID_o)); 
@@ -582,15 +622,23 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
           double ptID = 1 / cosh(*n_eta_ID_o) / abs(*n_qOverP_ID_o);
           double ptME = 1 / cosh(*n_eta_ME_o) / abs(*n_qOverP_ME_o);
           h_rho2_ME_o->Fill((ptME-ptID)/ptID);
-          h_dR2_ME_o->Fill(sqrt( pow(*n_eta_ID_o-*n_eta_ME_o,2) + pow(*n_phi_ID_o-*n_phi_ME_o,2)));
+          p_rho_ME_o->Fill(*n_eta_ID_o, (ptME-ptID)/ptID);
+          double deta2 = pow(*n_eta_ID_o - *n_eta_ME_o, 2);
+          double dphi2 = pow(*n_phi_ID_o - *n_phi_ME_o, 2);
+          h_dR2_ME_o->Fill(sqrt(deta2 + dphi2));
+          p_dR_ME_o->Fill(*n_eta_ID_o, sqrt(deta2 + dphi2));
         }
         if (*n_isMSO_o) {
           double ptID = 1 / cosh(*n_eta_ID_o) / abs(*n_qOverP_ID_o);
           double ptMSO = 1 / cosh(*n_eta_MSO_o) / abs(*n_qOverP_MSO_o);
           h_rho2_MSO_o->Fill((ptMSO-ptID)/ptID);
+          p_rho_MSO_o->Fill(*n_eta_ID_o, (ptMSO-ptID)/ptID);
         }
         if (*n_isMSOE_o)
-          h_dR2_MSOE_o->Fill(sqrt( pow(*n_eta_ID_o-*n_eta_MSOE_o,2) + pow(*n_phi_ID_o-*n_phi_MSOE_o,2)));
+          double deta2 = pow(*n_eta_ID_o - *n_eta_MSOE_o, 2);
+          double dphi2 = pow(*n_phi_ID_o - *n_phi_MSOE_o, 2);
+          h_dR2_MSOE_o->Fill(sqrt(deta2 + dphi2));
+          p_dR_MSOE_o->Fill(*n_eta_ID_o, sqrt(deta2 + dphi2));
       }
     }
     // if negative muon is primary
@@ -638,15 +686,23 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
           double ptID = 1 / cosh(*p_eta_ID_o) / abs(*p_qOverP_ID_o);
           double ptME = 1 / cosh(*p_eta_ME_o) / abs(*p_qOverP_ME_o);
           h_rho2_ME_o->Fill((ptME-ptID)/ptID);
-          h_dR2_ME_o->Fill(sqrt( pow(*p_eta_ID_o-*p_eta_ME_o,2) + pow(*p_phi_ID_o-*p_phi_ME_o,2)));
+          p_rho_ME_o->Fill(*p_eta_ID_o, (ptME-ptID)/ptID);
+          double deta2 = pow(*p_eta_ID_o - *p_eta_ME_o, 2);
+          double dphi2 = pow(*p_phi_ID_o - *p_phi_ME_o, 2);
+          h_dR2_ME_o->Fill(sqrt(deta2 + dphi2));
+          p_dR_ME_o->Fill(*p_eta_ID_o, sqrt(deta2 + dphi2));
         }
         if (*p_isMSO_o) {
           double ptID = 1 / cosh(*p_eta_ID_o) / abs(*p_qOverP_ID_o);
           double ptMSO = 1 / cosh(*p_eta_MSO_o) / abs(*p_qOverP_MSO_o);
           h_rho2_MSO_o->Fill((ptMSO-ptID)/ptID);
+          p_rho_MSO_o->Fill(*p_eta_ID_o, (ptMSO-ptID)/ptID);
         }
         if (*p_isMSOE_o)
-          h_dR2_MSOE_o->Fill(sqrt( pow(*p_eta_ID_o-*p_eta_MSOE_o,2) + pow(*p_phi_ID_o-*p_phi_MSOE_o,2)));
+          double deta2 = pow(*p_eta_ID_o - *p_eta_MSOE_o, 2);
+          double dphi2 = pow(*p_phi_ID_o - *p_phi_MSOE_o, 2);
+          h_dR2_MSOE_o->Fill(sqrt(deta2 + dphi2));
+          p_dR_MSOE_o->Fill(*p_eta_ID_o, sqrt(deta2 + dphi2));
       }
       if (*n_isID_o) {
         h_pt1_ID_o->Fill(1 / cosh(*n_eta_ID_o) / abs(*n_qOverP_ID_o)); 
@@ -655,15 +711,23 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
           double ptID = 1 / cosh(*n_eta_ID_o) / abs(*n_qOverP_ID_o);
           double ptME = 1 / cosh(*n_eta_ME_o) / abs(*n_qOverP_ME_o);
           h_rho1_ME_o->Fill((ptME-ptID)/ptID);
-          h_dR1_ME_o->Fill(sqrt( pow(*n_eta_ID_o-*n_eta_ME_o,2) + pow(*n_phi_ID_o-*n_phi_ME_o,2)));
+          p_rho_ME_o->Fill(*n_eta_ID_o, (ptME-ptID)/ptID);
+          double deta2 = pow(*n_eta_ID_o - *n_eta_ME_o, 2);
+          double dphi2 = pow(*n_phi_ID_o - *n_phi_ME_o, 2);
+          h_dR1_ME_o->Fill(sqrt(deta2 + dphi2));
+          p_dR_ME_o->Fill(*n_eta_ID_o, sqrt(deta2 + dphi2));
         }
         if (*n_isMSO_o) {
           double ptID = 1 / cosh(*n_eta_ID_o) / abs(*n_qOverP_ID_o);
           double ptMSO = 1 / cosh(*n_eta_MSO_o) / abs(*n_qOverP_MSO_o);
           h_rho1_MSO_o->Fill((ptMSO-ptID)/ptID);
+          p_rho_MSO_o->Fill(*n_eta_ID_o, (ptMSO-ptID)/ptID);
         }
         if (*n_isMSOE_o)
-          h_dR1_MSOE_o->Fill(sqrt( pow(*n_eta_ID_o-*n_eta_MSOE_o,2) + pow(*n_phi_ID_o-*n_phi_MSOE_o,2)));
+          double deta2 = pow(*n_eta_ID_o - *n_eta_MSOE_o, 2);
+          double dphi2 = pow(*n_phi_ID_o - *n_phi_MSOE_o, 2);
+          h_dR1_MSOE_o->Fill(sqrt(deta2 + dphi2));
+          p_dR_MSOE_o->Fill(*n_eta_ID_o, sqrt(deta2 + dphi2));
       }
     }
   }
@@ -807,6 +871,10 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
     nEvents_n++;
     h_quality_n->Fill(*p_quality_n);
     h_quality_n->Fill(*n_quality_n);
+    h_nPrecLay_n->Fill(*p_nPrecLay_n);
+    h_nPrecLay_n->Fill(*n_nPrecLay_n);
+    h_nPrecHoleLay_n->Fill(*p_nPrecHoleLay_n);
+    h_nPrecHoleLay_n->Fill(*n_nPrecHoleLay_n);
 
     // skip event if event not on GRL
     if (!*passGRL_n) continue;
@@ -832,8 +900,8 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
       q_lead = 1;
 
     // skip events with pt(lead)<30, pt(sublead)<20
-    if (max(pt_p, pt_n) < 30) continue;
-    if (min(pt_p, pt_n) < 20) continue;
+    //if (max(pt_p, pt_n) < 30) continue;
+    //if (min(pt_p, pt_n) < 20) continue;
     
     // fill primary author
     if (q_lead == 1) {
@@ -872,6 +940,20 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
       v2.SetPtEtaPhiM(1 / cosh(*n_eta_ID_n) / abs(*n_qOverP_ID_n), *n_eta_ID_n, *n_phi_ID_n, .10566); 
       h_m_ID_o->Fill((v1+v2).M());
     }
+
+    // fill pt profiles
+    if (*p_isID_n) 
+      p_pt_ID_n->Fill(*p_eta_ID_n, 1 / cosh(*p_eta_ID_n) / abs(*p_qOverP_ID_n));
+    if (*n_isID_n) 
+      p_pt_ID_n->Fill(*n_eta_ID_n, 1 / cosh(*n_eta_ID_n) / abs(*n_qOverP_ID_n));
+    if (*p_isME_n) 
+      p_pt_ME_n->Fill(*p_eta_ME_n, 1 / cosh(*p_eta_ME_n) / abs(*p_qOverP_ME_n));
+    if (*n_isME_n) 
+      p_pt_ME_n->Fill(*n_eta_ME_n, 1 / cosh(*n_eta_ME_n) / abs(*n_qOverP_ME_n));
+    if (*p_isMSO_n) 
+      p_pt_MSO_n->Fill(*p_eta_MSO_n, 1 / cosh(*p_eta_MSO_n) / abs(*p_qOverP_MSO_n));
+    if (*n_isMSO_n) 
+      p_pt_MSO_n->Fill(*n_eta_MSO_n, 1 / cosh(*n_eta_MSO_n) / abs(*n_qOverP_MSO_n));
  
     // fill leading/subleading variable histograms
     if (q_lead == 1) {
@@ -918,15 +1000,23 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
           double ptID = 1 / cosh(*p_eta_ID_n) / abs(*p_qOverP_ID_n);
           double ptME = 1 / cosh(*p_eta_ME_n) / abs(*p_qOverP_ME_n);
           h_rho1_ME_n->Fill((ptME-ptID)/ptID);
-          h_dR1_ME_n->Fill(sqrt( pow(*p_eta_ID_n-*p_eta_ME_n,2) + pow(*p_phi_ID_n-*p_phi_ME_n,2)));
+          p_rho_ME_n->Fill(*p_eta_ID_n, (ptME-ptID)/ptID);
+          double deta2 = pow(*p_eta_ID_n - *p_eta_ME_n, 2);
+          double dphi2 = pow(*p_phi_ID_n - *p_phi_ME_n, 2);
+          h_dR1_ME_n->Fill(sqrt(deta2 + dphi2));
+          p_dR_ME_n->Fill(*p_eta_ID_n, sqrt(deta2 + dphi2));
         }
         if (*p_isMSO_n) {
           double ptID = 1 / cosh(*p_eta_ID_n) / abs(*p_qOverP_ID_n);
           double ptMSO = 1 / cosh(*p_eta_MSO_n) / abs(*p_qOverP_MSO_n);
           h_rho1_MSO_n->Fill((ptMSO-ptID)/ptID);
+          p_rho_MSO_n->Fill(*p_eta_ID_n, (ptMSO-ptID)/ptID);
         }
         if (*p_isMSOE_n)
-          h_dR1_MSOE_n->Fill(sqrt( pow(*p_eta_ID_n-*p_eta_MSOE_n,2) + pow(*p_phi_ID_n-*p_phi_MSOE_n,2)));
+          double deta2 = pow(*p_eta_ID_n - *p_eta_MSOE_n, 2);
+          double dphi2 = pow(*p_phi_ID_n - *p_phi_MSOE_n, 2);
+          h_dR1_MSOE_n->Fill(sqrt(deta2 + dphi2));
+          p_dR_MSOE_n->Fill(*p_eta_ID_n, sqrt(deta2 + dphi2));
       }
       if (*n_isID_n) {
         h_pt2_ID_n->Fill(1 / cosh(*n_eta_ID_n) / abs(*n_qOverP_ID_n)); 
@@ -935,15 +1025,23 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
           double ptID = 1 / cosh(*n_eta_ID_n) / abs(*n_qOverP_ID_n);
           double ptME = 1 / cosh(*n_eta_ME_n) / abs(*n_qOverP_ME_n);
           h_rho2_ME_n->Fill((ptME-ptID)/ptID);
-          h_dR2_ME_n->Fill(sqrt( pow(*n_eta_ID_n-*n_eta_ME_n,2) + pow(*n_phi_ID_n-*n_phi_ME_n,2)));
+          p_rho_ME_n->Fill(*n_eta_ID_n, (ptME-ptID)/ptID);
+          double deta2 = pow(*n_eta_ID_n - *n_eta_ME_n, 2);
+          double dphi2 = pow(*n_phi_ID_n - *n_phi_ME_n, 2);
+          h_dR2_ME_n->Fill(sqrt(deta2 + dphi2));
+          p_dR_ME_n->Fill(*n_eta_ID_n, sqrt(deta2 + dphi2));
         }
         if (*n_isMSO_n) {
           double ptID = 1 / cosh(*n_eta_ID_n) / abs(*n_qOverP_ID_n);
           double ptMSO = 1 / cosh(*n_eta_MSO_n) / abs(*n_qOverP_MSO_n);
           h_rho2_MSO_n->Fill((ptMSO-ptID)/ptID);
+          p_rho_MSO_n->Fill(*n_eta_ID_n, (ptMSO-ptID)/ptID);
         }
         if (*n_isMSOE_n)
-          h_dR2_MSOE_n->Fill(sqrt( pow(*n_eta_ID_n-*n_eta_MSOE_n,2) + pow(*n_phi_ID_n-*n_phi_MSOE_n,2)));
+          double deta2 = pow(*n_eta_ID_n - *n_eta_MSOE_n, 2);
+          double dphi2 = pow(*n_phi_ID_n - *n_phi_MSOE_n, 2);
+          h_dR2_MSOE_n->Fill(sqrt(deta2 + dphi2));
+          p_dR_MSOE_n->Fill(*n_eta_ID_n, sqrt(deta2 + dphi2));
       }
     }
     // if negative muon is primary
@@ -991,15 +1089,23 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
           double ptID = 1 / cosh(*p_eta_ID_n) / abs(*p_qOverP_ID_n);
           double ptME = 1 / cosh(*p_eta_ME_n) / abs(*p_qOverP_ME_n);
           h_rho2_ME_n->Fill((ptME-ptID)/ptID);
-          h_dR2_ME_n->Fill(sqrt( pow(*p_eta_ID_n-*p_eta_ME_n,2) + pow(*p_phi_ID_n-*p_phi_ME_n,2)));
+          p_rho_ME_n->Fill(*p_eta_ID_n, (ptME-ptID)/ptID);
+          double deta2 = pow(*p_eta_ID_n - *p_eta_ME_n, 2);
+          double dphi2 = pow(*p_phi_ID_n - *p_phi_ME_n, 2);
+          h_dR2_ME_n->Fill(sqrt(deta2 + dphi2));
+          p_dR_ME_n->Fill(*p_eta_ID_n, sqrt(deta2 + dphi2));
         }
         if (*p_isMSO_n) {
           double ptID = 1 / cosh(*p_eta_ID_n) / abs(*p_qOverP_ID_n);
           double ptMSO = 1 / cosh(*p_eta_MSO_n) / abs(*p_qOverP_MSO_n);
           h_rho2_MSO_n->Fill((ptMSO-ptID)/ptID);
+          p_rho_MSO_n->Fill(*p_eta_ID_n, (ptMSO-ptID)/ptID);
         }
         if (*p_isMSOE_n)
-          h_dR2_MSOE_n->Fill(sqrt( pow(*p_eta_ID_n-*p_eta_MSOE_n,2) + pow(*p_phi_ID_n-*p_phi_MSOE_n,2)));
+          double deta2 = pow(*p_eta_ID_n - *p_eta_MSOE_n, 2);
+          double dphi2 = pow(*p_phi_ID_n - *p_phi_MSOE_n, 2);
+          h_dR2_MSOE_n->Fill(sqrt(deta2 + dphi2));
+          p_dR_MSOE_n->Fill(*p_eta_ID_n, sqrt(deta2 + dphi2));
       }
       if (*n_isID_n) {
         h_pt1_ID_n->Fill(1 / cosh(*n_eta_ID_n) / abs(*n_qOverP_ID_n)); 
@@ -1008,23 +1114,64 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
           double ptID = 1 / cosh(*n_eta_ID_n) / abs(*n_qOverP_ID_n);
           double ptME = 1 / cosh(*n_eta_ME_n) / abs(*n_qOverP_ME_n);
           h_rho1_ME_n->Fill((ptME-ptID)/ptID);
-          h_dR1_ME_n->Fill(sqrt( pow(*n_eta_ID_n-*n_eta_ME_n,2) + pow(*n_phi_ID_n-*n_phi_ME_n,2)));
+          p_rho_ME_n->Fill(*n_eta_ID_n, (ptME-ptID)/ptID);
+          double deta2 = pow(*n_eta_ID_n - *n_eta_ME_n, 2);
+          double dphi2 = pow(*n_phi_ID_n - *n_phi_ME_n, 2);
+          h_dR1_ME_n->Fill(sqrt(deta2 + dphi2));
+          p_dR_ME_n->Fill(*n_eta_ID_n, sqrt(deta2 + dphi2));
         }
         if (*n_isMSO_n) {
           double ptID = 1 / cosh(*n_eta_ID_n) / abs(*n_qOverP_ID_n);
           double ptMSO = 1 / cosh(*n_eta_MSO_n) / abs(*n_qOverP_MSO_n);
           h_rho1_MSO_n->Fill((ptMSO-ptID)/ptID);
+          p_rho_MSO_n->Fill(*n_eta_ID_n, (ptMSO-ptID)/ptID);
         }
         if (*n_isMSOE_n)
-          h_dR1_MSOE_n->Fill(sqrt( pow(*n_eta_ID_n-*n_eta_MSOE_n,2) + pow(*n_phi_ID_n-*n_phi_MSOE_n,2)));
+          double deta2 = pow(*n_eta_ID_n - *n_eta_MSOE_n, 2);
+          double dphi2 = pow(*n_phi_ID_n - *n_phi_MSOE_n, 2);
+          h_dR1_MSOE_n->Fill(sqrt(deta2 + dphi2));
+          p_dR_MSOE_n->Fill(*n_eta_ID_n, sqrt(deta2 + dphi2));
       }
     }
   }
   delete f_recoNew;
+  
+  // loop through bins of profiles to fill varXeta histograms
+  for (int bin = 1; bin <= nBins; bin++) {
+    h_ptXeta_ME_o->SetBinContent(bin, p_pt_ME_o->GetBinContent(bin));
+    h_ptXeta_MSO_o->SetBinContent(bin, p_pt_MSO_o->GetBinContent(bin));
+    h_ptXeta_ID_o->SetBinContent(bin, p_pt_ID_o->GetBinContent(bin));
+    h_dptXeta_ME_o->SetBinContent(bin, p_pt_ME_o->GetBinError(bin));
+    h_dptXeta_MSO_o->SetBinContent(bin, p_pt_MSO_o->GetBinError(bin));
+    h_dptXeta_ID_o->SetBinContent(bin, p_pt_ID_o->GetBinError(bin));
 
-  /*
-   *  Fill varXeta histograms here
-   */
+    h_rhoXeta_ME_o->SetBinContent(bin, p_rho_ME_o->GetBinContent(bin));
+    h_rhoXeta_MSO_o->SetBinContent(bin, p_rho_MSO_o->GetBinContent(bin));
+    h_drhoXeta_ME_o->SetBinContent(bin, p_rho_ME_o->GetBinError(bin));
+    h_drhoXeta_MSO_o->SetBinContent(bin, p_rho_MSO_o->GetBinError(bin));
+
+    h_dRXeta_ME_o->SetBinContent(bin, p_dR_ME_o->GetBinContent(bin));
+    h_dRXeta_MSOE_o->SetBinContent(bin, p_dR_MSOE_o->GetBinContent(bin));
+    h_ddRXeta_ME_o->SetBinContent(bin, p_dR_ME_o->GetBinError(bin));
+    h_ddRXeta_MSOE_o->SetBinContent(bin, p_dR_MSOE_o->GetBinError(bin));
+
+    h_ptXeta_ME_n->SetBinContent(bin, p_pt_ME_n->GetBinContent(bin));
+    h_ptXeta_MSO_n->SetBinContent(bin, p_pt_MSO_n->GetBinContent(bin));
+    h_ptXeta_ID_n->SetBinContent(bin, p_pt_ID_n->GetBinContent(bin));
+    h_dptXeta_ME_n->SetBinContent(bin, p_pt_ME_n->GetBinError(bin));
+    h_dptXeta_MSO_n->SetBinContent(bin, p_pt_MSO_n->GetBinError(bin));
+    h_dptXeta_ID_n->SetBinContent(bin, p_pt_ID_n->GetBinError(bin));
+
+    h_rhoXeta_ME_n->SetBinContent(bin, p_rho_ME_n->GetBinContent(bin));
+    h_rhoXeta_MSO_n->SetBinContent(bin, p_rho_MSO_n->GetBinContent(bin));
+    h_drhoXeta_ME_n->SetBinContent(bin, p_rho_ME_n->GetBinError(bin));
+    h_drhoXeta_MSO_n->SetBinContent(bin, p_rho_MSO_n->GetBinError(bin));
+
+    h_dRXeta_ME_n->SetBinContent(bin, p_dR_ME_n->GetBinContent(bin));
+    h_dRXeta_MSOE_n->SetBinContent(bin, p_dR_MSOE_n->GetBinContent(bin));
+    h_ddRXeta_ME_n->SetBinContent(bin, p_dR_ME_n->GetBinError(bin));
+    h_ddRXeta_MSOE_n->SetBinContent(bin, p_dR_MSOE_n->GetBinError(bin));
+  }
 
   // plotting for invariant mass
   // gaussian fits
@@ -1325,9 +1472,14 @@ void FillPlots(string file_prefix, string oldFileName, string newFileName) {
 
 void GeneratePlots() {
   // declare and print file prefix
-  string file_prefix = "group.perf-muons.RunIvs2016.pt1g30-pt2g20";
-  string oldFileName = "test.root";
-  string newFileName = "bbullard.00340072.2016.root";
+  // RunI vs 2016
+  string file_prefix = "Zmumu.00340072.noIDalign.RunIvs2016";
+  string oldFileName = "ntuples/ntuple_RunI_noIDalign.root";
+  string newFileName = "ntuples/ntuple_2016_noIDalign.root";
+  // AOD vs RunI
+  //string file_prefix = "Zmumu.00340072.noIDalign.AODvsRunI";
+  //string oldFileName = "ntuples/ntuple_AOD_noIDalign.root";
+  //string newFileName = "ntuples/ntuple_RunI_noIDalign.root";
 
   cout << "Old map reconstruction: " << oldFileName << endl;
   cout << "New map reconstruction: " << newFileName << endl;

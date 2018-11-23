@@ -13,7 +13,7 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
   std::ifstream ntupleFileStream(ntuplesFile.c_str());
   string fileName;
   while (ntupleFileStream >> fileName) {
-    cout << "Adding file to chain: " << fileName << endl;
+    //cout << "Adding file to chain: " << fileName << endl;
     chainedNtuples.Add(fileName.c_str());
   }
 
@@ -26,11 +26,11 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
   TTreeReaderValue<unsigned int> nNegativeMuons_o(reader, "nNegativeMuons");
   
   // positive muon variables
-	TTreeReaderValue<vector<int>> p_pdgID_truth_o(reader, "p_pdgID_truth");
-	TTreeReaderValue<vector<double>> p_pt_truth_o(reader, "p_pt_truth");
-	TTreeReaderValue<vector<double>> p_eta_truth_o(reader, "p_eta_truth");
-	TTreeReaderValue<vector<double>> p_phi_truth_o(reader, "p_phi_truth");
-	TTreeReaderValue<vector<double>> p_m_truth_o(reader, "p_m_truth");
+	//TTreeReaderValue<vector<int>> p_pdgID_truth_o(reader, "p_pdgID_truth");
+	//TTreeReaderValue<vector<double>> p_pt_truth_o(reader, "p_pt_truth");
+	//TTreeReaderValue<vector<double>> p_eta_truth_o(reader, "p_eta_truth");
+	//TTreeReaderValue<vector<double>> p_phi_truth_o(reader, "p_phi_truth");
+	//TTreeReaderValue<vector<double>> p_m_truth_o(reader, "p_m_truth");
   TTreeReaderValue<vector<bool>> p_passIDcuts_o(reader, "p_passIDcuts");
   TTreeReaderValue<vector<bool>> p_passAll_o(reader, "p_passAll");
   TTreeReaderValue<vector<float>> p_eLoss_o(reader, "p_eLoss");
@@ -59,11 +59,11 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
   //TTreeReaderValue<vector<int>> p_extendedLargeHoles_o(reader, "p_extendedLargeHoles");
 
   // negative muon variables
-	TTreeReaderValue<vector<int>> n_pdgID_truth_o(reader, "n_pdgID_truth");
-	TTreeReaderValue<vector<double>> n_pt_truth_o(reader, "n_pt_truth");
-	TTreeReaderValue<vector<double>> n_eta_truth_o(reader, "n_eta_truth");
-	TTreeReaderValue<vector<double>> n_phi_truth_o(reader, "n_phi_truth");
-	TTreeReaderValue<vector<double>> n_m_truth_o(reader, "n_m_truth");
+	//TTreeReaderValue<vector<int>> n_pdgID_truth_o(reader, "n_pdgID_truth");
+	//TTreeReaderValue<vector<double>> n_pt_truth_o(reader, "n_pt_truth");
+	//TTreeReaderValue<vector<double>> n_eta_truth_o(reader, "n_eta_truth");
+	//TTreeReaderValue<vector<double>> n_phi_truth_o(reader, "n_phi_truth");
+	//TTreeReaderValue<vector<double>> n_m_truth_o(reader, "n_m_truth");
   TTreeReaderValue<vector<bool>> n_passIDcuts_o(reader, "n_passIDcuts");
   TTreeReaderValue<vector<bool>> n_passAll_o(reader, "n_passAll");
   TTreeReaderValue<vector<float>> n_eLoss_o(reader, "n_eLoss");
@@ -201,11 +201,11 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
 	int p_authors = 0;
   int p_nPrecisionLayers = 0;
   int p_nPrecisionHoleLayers = 0;
-	outTree->Branch("p_pdgID_truth", &p_pdgID_truth);
-	outTree->Branch("p_pt_truth", &p_pt_truth);
-	outTree->Branch("p_eta_truth", &p_eta_truth);
-	outTree->Branch("p_phi_truth", &p_phi_truth);
-	outTree->Branch("p_m_truth", &p_m_truth);
+	//outTree->Branch("p_pdgID_truth", &p_pdgID_truth);
+	//outTree->Branch("p_pt_truth", &p_pt_truth);
+	//outTree->Branch("p_eta_truth", &p_eta_truth);
+	//outTree->Branch("p_phi_truth", &p_phi_truth);
+	//outTree->Branch("p_m_truth", &p_m_truth);
 	outTree->Branch("p_passIDcuts", &p_passIDcuts);
 	outTree->Branch("p_passAll", &p_passAll);
 	outTree->Branch("p_ptcone40", &p_ptcone40);
@@ -214,6 +214,7 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
 	outTree->Branch("p_primaryAuthor", &p_primaryAuthor);
 	outTree->Branch("p_authors", &p_authors);
 	outTree->Branch("p_nPrecisionLayers", &p_nPrecisionLayers);
+	outTree->Branch("p_nPrecisionHoleLayers", &p_nPrecisionHoleLayers);
 
   // positive muon track variables
   bool p_isCB = false;
@@ -312,11 +313,11 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
 	int n_authors = 0;
   int n_nPrecisionLayers = 0;
   int n_nPrecisionHoleLayers = 0;
-	outTree->Branch("n_pdgID_truth", &n_pdgID_truth);
-	outTree->Branch("n_pt_truth", &n_pt_truth);
-	outTree->Branch("n_eta_truth", &n_eta_truth);
-	outTree->Branch("n_phi_truth", &n_phi_truth);
-	outTree->Branch("n_m_truth", &n_m_truth);
+	//outTree->Branch("n_pdgID_truth", &n_pdgID_truth);
+	//outTree->Branch("n_pt_truth", &n_pt_truth);
+	//outTree->Branch("n_eta_truth", &n_eta_truth);
+	//outTree->Branch("n_phi_truth", &n_phi_truth);
+	//outTree->Branch("n_m_truth", &n_m_truth);
 	outTree->Branch("n_passIDcuts", &n_passIDcuts);
 	outTree->Branch("n_passAll", &n_passAll);
 	outTree->Branch("n_ptcone40", &n_ptcone40);
@@ -326,6 +327,7 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
 	outTree->Branch("n_authors", &n_authors);
 	outTree->Branch("n_authors", &p_authors);
 	outTree->Branch("n_nPrecisionLayers", &p_nPrecisionLayers);
+	outTree->Branch("n_nPrecisionHoleLayers", &p_nPrecisionHoleLayers);
 
   // negative muon track variables
   bool n_isCB = false;
@@ -483,11 +485,11 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
 	  eventNumber = *eventNumber_o;
 	
   	// positive muon variables
-  	p_pdgID_truth           = p_pdgID_truth_o->at(0);
-  	p_pt_truth              = p_pt_truth_o->at(0);
-  	p_eta_truth             = p_eta_truth_o->at(0);
-	  p_phi_truth             = p_phi_truth_o->at(0);
-	  p_m_truth               = p_m_truth_o->at(0);
+  	//p_pdgID_truth           = p_pdgID_truth_o->at(0);
+  	//p_pt_truth              = p_pt_truth_o->at(0);
+  	//p_eta_truth             = p_eta_truth_o->at(0);
+	  //p_phi_truth             = p_phi_truth_o->at(0);
+	  //p_m_truth               = p_m_truth_o->at(0);
 	  p_passIDcuts            = p_passIDcuts_o->at(0);
 	  p_passAll               = p_passAll_o->at(0);
   	p_ptcone40              = p_ptcone40_o->at(0);
@@ -540,11 +542,11 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
     p_rchi2_ID        = p_rchi2_ID_o->at(0);
 
   	// negative muon variables
-  	n_pdgID_truth           = n_pdgID_truth_o->at(0);
-  	n_pt_truth              = n_pt_truth_o->at(0);
-  	n_eta_truth             = n_eta_truth_o->at(0);
-	  n_phi_truth             = n_phi_truth_o->at(0);
-	  n_m_truth               = n_m_truth_o->at(0);
+  	//n_pdgID_truth           = n_pdgID_truth_o->at(0);
+  	//n_pt_truth              = n_pt_truth_o->at(0);
+  	//n_eta_truth             = n_eta_truth_o->at(0);
+	  //n_phi_truth             = n_phi_truth_o->at(0);
+	  //n_m_truth               = n_m_truth_o->at(0);
 	  n_passIDcuts            = n_passIDcuts_o->at(0);
 	  n_passAll               = n_passAll_o->at(0);
   	n_ptcone40              = n_ptcone40_o->at(0);
@@ -604,9 +606,21 @@ void SkimNtuples(string ntuplesFile, string outputRootFile, bool isAOD=false) {
 }
 
 void DoSkimming() {
-  string RunIntuples = "AODtestfiles.txt";
-  string RunIoutputNtuple = "RunI_skimmedNtuple_preselection.root";
-  cout << "Skimming ntuples in text file " << RunIntuples 
-       << " and saving output to " << RunIoutputNtuple<< endl;
-  SkimNtuples(RunIntuples, RunIoutputNtuple, true);
+  string ntuplePaths = "ntuplePaths_AOD.txt";
+  string skimmedNtuple = "ntuples/ntuple_AOD_presel_noIDalign.root";
+  cout << "Skimming ntuples in text file " << ntuplePaths 
+       << " and saving output to " << skimmedNtuple << endl;
+  SkimNtuples(ntuplePaths, skimmedNtuple, true);
+
+  ntuplePaths = "ntuplePaths_RunI.txt";
+  skimmedNtuple = "ntuples/ntuple_RunI_noIDalign.root";
+  cout << "Skimming ntuples in text file " << ntuplePaths 
+       << " and saving output to " << skimmedNtuple << endl;
+  SkimNtuples(ntuplePaths, skimmedNtuple, false);
+
+  ntuplePaths = "ntuplePaths_2016.txt";
+  skimmedNtuple = "ntuples/ntuple_2016_noIDalign.root";
+  cout << "Skimming ntuples in text file " << ntuplePaths 
+       << " and saving output to " << skimmedNtuple << endl;
+  SkimNtuples(ntuplePaths, skimmedNtuple, false);
 }
